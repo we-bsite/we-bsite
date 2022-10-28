@@ -65,8 +65,12 @@ $letter-zoom-scale: 0.2;
 #desk {
   background: burlywood;
   width: 80vw;
-  height: 50vh;
+  height: 60vh;
   padding: 40px;
+
+  display: flex;
+  align-items: baseline;
+  grid-gap: 48px;
 
   .letter {
     border: 2px solid black;
