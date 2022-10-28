@@ -1,34 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import { LetterView } from "./Letter";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+export interface Letter {
+  to: string;
+  from: string;
+  date: Date;
+  src: string;
 }
 
-export default App
+function App() {
+  const [letters, setLetters] = useState<Letter[]>([
+    {
+      to: "Jacky",
+      from: "Spencer",
+      src: "https://spencerchang.me/posts/everyday-magic",
+      date: new Date("2022-10-28"),
+    },
+  ]);
+  return (
+    <div className="App">
+      <h1>(we)bsite</h1>
+      <div id="desk">
+        {letters.map((letter) => (
+          <LetterView letter={letter} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default App;
