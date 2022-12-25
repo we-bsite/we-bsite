@@ -45,7 +45,7 @@ function App() {
         <p>
           If you have an internet dream you would like to contribute and/or want
           to help us cultivate this space, please{" "}
-          <a href="mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com&subject=(we)bsite dreams">
+          <a href="mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams">
             reach out to us
           </a>
           .
