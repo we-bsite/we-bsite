@@ -30,6 +30,9 @@ node_modules/
 # Yarn Integrity file
 .yarn-integrity
 
+# SASS cache
+.sass-cache
+
 # dotenv environment variables file
 .env
 .env.test
