@@ -7,9 +7,6 @@ export interface Person {
   fullName: string,
   name: string,
   stamp: string,
-
-  /// use https://maxbittker.github.io/broider/
-  stampBorder: string,
 }
 
 export interface Letter {
