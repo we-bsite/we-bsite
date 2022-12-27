@@ -21,6 +21,17 @@ $color-letter-border: #d9d3c1;
   -webkit-text-size-adjust: 100%;
 }
 
+a {
+  color: $color-bg;
+  transition: color 0.3s ease;
+  &:hover {
+    color: #467aab;
+  }
+  &:visited {
+    color: #684ea3;
+  }
+}
+
 body {
   background: $color-main;
   margin: 0;
@@ -39,10 +50,11 @@ button {
   font-weight: 500;
 
   font-family: inherit;
-  background-color: #f9f9f9;
+  background-color: $color-bg;
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
@@ -130,13 +142,13 @@ $letter-zoom-scale: 0.5;
     border-radius: 5px;
     background: $color-letter;
     width: fit-content;
-    text-shadow: 0 0 5px $color-shadow;
 
     .header {
       font-weight: bold;
     }
 
     .letterHead {
+      text-shadow: 0 0 5px $color-shadow;
       line-height: 1.6;
       padding: 0.8em;
       cursor: pointer;
@@ -151,13 +163,16 @@ $letter-zoom-scale: 0.5;
       flex-grow: 1;
     }
 
+    .link-to-letter > a {
+      padding: 0.2em 0.8em;
+    }
+
     .iframe-wrapper {
       width: 300px;
       height: 300px;
       overflow: hidden;
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
       border-top: 1px solid $color-letter-border;
+      border-bottom: 1px solid $color-letter-border;
 
       iframe {
         border: none;

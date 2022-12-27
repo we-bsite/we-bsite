@@ -60,6 +60,9 @@ export function LetterView({ letter }: Props) {
           <div className="iframe-wrapper">
             <iframe src={src}></iframe>
           </div>
+          <div className="link-to-letter">
+            <a href={src} target="_blank">Read letter →</a>
+          </div>
         </motion.div>
       </div>
     </Draggable>

@@ -90,7 +90,7 @@ function App() {
       <footer>
         (we)bsite is a project by{" "}
         <a href={people.spencer.url}>{people.spencer.fullName}</a> and{" "}
-        <a href={people.jacky.url}>{people.jacky.fullName}</a>.
+        <a href={people.jacky.url}>{people.jacky.fullName}</a>. Poke around <a href="https://github.com/we-bsite/we-bsite">the source code</a>!
       </footer>
     </>
   );
