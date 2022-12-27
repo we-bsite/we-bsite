@@ -57,6 +57,10 @@ button:focus-visible {
   padding: 0 2em;
 }
 
+#root {
+  overflow: hidden;
+}
+
 h1,
 h2,
 h3 {
@@ -113,8 +117,7 @@ $letter-zoom-scale: 0.5;
 
   // wrap for mobile
   @media (max-width: 600px) {
-    flex-wrap: wrap;
-    justify-content: center;
+    overflow-x: scroll;
   }
 
   .letter {
