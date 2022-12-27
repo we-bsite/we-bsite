@@ -1,24 +1,55 @@
 import { Letter } from "./App";
+import { motion } from "framer-motion"
+import { useState } from "react";
+import Draggable from "react-draggable";
 
 interface Props {
   letter: Letter;
 }
 
 export function LetterView({ letter }: Props) {
-  const { src, to, from, date } = letter;
-  //   TODO: make moveable via drag
+  const [dragging, setDragging] = useState(false)
+  const { src, to, from, position } = letter;
   // TODO: clicking on letter should open in new page
   // TODO: some way to track which letters have been opened, and the ones that have been opened by more people are more worn?
-  //   TODO: active cursors?
   return (
-    <div className="letter">
-      <div className="letterHead">
-        <div className="header">Dear {to},</div>
-        <span className="date">{date.toDateString()}</span>
+    <Draggable
+      handle=".letterHead"
+      defaultPosition={position}
+      onStart={() => setDragging(true)}
+      onStop={() => setDragging(false)}
+    >
+      <div>
+        <motion.div
+          className="letter"
+          transition={{ type: "spring", stiffness: 100, duration: 0.3 }}
+          animate={{
+            transform: `rotate(${dragging ? 0 : position.rotation}deg)`,
+            boxShadow: dragging ? "0 0 30px rgba(51, 75, 97, 0.35)" : "0 0 5px rgba(51, 75, 97, 0.2)",
+          }}
+          initial={false}
+        >
+          <div className="letterHead">
+            <div>
+              <div><span className="header">From: </span> {from.name}</div>
+              <div><span className="header">To: </span> {to.name}</div>
+            </div>
+            <div className="spacer"></div>
+            <div className="stamps">
+              <div className="stamp">
+                <img src={from.stamp} />
+              </div>
+              <div className="stamp">
+                <img src={to.stamp} />
+              </div>
+            </div>
+          </div>
+          <div className="iframe-wrapper">
+            <iframe src={src}></iframe>
+          </div>
+        </motion.div>
       </div>
-      <div className="iframe-wrapper">
-        <iframe src={src}></iframe>
-      </div>
-    </div>
+
+    </Draggable>
   );
 }

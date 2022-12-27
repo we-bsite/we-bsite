@@ -1,27 +1,50 @@
 import { useState } from "react";
 import { LetterView } from "./Letter";
+import people from './people.json'
+
+export interface Person {
+  url: string;
+  fullName: string,
+  name: string,
+  stamp: string,
+
+  /// use https://maxbittker.github.io/broider/
+  stampBorder: string,
+}
 
 export interface Letter {
-  to: string;
-  from: string;
-  date: Date;
+  to: Person;
+  from: Person;
   src: string;
+  position: {
+    rotation: number,
+    x: number,
+    y: number,
+  }
 }
 
 function App() {
   // TODO: color the background of letters depending on from, or to/from combo?
   const [letters, setLetters] = useState<Letter[]>([
     {
-      to: "Jacky",
-      from: "Spencer",
+      to: people.jacky,
+      from: people.spencer,
       src: "https://spencerchang.me/posts/everyday-magic",
-      date: new Date("2022-10-28"),
+      position: {
+        rotation: 5,
+        x: 0,
+        y: -5,
+      }
     },
     {
-      to: "Spencer",
-      from: "Jacky",
+      to: people.spencer,
+      from: people.jacky,
       src: "https://jzhao.xyz/posts/the-fools-who-dream/",
-      date: new Date("2022-08-21"),
+      position: {
+        rotation: -3,
+        x: -65,
+        y: -80
+      }
     },
   ]);
 
@@ -50,17 +73,16 @@ function App() {
           </a>
           .
         </p>
-        {/* TODO: add texture to desk background, make it grainy */}
-        {/* <div id="desk">
+      </div>
+      <div id="desk">
         {letters.map((letter) => (
           <LetterView letter={letter} />
         ))}
-      </div> */}
       </div>
       <footer>
         (we)bsite is a project by{" "}
-        <a href="https://spencerchang.me">Spencer Chang</a> and{" "}
-        <a href="https://jzhao.xyz">Jacky Zhao</a>.
+        <a href={people.spencer.url}>{people.spencer.fullName}</a> and{" "}
+        <a href={people.jacky.url}>{people.jacky.fullName}</a>.
       </footer>
     </>
   );

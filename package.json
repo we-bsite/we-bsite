@@ -9,8 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cursor-chat": "^0.4.9",
+    "framer-motion": "^8.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-draggable": "^4.4.5",
     "sass": "^1.55.0"
   },
   "devDependencies": {

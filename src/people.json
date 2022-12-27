@@ -1,0 +1,15 @@
+
+{
+  "jacky": {
+    "url": "https://jzhao.xyz",
+    "fullName": "Jacky Zhao",
+    "name": "Jacky",
+    "stamp": "https://jzhao.xyz/icon.png"
+  },
+  "spencer": {
+    "url": "https://www.spencerchang.me/",
+    "fullName": "Spencer Chang",
+    "name": "Spencer",
+    "stamp": "https://www.spencerchang.me/assets/name-stamp.svg"
+  }
+}
