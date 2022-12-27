@@ -24,23 +24,33 @@ function App() {
   // TODO: color the background of letters depending on from, or to/from combo?
   const [letters, setLetters] = useState<Letter[]>([
     {
+      to: people.spencer,
+      from: people.jacky,
+      src: "https://jzhao.xyz/posts/towards-data-neutrality/",
+      position: {
+        rotation: -2,
+        x: 0,
+        y: 0,
+      }
+    },
+    {
       to: people.jacky,
       from: people.spencer,
       src: "https://spencerchang.me/posts/everyday-magic",
       position: {
         rotation: 5,
         x: 0,
-        y: -5,
+        y: -55,
       }
     },
     {
       to: people.spencer,
       from: people.jacky,
-      src: "https://jzhao.xyz/posts/the-fools-who-dream/",
+      src: "https://jzhao.xyz/posts/web-is-better-together/",
       position: {
-        rotation: -3,
+        rotation: 1,
         x: -65,
-        y: -80
+        y: -20
       }
     },
   ]);
