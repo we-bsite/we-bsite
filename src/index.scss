@@ -81,9 +81,9 @@ h3 {
   @for $i from 1 through 10 {
     @for $j from 1 through 3 {
       &:nth-of-type(#{$i}) .stamp:nth-of-type(#{$j}) {
-        transform: rotate((random() * 20 - 5) + deg)
-          translateX(random() * 25 - 12 + px)
-          translateY(random() * 25 - 12 + px);
+        transform: rotate((random() * 20 - 10) + deg)
+          translateX(random() * 25 - 12.5 + px)
+          translateY(random() * 25 - 12.5 + px);
       }
     }
   }
@@ -101,8 +101,8 @@ h3 {
   width: auto;
 
   & > img {
-    height: 34px;
-    width: 34px;
+    height: 30px;
+    width: 30px;
     border-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAAXNSR0IArs4c6QAAAJtJREFUOE9jLIiw+8/AwMAwYcUhRhgbxgfRyGIgPi45ZP0oBsE0UUozwlwDsolSw0C+ApkDdym690m1AKv3YYLkuBjmQlj4Y7iUVBcjOwZuKHKYIttIjIvR1cPDlCaGoqdTUsIWm0tBjsQZpuR6f9RQBpRsOjSTFLF5H2uOwpZOiTUQpo5g3ifVQOSCG2veJ9dAdBfTpuSnRR0FABXZWnBmPtz1AAAAAElFTkSuQmCC")
       4 / 4px / 0 round;
     border-width: 4px;
