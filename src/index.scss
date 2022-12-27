@@ -58,7 +58,9 @@ button:focus-visible {
 }
 
 #root {
-  overflow: hidden;
+  @media (max-width: 600px) {
+    overflow: hidden;
+  }
 }
 
 h1,

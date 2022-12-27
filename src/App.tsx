@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { LetterView } from "./Letter";
-import people from './people.json'
+import people from "./people.json";
 
 export interface Person {
   url: string;
-  fullName: string,
-  name: string,
-  stamp: string,
+  fullName: string;
+  name: string;
+  stamp: string;
 }
 
 export interface Letter {
@@ -14,10 +14,10 @@ export interface Letter {
   from: Person;
   src: string;
   position: {
-    rotation: number,
-    x: number,
-    y: number,
-  }
+    rotation: number;
+    x: number;
+    y: number;
+  };
 }
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
         rotation: -2,
         x: 0,
         y: 0,
-      }
+      },
     },
     {
       to: people.jacky,
@@ -41,7 +41,7 @@ function App() {
         rotation: 5,
         x: 0,
         y: -55,
-      }
+      },
     },
     {
       to: people.spencer,
@@ -50,9 +50,10 @@ function App() {
       position: {
         rotation: 1,
         x: -65,
-        y: -20
-      }
+        y: -20,
+      },
     },
+    // TODO: add one that is a submit form to add a new letter, with ? for to and you for from
   ]);
 
   return (
