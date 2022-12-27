@@ -1,5 +1,5 @@
 import { Letter } from "./App";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 import { useState } from "react";
 import Draggable from "react-draggable";
 
@@ -8,10 +8,11 @@ interface Props {
 }
 
 export function LetterView({ letter }: Props) {
-  const [dragging, setDragging] = useState(false)
+  const [dragging, setDragging] = useState(false);
   const { src, to, from, position } = letter;
   // TODO: clicking on letter should open in new page
   // TODO: some way to track which letters have been opened, and the ones that have been opened by more people are more worn?
+
   return (
     <Draggable
       handle=".letterHead"
@@ -23,25 +24,36 @@ export function LetterView({ letter }: Props) {
       <div>
         <motion.div
           className="letter"
-          transition={{ type: "spring", stiffness: 150, duration: 0.3, bounce: 0.8 }}
+          transition={{
+            type: "spring",
+            stiffness: 150,
+            duration: 0.3,
+            bounce: 0.8,
+          }}
           animate={{
             transform: `rotate(${dragging ? 0 : position.rotation}deg)`,
-            boxShadow: dragging ? "0 0 35px rgba(51, 75, 97, 0.35)" : "0 0 5px rgba(51, 75, 97, 0.2)",
+            boxShadow: dragging
+              ? "0 0 35px rgba(51, 75, 97, 0.35)"
+              : "0 0 5px rgba(51, 75, 97, 0.2)",
           }}
           initial={false}
         >
-          <div className="letterHead">
+          <div className={`letterHead ${dragging ? "dragging" : ""}`}>
             <div>
-              <div><span className="header">From: </span> {from.name}</div>
-              <div><span className="header">To: </span> {to.name}</div>
+              <div>
+                <span className="header">From: </span> {from.name}
+              </div>
+              <div>
+                <span className="header">To: </span> {to.name}
+              </div>
             </div>
             <div className="spacer"></div>
             <div className="stamps">
               <div className="stamp">
-                <img src={from.stamp}/>
+                <img src={from.stamp} />
               </div>
               <div className="stamp">
-                <img src={to.stamp}/>
+                <img src={to.stamp} />
               </div>
             </div>
           </div>

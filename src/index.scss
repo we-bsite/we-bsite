@@ -141,6 +141,10 @@ $letter-zoom-scale: 0.5;
       padding: 0.8em;
       cursor: pointer;
       display: flex;
+
+      &.dragging {
+        cursor: grabbing;
+      }
     }
 
     .spacer {
