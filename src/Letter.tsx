@@ -22,10 +22,10 @@ export function LetterView({ letter }: Props) {
       <div>
         <motion.div
           className="letter"
-          transition={{ type: "spring", stiffness: 100, duration: 0.3 }}
+          transition={{ type: "spring", stiffness: 150, duration: 0.3, bounce: 0.8 }}
           animate={{
             transform: `rotate(${dragging ? 0 : position.rotation}deg)`,
-            boxShadow: dragging ? "0 0 30px rgba(51, 75, 97, 0.35)" : "0 0 5px rgba(51, 75, 97, 0.2)",
+            boxShadow: dragging ? "0 0 35px rgba(51, 75, 97, 0.35)" : "0 0 5px rgba(51, 75, 97, 0.2)",
           }}
           initial={false}
         >
@@ -37,10 +37,10 @@ export function LetterView({ letter }: Props) {
             <div className="spacer"></div>
             <div className="stamps">
               <div className="stamp">
-                <img src={from.stamp} />
+                <img src={from.stamp}/>
               </div>
               <div className="stamp">
-                <img src={to.stamp} />
+                <img src={to.stamp}/>
               </div>
             </div>
           </div>
@@ -49,7 +49,6 @@ export function LetterView({ letter }: Props) {
           </div>
         </motion.div>
       </div>
-
     </Draggable>
   );
 }
