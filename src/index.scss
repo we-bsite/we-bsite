@@ -77,21 +77,23 @@ h3 {
   -webkit-text-fill-color: transparent;
 }
 
-.stamps {
-  flex: 0 0 2em;
-  display: flex;
-  align-items: center;
-  gap: 1em;
-
+.letter-container {
   @for $i from 1 through 10 {
     @for $j from 1 through 3 {
-      &:nth-of-type(#{$i}) > .stamp:nth-of-type(#{$j}) {
+      &:nth-of-type(#{$i}) .stamp:nth-of-type(#{$j}) {
         transform: rotate((random() * 20 - 5) + deg)
           translateX(random() * 25 - 12 + px)
           translateY(random() * 25 - 12 + px);
       }
     }
   }
+}
+
+.stamps {
+  flex: 0 0 2em;
+  display: flex;
+  align-items: center;
+  gap: 1em;
 }
 
 .stamp {

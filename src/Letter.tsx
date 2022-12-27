@@ -15,6 +15,7 @@ export function LetterView({ letter }: Props) {
   return (
     <Draggable
       handle=".letterHead"
+      defaultClassName="letter-container"
       defaultPosition={position}
       onStart={() => setDragging(true)}
       onStop={() => setDragging(false)}
