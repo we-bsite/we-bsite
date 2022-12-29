@@ -2,6 +2,7 @@ import { Letter } from "./App";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Draggable from "react-draggable";
+import dayjs from "dayjs";
 
 interface Props {
   letter: Letter;
@@ -9,7 +10,7 @@ interface Props {
 
 export function LetterView({ letter }: Props) {
   const [dragging, setDragging] = useState(false);
-  const { src, to, from, position } = letter;
+  const { src, to, from, position, date } = letter;
   // TODO: clicking on letter should open in new page
   // TODO: some way to track which letters have been opened, and the ones that have been opened by more people are more worn?
 
@@ -47,7 +48,13 @@ export function LetterView({ letter }: Props) {
                 <span className="header">To: </span> {to.name}
               </div>
             </div>
-            <div className="spacer"></div>
+            <div className="spacer">
+              <div className="dateStamp">
+                {dayjs(date).format("MM.DD")}
+                <br />
+                {dayjs(date).format("YYYY")}
+              </div>
+            </div>
             <div className="stamps">
               <div className="stamp">
                 <img src={from.stamp} />

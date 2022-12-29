@@ -13,6 +13,7 @@ export interface Letter {
   to: Person;
   from: Person;
   src: string;
+  date: Date;
   position: {
     rotation: number;
     x: number;
@@ -32,6 +33,7 @@ function App() {
         x: 0,
         y: 0,
       },
+      date: new Date("2021-03-01"),
     },
     {
       to: people.jacky,
@@ -42,6 +44,7 @@ function App() {
         x: 0,
         y: -55,
       },
+      date: new Date("2021-03-01"),
     },
     {
       to: people.spencer,
@@ -52,6 +55,7 @@ function App() {
         x: -65,
         y: -20,
       },
+      date: new Date("2021-03-01"),
     },
     // TODO: add one that is a submit form to add a new letter, with ? for to and you for from
   ]);
@@ -82,10 +86,12 @@ function App() {
           .
         </p>
       </div>
-      <div id="desk">
-        {letters.map((letter) => (
-          <LetterView letter={letter} />
-        ))}
+      <div id="deskPlaceholder">
+        <div id="desk">
+          {letters.map((letter) => (
+            <LetterView letter={letter} />
+          ))}
+        </div>
       </div>
       <footer>
         (we)bsite is a project by{" "}

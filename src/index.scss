@@ -4,6 +4,7 @@ $color-bg: #213547;
 $color-shadow: #334b6177;
 $color-letter: #faf9f5;
 $color-letter-border: #d9d3c1;
+$date-stamp-border-size: 3px;
 
 :root {
   font-family: "EB Garamond", Avenir, Helvetica, Arial, sans-serif;
@@ -70,9 +71,9 @@ button:focus-visible {
 }
 
 #root {
-  @media (max-width: 600px) {
-    overflow: hidden;
-  }
+  // @media (max-width: 800px) {
+  overflow: hidden;
+  // }
 }
 
 h1,
@@ -97,6 +98,9 @@ h3 {
           translateX(random() * 25 - 12.5 + px)
           translateY(random() * 25 - 12.5 + px);
       }
+      &:nth-of-type(#{$i}) .dateStamp:nth-of-type(#{$j}) {
+        transform: rotate((((random()) * 80) - 40) + deg);
+      }
     }
   }
 }
@@ -106,6 +110,37 @@ h3 {
   display: flex;
   align-items: center;
   gap: 1em;
+}
+
+.dateStamp {
+  position: absolute;
+  padding: 0.5em;
+  border-radius: 50%;
+  border: $date-stamp-border-size solid rgba(33, 32, 32, 0.7);
+  width: 36px;
+  height: 36px;
+  margin-left: 10px;
+  font-size: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Special Elite";
+  background: $color-letter;
+  filter: blur(0.4px);
+  line-height: normal;
+  text-align: center;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: -$date-stamp-border-size;
+    top: -$date-stamp-border-size;
+    width: calc(100% + ($date-stamp-border-size * 2));
+    height: calc(100% + ($date-stamp-border-size * 2));
+    border-radius: 50%;
+    background-image: url("http://i.imgur.com/5O74VI6.jpg");
+    mix-blend-mode: lighten;
+  }
 }
 
 .stamp {
@@ -123,18 +158,22 @@ h3 {
 }
 
 $letter-zoom-scale: 0.5;
+#deskPlaceholder {
+  width: 400px;
+  height: 500px;
+  margin: 2em 0;
+}
+
 #desk {
   padding: 40px;
-  margin: 2em 0;
-
   display: flex;
   align-items: baseline;
   grid-gap: 2em;
-
-  // wrap for mobile
-  @media (max-width: 600px) {
-    overflow-x: scroll;
-  }
+  overflow-x: scroll;
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  width: calc(100vw - 80px);
 
   .letter {
     overflow: hidden;
@@ -161,6 +200,7 @@ $letter-zoom-scale: 0.5;
 
     .spacer {
       flex-grow: 1;
+      position: relative;
     }
 
     .link-to-letter > a {
