@@ -46,7 +46,7 @@ function App() {
     {
       to: people.spencer,
       from: people.jacky,
-      src: "https://jzhao.xyz/posts/web-is-better-together/",
+      src: "https://jzhao.xyz/posts/communal-computing/",
       position: {
         rotation: 1,
         x: -65,
