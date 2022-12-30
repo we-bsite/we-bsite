@@ -1,4 +1,4 @@
-import { Letter } from "./App";
+import { Letter, LetterType } from "./App";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Draggable from "react-draggable";
@@ -10,9 +10,41 @@ interface Props {
 
 export function LetterView({ letter }: Props) {
   const [dragging, setDragging] = useState(false);
-  const { src, to, from, position, date } = letter;
+  const { to, from, position, date, type, src, ctaText } = letter;
   // TODO: clicking on letter should open in new page
   // TODO: some way to track which letters have been opened, and the ones that have been opened by more people are more worn?
+
+  const renderContent = () => {
+    let mainContent;
+    switch (type) {
+      case LetterType.IFrame:
+        const { src } = letter;
+        mainContent = (
+          <div className="letter-content-wrapper">
+            <iframe src={src}></iframe>
+          </div>
+        );
+        break;
+      case LetterType.Content:
+        const { srcContent } = letter;
+        mainContent = (
+          <div className="letter-content-wrapper direct">{srcContent}</div>
+        );
+        break;
+    }
+
+    const cta = ctaText || "Read letter →";
+    return (
+      <>
+        {mainContent}
+        <div className="link-to-letter">
+          <a href={src} target="_blank">
+            {cta}
+          </a>
+        </div>
+      </>
+    );
+  };
 
   return (
     <Draggable
@@ -56,20 +88,19 @@ export function LetterView({ letter }: Props) {
               </div>
             </div>
             <div className="stamps">
-              <div className="stamp">
-                <img src={from.stamp} />
-              </div>
-              <div className="stamp">
-                <img src={to.stamp} />
-              </div>
+              {from.stamp && (
+                <div className="stamp">
+                  <img src={from.stamp} />
+                </div>
+              )}
+              {to.stamp && (
+                <div className="stamp">
+                  <img src={to.stamp} />
+                </div>
+              )}
             </div>
           </div>
-          <div className="iframe-wrapper">
-            <iframe src={src}></iframe>
-          </div>
-          <div className="link-to-letter">
-            <a href={src} target="_blank">Read letter →</a>
-          </div>
+          {renderContent()}
         </motion.div>
       </div>
     </Draggable>

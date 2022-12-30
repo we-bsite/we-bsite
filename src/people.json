@@ -1,4 +1,10 @@
 {
+  "you": {
+    "name": "you"
+  },
+  "someone": {
+    "name": "???"
+  },
   "jacky": {
     "url": "https://jzhao.xyz",
     "fullName": "Jacky Zhao",

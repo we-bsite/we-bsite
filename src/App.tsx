@@ -3,23 +3,40 @@ import { LetterView } from "./Letter";
 import people from "./people.json";
 
 export interface Person {
-  url: string;
-  fullName: string;
   name: string;
-  stamp: string;
+  url?: string;
+  fullName?: string;
+  stamp?: string;
 }
 
-export interface Letter {
+export enum LetterType {
+  IFrame = "IFrame",
+  Content = "Content",
+}
+
+export interface BaseLetter {
+  type: LetterType;
   to: Person;
   from: Person;
-  src: string;
   date: Date;
   position: {
     rotation: number;
     x: number;
     y: number;
   };
+  src: string;
+  ctaText?: string;
 }
+
+interface IFrameLetter extends BaseLetter {
+  type: LetterType.IFrame;
+}
+interface ContentLetter extends BaseLetter {
+  type: LetterType.Content;
+  srcContent: React.ReactNode;
+}
+
+export type Letter = IFrameLetter | ContentLetter;
 
 function App() {
   // TODO: color the background of letters depending on from, or to/from combo?
@@ -34,6 +51,7 @@ function App() {
         y: 13,
       },
       date: new Date("12-02-2021"),
+      type: LetterType.IFrame,
     },
     {
       to: people.spencer,
@@ -45,6 +63,7 @@ function App() {
         y: 0,
       },
       date: new Date("07-14-2022"),
+      type: LetterType.IFrame,
     },
     {
       to: people.jacky,
@@ -56,6 +75,7 @@ function App() {
         y: -55,
       },
       date: new Date("12-11-2022"),
+      type: LetterType.IFrame,
     },
     {
       to: people.spencer,
@@ -63,12 +83,27 @@ function App() {
       src: "https://jzhao.xyz/posts/communal-computing/",
       position: {
         rotation: 1,
-        x: -35,
+        x: -10,
         y: -20,
       },
       date: new Date("12-26-2022"),
+      type: LetterType.IFrame,
     },
-    // TODO: add one that is a submit form to add a new letter, with ? for to and you for from
+    {
+      to: people.someone,
+      from: people.you,
+      position: {
+        rotation: 1,
+        x: -5,
+        y: -5,
+      },
+      srcContent: "your internet dreams & hopes letter",
+      //TODO: replace with form at launch
+      src: "mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams",
+      date: new Date(),
+      type: LetterType.Content,
+      ctaText: "Submit yours →",
+    },
   ]);
 
   return (
@@ -97,13 +132,13 @@ function App() {
           .
         </p>
       </div>
-      <div id="deskPlaceholder">
-        <div id="desk">
-          {letters.map((letter) => (
-            <LetterView letter={letter} />
-          ))}
-        </div>
+      {/* <div id="deskPlaceholder"> */}
+      <div id="desk">
+        {letters.map((letter) => (
+          <LetterView letter={letter} />
+        ))}
       </div>
+      {/* </div> */}
       <footer>
         (we)bsite is a project by{" "}
         <a href={people.spencer.url}>{people.spencer.fullName}</a> and{" "}

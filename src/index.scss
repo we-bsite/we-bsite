@@ -68,6 +68,8 @@ button:focus-visible {
   margin-top: 10vh;
   max-width: 600px;
   padding: 0 2em;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #root {
@@ -157,7 +159,6 @@ h3 {
 
 $letter-zoom-scale: 0.5;
 #deskPlaceholder {
-  width: 400px;
   height: 500px;
   margin: 2em 0;
 }
@@ -165,15 +166,16 @@ $letter-zoom-scale: 0.5;
 #desk {
   padding: 40px;
   display: flex;
-  align-items: baseline;
   grid-gap: 2em;
-  position: absolute;
+  justify-content: center;
   z-index: 2;
+  // position: absolute;
   left: 0;
   width: calc(100vw - 80px);
+  flex-wrap: wrap;
 
-  @media (max-width: 800px) {
-    overflow-x: scroll;
+  @media (max-width: 1270px) {
+    // overflow-x: scroll;
   }
 
   .letter {
@@ -208,7 +210,7 @@ $letter-zoom-scale: 0.5;
       padding: 0.2em 0.8em;
     }
 
-    .iframe-wrapper {
+    .letter-content-wrapper {
       width: 300px;
       height: 300px;
       overflow: hidden;
@@ -224,6 +226,13 @@ $letter-zoom-scale: 0.5;
         -webkit-transform-origin: 0 0;
         transform-origin: 0 0;
       }
+
+      &.direct {
+        background: linear-gradient(180deg, $color-letter 0%, $color-main 80%);
+        text-align: center;
+        padding-top: 20px;
+        font-family: cursive;
+      }
     }
   }
 }
@@ -231,6 +240,7 @@ $letter-zoom-scale: 0.5;
 footer {
   margin-bottom: 2em;
   padding: 0 2em;
+  text-align: center;
 }
 
 // cursor chat overrides
