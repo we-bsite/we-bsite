@@ -97,7 +97,7 @@ function App() {
         x: -5,
         y: -5,
       },
-      srcContent: "your letter of intern dreams & hopes",
+      srcContent: "your letter of internet dreams & hopes",
       //TODO: replace with form at launch
       src: "mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams",
       date: new Date(),
