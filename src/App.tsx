@@ -47,7 +47,7 @@ function App() {
       src: "https://spencerchang.me/posts/everyday-magic",
       position: {
         rotation: 3,
-        x: 0,
+        x: 50,
         y: 13,
       },
       date: new Date("12-02-2021"),
@@ -84,7 +84,7 @@ function App() {
       position: {
         rotation: 1,
         x: -10,
-        y: -20,
+        y: 40,
       },
       date: new Date("12-26-2022"),
       type: LetterType.IFrame,
@@ -97,7 +97,7 @@ function App() {
         x: -5,
         y: -5,
       },
-      srcContent: "your internet dreams & hopes letter",
+      srcContent: "your letter of intern dreams & hopes",
       //TODO: replace with form at launch
       src: "mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams",
       date: new Date(),

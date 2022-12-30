@@ -4,7 +4,7 @@ $color-bg: #213547;
 $color-shadow: #334b6177;
 $color-letter: #faf9f5;
 $color-letter-border: #d9d3c1;
-$date-stamp-border-size: 3px;
+$date-stamp-border-size: 2px;
 
 :root {
   font-family: "EB Garamond", Avenir, Helvetica, Arial, sans-serif;
@@ -119,14 +119,15 @@ h3 {
   border: $date-stamp-border-size solid rgba(33, 32, 32, 0.7);
   width: 36px;
   height: 36px;
+  opacity: 0.6;
   margin-left: 10px;
   font-size: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: "Special Elite";
+  font-size: 0.8em;
   background: $color-letter;
-  filter: blur(0.4px);
   line-height: normal;
   text-align: center;
 
