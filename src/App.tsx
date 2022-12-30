@@ -33,7 +33,7 @@ function App() {
         x: 0,
         y: 0,
       },
-      date: new Date("2021-03-01"),
+      date: new Date("03-01-2021"),
     },
     {
       to: people.jacky,
@@ -44,7 +44,7 @@ function App() {
         x: 0,
         y: -55,
       },
-      date: new Date("2021-03-01"),
+      date: new Date("03-01-2021"),
     },
     {
       to: people.spencer,
@@ -55,7 +55,7 @@ function App() {
         x: -65,
         y: -20,
       },
-      date: new Date("2021-03-01"),
+      date: new Date("03-01-2021"),
     },
     // TODO: add one that is a submit form to add a new letter, with ? for to and you for from
   ]);
@@ -96,7 +96,8 @@ function App() {
       <footer>
         (we)bsite is a project by{" "}
         <a href={people.spencer.url}>{people.spencer.fullName}</a> and{" "}
-        <a href={people.jacky.url}>{people.jacky.fullName}</a>. Poke around <a href="https://github.com/we-bsite/we-bsite">the source code</a>!
+        <a href={people.jacky.url}>{people.jacky.fullName}</a>. Poke around{" "}
+        <a href="https://github.com/we-bsite/we-bsite">the source code</a>!
       </footer>
     </>
   );
