@@ -25,6 +25,17 @@ function App() {
   // TODO: color the background of letters depending on from, or to/from combo?
   const [letters, setLetters] = useState<Letter[]>([
     {
+      to: people.jacky,
+      from: people.spencer,
+      src: "https://spencerchang.me/posts/everyday-magic",
+      position: {
+        rotation: 3,
+        x: 0,
+        y: 13,
+      },
+      date: new Date("12-02-2021"),
+    },
+    {
       to: people.spencer,
       from: people.jacky,
       src: "https://jzhao.xyz/posts/towards-data-neutrality/",
@@ -33,18 +44,18 @@ function App() {
         x: 0,
         y: 0,
       },
-      date: new Date("03-01-2021"),
+      date: new Date("07-14-2022"),
     },
     {
       to: people.jacky,
       from: people.spencer,
-      src: "https://spencerchang.me/posts/everyday-magic",
+      src: "https://spencerchang.me/posts/our-internet",
       position: {
         rotation: 5,
         x: 0,
         y: -55,
       },
-      date: new Date("03-01-2021"),
+      date: new Date("12-11-2022"),
     },
     {
       to: people.spencer,
@@ -52,10 +63,10 @@ function App() {
       src: "https://jzhao.xyz/posts/communal-computing/",
       position: {
         rotation: 1,
-        x: -65,
+        x: -35,
         y: -20,
       },
-      date: new Date("03-01-2021"),
+      date: new Date("12-26-2022"),
     },
     // TODO: add one that is a submit form to add a new letter, with ? for to and you for from
   ]);
