@@ -18,7 +18,7 @@ export enum LetterType {
 
 export interface BaseLetter {
   type: LetterType;
-  to: Person;
+  to: Person | React.ReactNode;
   from: Person;
   date: Date;
   src: string;
@@ -50,7 +50,7 @@ export type Letter = IFrameLetter | ContentLetter;
 type LetterID = `${string}-${number}`
 export const letters: Record<LetterID, Letter> = {
   "spencer-0": {
-    to: people.jacky,
+    to: "reboot & internet",
     from: people.spencer,
     src: "https://spencerchang.me/posts/everyday-magic",
     initialPersistenceData: {
@@ -62,7 +62,7 @@ export const letters: Record<LetterID, Letter> = {
     type: LetterType.IFrame,
   },
   "jacky-0": {
-    to: people.spencer,
+    to: "reboot & internet",
     from: people.jacky,
     src: "https://jzhao.xyz/posts/towards-data-neutrality/",
     initialPersistenceData: {
@@ -95,6 +95,20 @@ export const letters: Record<LetterID, Letter> = {
       y: 40,
     },
     date: new Date("12-26-2022"),
+    type: LetterType.IFrame,
+  },
+  "katherine-0": {
+    to: "the internet",
+    from: people.katherine,
+    src: "https://whykatherine.github.io/assets/manifesto/manifesto.pdf",
+    date: new Date("2021-09-01"),
+    type: LetterType.IFrame,
+  },
+  "chia-0": {
+    to: "the internet",
+    from: people.chia,
+    src: "https://chias.blog/2022/there-is-an-internet-that-is-mine/",
+    date: new Date("2022-12-12"),
     type: LetterType.IFrame,
   },
   "open-0": {

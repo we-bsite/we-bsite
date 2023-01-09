@@ -61,6 +61,8 @@ export function LetterView({ id, letter, shared }: Props) {
     );
   };
 
+  const toName = typeof to === "string" ? to : to.name;
+
   return (
     <Draggable
       handle=".letterHead"
@@ -88,8 +90,11 @@ export function LetterView({ id, letter, shared }: Props) {
             duration: 0.3,
             bounce: 0.8,
           }}
+          // TODO: move rotation to css random generation
           animate={{
-            transform: `rotate(${dragging ? 0 : position.rotation}deg)`,
+            transform: position
+              ? `rotate(${dragging ? 0 : position.rotation}deg)`
+              : "",
             boxShadow: dragging
               ? "0 0 35px rgba(51, 75, 97, 0.35)"
               : "0 0 5px rgba(51, 75, 97, 0.2)",
@@ -102,7 +107,7 @@ export function LetterView({ id, letter, shared }: Props) {
                 <span className="header">From: </span> {from.name}
               </div>
               <div>
-                <span className="header">To: </span> {to.name}
+                <span className="header">To: </span> {toName}
               </div>
             </div>
             <div className="spacer">
