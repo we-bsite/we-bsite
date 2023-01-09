@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useYDoc, useYMap } from "zustand-yjs";
 import { LetterView } from "./Letter";
 import people from "./people.json";
+import Y from 'yjs'
+import { IndexeddbPersistence } from "y-indexeddb";
 
 export interface Person {
   name: string;
@@ -16,16 +18,23 @@ export enum LetterType {
 
 export interface BaseLetter {
   type: LetterType;
-  to: Person | React.ReactNode;
+  to: Person | string;
   from: Person;
   date: Date;
-  position?: {
-    rotation: number;
-    x: number;
-    y: number;
-  };
   src: string;
   ctaText?: string;
+  initialPersistenceData: LetterPersistenceData
+}
+
+export interface LetterPersistenceData {
+  rotation: number;
+  x: number;
+  y: number;
+}
+
+export interface LetterSharedData {
+  numOpens: number;
+  numDrags: number;
 }
 
 interface IFrameLetter extends BaseLetter {
@@ -38,73 +47,84 @@ interface ContentLetter extends BaseLetter {
 
 export type Letter = IFrameLetter | ContentLetter;
 
-const Letters: Letter[] = [
-  {
+type LetterID = `${string}-${number}`
+export const letters: Record<LetterID, Letter> = {
+  "spencer-0": {
     to: "reboot & internet",
     from: people.spencer,
     src: "https://spencerchang.me/posts/everyday-magic",
-    position: {
+    initialPersistenceData: {
       rotation: 3,
       x: 50,
       y: 13,
     },
-    date: new Date("2021-12-02"),
+    date: new Date("12-02-2021"),
     type: LetterType.IFrame,
   },
-  {
+  "jacky-0": {
     to: "reboot & internet",
     from: people.jacky,
     src: "https://jzhao.xyz/posts/towards-data-neutrality/",
-    position: {
+    initialPersistenceData: {
       rotation: -2,
       x: 0,
       y: 0,
     },
-    date: new Date("2022-07-14"),
+    date: new Date("07-14-2022"),
     type: LetterType.IFrame,
   },
-  {
+  "spencer-1": {
     to: people.jacky,
     from: people.spencer,
     src: "https://spencerchang.me/posts/our-internet",
-    position: {
+    initialPersistenceData: {
       rotation: 5,
       x: 0,
       y: -55,
     },
-    date: new Date("2022-12-11"),
+    date: new Date("12-11-2022"),
     type: LetterType.IFrame,
   },
-  {
+  "jacky-1": {
     to: people.spencer,
     from: people.jacky,
     src: "https://jzhao.xyz/posts/communal-computing/",
-    position: {
+    initialPersistenceData: {
       rotation: 1,
       x: -10,
       y: 40,
     },
-    date: new Date("2022-12-26"),
+    date: new Date("12-26-2022"),
     type: LetterType.IFrame,
   },
-  {
+  "katherine-0": {
     to: "the internet",
     from: people.katherine,
+    initialPersistenceData: {
+      rotation: 1,
+      x: -5,
+      y: -50,
+    },
     src: "https://whykatherine.github.io/assets/manifesto/manifesto.pdf",
     date: new Date("2021-09-01"),
     type: LetterType.IFrame,
   },
-  {
+  "chia-0": {
     to: "the internet",
     from: people.chia,
+    initialPersistenceData: {
+      rotation: 4,
+      x: -40,
+      y: -5,
+    },
     src: "https://chias.blog/2022/there-is-an-internet-that-is-mine/",
     date: new Date("2022-12-12"),
     type: LetterType.IFrame,
   },
-  {
+  "open-0": {
     to: people.someone,
     from: people.you,
-    position: {
+    initialPersistenceData: {
       rotation: 1,
       x: -5,
       y: -5,
@@ -116,12 +136,20 @@ const Letters: Letter[] = [
     type: LetterType.Content,
     ctaText: "Submit yours →",
   },
-];
+}
+
+const connectDoc = (doc: Y.Doc) => {
+  console.log(`connected to ${doc.guid}`)
+  const index = new IndexeddbPersistence('(we)bsite-persistence', doc)
+  return () => {
+    index.destroy()
+    console.log('disconnected')
+  }
+}
 
 function App() {
-  // TODO: color the background of letters depending on from, or to/from combo?
-  const [letters, setLetters] = useState<Letter[]>(Letters);
-
+  const yDoc = useYDoc('(we)bsite-persistence', connectDoc)
+  const sharedMap = yDoc.getMap<LetterSharedData>('shared')
   return (
     <>
       <div className="App">
@@ -148,13 +176,11 @@ function App() {
           .
         </p>
       </div>
-      {/* <div id="deskPlaceholder"> */}
       <div id="desk">
-        {letters.map((letter) => (
-          <LetterView letter={letter} />
+        {Object.entries(letters).map(([id, letter]) => (
+          <LetterView letter={letter} key={id} id={id} shared={sharedMap} />
         ))}
       </div>
-      {/* </div> */}
       <footer>
         (we)bsite is a project by{" "}
         <a href={people.spencer.url}>{people.spencer.fullName}</a> and{" "}

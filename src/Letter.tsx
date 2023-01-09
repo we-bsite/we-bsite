@@ -1,18 +1,29 @@
-import { Letter, LetterType } from "./App";
+import { Letter, LetterPersistenceData, LetterSharedData, LetterType } from "./App";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import dayjs from "dayjs";
+import Y from 'yjs'
 
 interface Props {
+  id: string;
   letter: Letter;
+  shared: Y.Map<LetterSharedData>;
 }
 
-export function LetterView({ letter }: Props) {
+export function LetterView({ id, letter, shared }: Props) {
   const [dragging, setDragging] = useState(false);
-  const { to, from, position, date, type, src, ctaText } = letter;
-  // TODO: clicking on letter should open in new page
-  // TODO: some way to track which letters have been opened, and the ones that have been opened by more people are more worn?
+  const { to, from, initialPersistenceData, date, type, src, ctaText } = letter;
+  const saved = localStorage.getItem(id)
+  const savedPersistenceData = useRef<LetterPersistenceData>(saved ? JSON.parse(saved) : {})
+  const position = {
+    ...initialPersistenceData,
+    ...savedPersistenceData.current
+  }
+  const old = shared.get(id) || {
+    numOpens: 0,
+    numDrags: 0
+  }
 
   const renderContent = () => {
     let mainContent;
@@ -38,7 +49,10 @@ export function LetterView({ letter }: Props) {
       <>
         {mainContent}
         <div className="link-to-letter">
-          <a href={src} target="_blank">
+          <a href={src} target="_blank" onClick={() => shared.set(id, {
+            ...old,
+            numOpens: old.numOpens + 1
+          })}>
             {cta}
           </a>
         </div>
@@ -54,7 +68,17 @@ export function LetterView({ letter }: Props) {
       defaultClassName="letter-container"
       defaultPosition={position}
       onStart={() => setDragging(true)}
-      onStop={() => setDragging(false)}
+      onStop={(_, dragData) => {
+        localStorage.setItem(id, JSON.stringify({
+          x: dragData.x,
+          y: dragData.y
+        }))
+        shared.set(id, {
+          ...old,
+          numDrags: old.numDrags + 1
+        })
+        setDragging(false)
+      }}
     >
       <div>
         <motion.div
@@ -98,7 +122,7 @@ export function LetterView({ letter }: Props) {
                   <img src={from.stamp} />
                 </div>
               )}
-              {to.stamp && (
+              {typeof to !== 'string' && (
                 <div className="stamp">
                   <img src={to.stamp} />
                 </div>
