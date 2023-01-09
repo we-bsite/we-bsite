@@ -24,7 +24,6 @@ export function LetterView({ id, letter, shared }: Props) {
     numOpens: 0,
     numDrags: 0
   }
-  console.log(old)
 
   const renderContent = () => {
     let mainContent;
@@ -123,7 +122,7 @@ export function LetterView({ id, letter, shared }: Props) {
                   <img src={from.stamp} />
                 </div>
               )}
-              {to.stamp && (
+              {typeof to !== 'string' && (
                 <div className="stamp">
                   <img src={to.stamp} />
                 </div>

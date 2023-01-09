@@ -18,7 +18,7 @@ export enum LetterType {
 
 export interface BaseLetter {
   type: LetterType;
-  to: Person | React.ReactNode;
+  to: Person | string;
   from: Person;
   date: Date;
   src: string;
@@ -100,6 +100,11 @@ export const letters: Record<LetterID, Letter> = {
   "katherine-0": {
     to: "the internet",
     from: people.katherine,
+    initialPersistenceData: {
+      rotation: 1,
+      x: -5,
+      y: -50,
+    },
     src: "https://whykatherine.github.io/assets/manifesto/manifesto.pdf",
     date: new Date("2021-09-01"),
     type: LetterType.IFrame,
@@ -107,6 +112,11 @@ export const letters: Record<LetterID, Letter> = {
   "chia-0": {
     to: "the internet",
     from: people.chia,
+    initialPersistenceData: {
+      rotation: 4,
+      x: -40,
+      y: -5,
+    },
     src: "https://chias.blog/2022/there-is-an-internet-that-is-mine/",
     date: new Date("2022-12-12"),
     type: LetterType.IFrame,
