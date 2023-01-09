@@ -16,10 +16,10 @@ export enum LetterType {
 
 export interface BaseLetter {
   type: LetterType;
-  to: Person;
+  to: Person | React.ReactNode;
   from: Person;
   date: Date;
-  position: {
+  position?: {
     rotation: number;
     x: number;
     y: number;
@@ -38,73 +38,89 @@ interface ContentLetter extends BaseLetter {
 
 export type Letter = IFrameLetter | ContentLetter;
 
+const Letters: Letter[] = [
+  {
+    to: "reboot & internet",
+    from: people.spencer,
+    src: "https://spencerchang.me/posts/everyday-magic",
+    position: {
+      rotation: 3,
+      x: 50,
+      y: 13,
+    },
+    date: new Date("2021-12-02"),
+    type: LetterType.IFrame,
+  },
+  {
+    to: "reboot & internet",
+    from: people.jacky,
+    src: "https://jzhao.xyz/posts/towards-data-neutrality/",
+    position: {
+      rotation: -2,
+      x: 0,
+      y: 0,
+    },
+    date: new Date("2022-07-14"),
+    type: LetterType.IFrame,
+  },
+  {
+    to: people.jacky,
+    from: people.spencer,
+    src: "https://spencerchang.me/posts/our-internet",
+    position: {
+      rotation: 5,
+      x: 0,
+      y: -55,
+    },
+    date: new Date("2022-12-11"),
+    type: LetterType.IFrame,
+  },
+  {
+    to: people.spencer,
+    from: people.jacky,
+    src: "https://jzhao.xyz/posts/communal-computing/",
+    position: {
+      rotation: 1,
+      x: -10,
+      y: 40,
+    },
+    date: new Date("2022-12-26"),
+    type: LetterType.IFrame,
+  },
+  {
+    to: "the internet",
+    from: people.katherine,
+    src: "https://whykatherine.github.io/assets/manifesto/manifesto.pdf",
+    date: new Date("2021-09-01"),
+    type: LetterType.IFrame,
+  },
+  {
+    to: "the internet",
+    from: people.chia,
+    src: "https://chias.blog/2022/there-is-an-internet-that-is-mine/",
+    date: new Date("2022-12-12"),
+    type: LetterType.IFrame,
+  },
+  {
+    to: people.someone,
+    from: people.you,
+    position: {
+      rotation: 1,
+      x: -5,
+      y: -5,
+    },
+    srcContent: "your letter of internet dreams & hopes",
+    //TODO: replace with form at launch
+    src: "mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams",
+    date: new Date(),
+    type: LetterType.Content,
+    ctaText: "Submit yours →",
+  },
+];
+
 function App() {
   // TODO: color the background of letters depending on from, or to/from combo?
-  const [letters, setLetters] = useState<Letter[]>([
-    {
-      to: people.jacky,
-      from: people.spencer,
-      src: "https://spencerchang.me/posts/everyday-magic",
-      position: {
-        rotation: 3,
-        x: 50,
-        y: 13,
-      },
-      date: new Date("12-02-2021"),
-      type: LetterType.IFrame,
-    },
-    {
-      to: people.spencer,
-      from: people.jacky,
-      src: "https://jzhao.xyz/posts/towards-data-neutrality/",
-      position: {
-        rotation: -2,
-        x: 0,
-        y: 0,
-      },
-      date: new Date("07-14-2022"),
-      type: LetterType.IFrame,
-    },
-    {
-      to: people.jacky,
-      from: people.spencer,
-      src: "https://spencerchang.me/posts/our-internet",
-      position: {
-        rotation: 5,
-        x: 0,
-        y: -55,
-      },
-      date: new Date("12-11-2022"),
-      type: LetterType.IFrame,
-    },
-    {
-      to: people.spencer,
-      from: people.jacky,
-      src: "https://jzhao.xyz/posts/communal-computing/",
-      position: {
-        rotation: 1,
-        x: -10,
-        y: 40,
-      },
-      date: new Date("12-26-2022"),
-      type: LetterType.IFrame,
-    },
-    {
-      to: people.someone,
-      from: people.you,
-      position: {
-        rotation: 1,
-        x: -5,
-        y: -5,
-      },
-      srcContent: "your letter of internet dreams & hopes",
-      //TODO: replace with form at launch
-      src: "mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams",
-      date: new Date(),
-      type: LetterType.Content,
-      ctaText: "Submit yours →",
-    },
-  ]);
+  const [letters, setLetters] = useState<Letter[]>(Letters);
 
   return (
     <>

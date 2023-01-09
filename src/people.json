@@ -16,5 +16,17 @@
     "fullName": "Spencer Chang",
     "name": "Spencer",
     "stamp": "https://www.spencerchang.me/assets/name-stamp.png"
+  },
+  "katherine": {
+    "url": "https://whykatherine.github.io/",
+    "fullName": "Katherine Yang",
+    "name": "Katherine",
+    "stamp": "https://whykatherine.github.io/safari-pinned-tab.svg"
+  },
+  "chia": {
+    "url": "https://chias.website/",
+    "fullName": "Chia Amisola",
+    "name": "chia",
+    "stamp": "https://ifyouknewmewouldyoulove.me/favicon.png"
   }
 }
