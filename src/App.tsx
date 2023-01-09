@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useYDoc, useYMap } from "zustand-yjs";
 import { LetterView } from "./Letter";
 import people from "./people.json";
+import Y from 'yjs'
+import { IndexeddbPersistence } from "y-indexeddb";
 
 export interface Person {
   name: string;
@@ -19,13 +21,20 @@ export interface BaseLetter {
   to: Person;
   from: Person;
   date: Date;
-  position: {
-    rotation: number;
-    x: number;
-    y: number;
-  };
   src: string;
   ctaText?: string;
+  initialPersistenceData: LetterPersistenceData
+}
+
+export interface LetterPersistenceData {
+  rotation: number;
+  x: number;
+  y: number;
+}
+
+export interface LetterSharedData {
+  numOpens: number;
+  numDrags: number;
 }
 
 interface IFrameLetter extends BaseLetter {
@@ -38,74 +47,85 @@ interface ContentLetter extends BaseLetter {
 
 export type Letter = IFrameLetter | ContentLetter;
 
-function App() {
-  // TODO: color the background of letters depending on from, or to/from combo?
-  const [letters, setLetters] = useState<Letter[]>([
-    {
-      to: people.jacky,
-      from: people.spencer,
-      src: "https://spencerchang.me/posts/everyday-magic",
-      position: {
-        rotation: 3,
-        x: 50,
-        y: 13,
-      },
-      date: new Date("12-02-2021"),
-      type: LetterType.IFrame,
+type LetterID = `${string}-${number}`
+export const letters: Record<LetterID, Letter> = {
+  "spencer-0": {
+    to: people.jacky,
+    from: people.spencer,
+    src: "https://spencerchang.me/posts/everyday-magic",
+    initialPersistenceData: {
+      rotation: 3,
+      x: 50,
+      y: 13,
     },
-    {
-      to: people.spencer,
-      from: people.jacky,
-      src: "https://jzhao.xyz/posts/towards-data-neutrality/",
-      position: {
-        rotation: -2,
-        x: 0,
-        y: 0,
-      },
-      date: new Date("07-14-2022"),
-      type: LetterType.IFrame,
+    date: new Date("12-02-2021"),
+    type: LetterType.IFrame,
+  },
+  "jacky-0": {
+    to: people.spencer,
+    from: people.jacky,
+    src: "https://jzhao.xyz/posts/towards-data-neutrality/",
+    initialPersistenceData: {
+      rotation: -2,
+      x: 0,
+      y: 0,
     },
-    {
-      to: people.jacky,
-      from: people.spencer,
-      src: "https://spencerchang.me/posts/our-internet",
-      position: {
-        rotation: 5,
-        x: 0,
-        y: -55,
-      },
-      date: new Date("12-11-2022"),
-      type: LetterType.IFrame,
+    date: new Date("07-14-2022"),
+    type: LetterType.IFrame,
+  },
+  "spencer-1": {
+    to: people.jacky,
+    from: people.spencer,
+    src: "https://spencerchang.me/posts/our-internet",
+    initialPersistenceData: {
+      rotation: 5,
+      x: 0,
+      y: -55,
     },
-    {
-      to: people.spencer,
-      from: people.jacky,
-      src: "https://jzhao.xyz/posts/communal-computing/",
-      position: {
-        rotation: 1,
-        x: -10,
-        y: 40,
-      },
-      date: new Date("12-26-2022"),
-      type: LetterType.IFrame,
+    date: new Date("12-11-2022"),
+    type: LetterType.IFrame,
+  },
+  "jacky-1": {
+    to: people.spencer,
+    from: people.jacky,
+    src: "https://jzhao.xyz/posts/communal-computing/",
+    initialPersistenceData: {
+      rotation: 1,
+      x: -10,
+      y: 40,
     },
-    {
-      to: people.someone,
-      from: people.you,
-      position: {
-        rotation: 1,
-        x: -5,
-        y: -5,
-      },
-      srcContent: "your letter of internet dreams & hopes",
-      //TODO: replace with form at launch
-      src: "mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams",
-      date: new Date(),
-      type: LetterType.Content,
-      ctaText: "Submit yours →",
+    date: new Date("12-26-2022"),
+    type: LetterType.IFrame,
+  },
+  "open-0": {
+    to: people.someone,
+    from: people.you,
+    initialPersistenceData: {
+      rotation: 1,
+      x: -5,
+      y: -5,
     },
-  ]);
+    srcContent: "your letter of internet dreams & hopes",
+    //TODO: replace with form at launch
+    src: "mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams",
+    date: new Date(),
+    type: LetterType.Content,
+    ctaText: "Submit yours →",
+  },
+}
 
+const connectDoc = (doc: Y.Doc) => {
+  console.log(`connected to ${doc.guid}`)
+  const index = new IndexeddbPersistence('(we)bsite-persistence', doc)
+  return () => {
+    index.destroy()
+    console.log('disconnected')
+  }
+}
+
+function App() {
+  const yDoc = useYDoc('(we)bsite-persistence', connectDoc)
+  const sharedMap = yDoc.getMap<LetterSharedData>('shared')
   return (
     <>
       <div className="App">
@@ -132,13 +152,11 @@ function App() {
           .
         </p>
       </div>
-      {/* <div id="deskPlaceholder"> */}
       <div id="desk">
-        {letters.map((letter) => (
-          <LetterView letter={letter} />
+        {Object.entries(letters).map(([id, letter]) => (
+          <LetterView letter={letter} key={id} id={id} shared={sharedMap} />
         ))}
       </div>
-      {/* </div> */}
       <footer>
         (we)bsite is a project by{" "}
         <a href={people.spencer.url}>{people.spencer.fullName}</a> and{" "}
