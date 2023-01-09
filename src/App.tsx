@@ -48,7 +48,7 @@ const Letters: Letter[] = [
       x: 50,
       y: 13,
     },
-    date: new Date("12-02-2021"),
+    date: new Date("2021-12-02"),
     type: LetterType.IFrame,
   },
   {
@@ -60,7 +60,7 @@ const Letters: Letter[] = [
       x: 0,
       y: 0,
     },
-    date: new Date("07-14-2022"),
+    date: new Date("2022-07-14"),
     type: LetterType.IFrame,
   },
   {
@@ -72,7 +72,7 @@ const Letters: Letter[] = [
       x: 0,
       y: -55,
     },
-    date: new Date("12-11-2022"),
+    date: new Date("2022-12-11"),
     type: LetterType.IFrame,
   },
   {
@@ -84,21 +84,21 @@ const Letters: Letter[] = [
       x: -10,
       y: 40,
     },
-    date: new Date("12-26-2022"),
+    date: new Date("2022-12-26"),
     type: LetterType.IFrame,
   },
   {
     to: "the internet",
     from: people.katherine,
     src: "https://whykatherine.github.io/assets/manifesto/manifesto.pdf",
-    date: new Date("09-01-2021"),
+    date: new Date("2021-09-01"),
     type: LetterType.IFrame,
   },
   {
     to: "the internet",
     from: people.chia,
     src: "https://chias.blog/2022/there-is-an-internet-that-is-mine/",
-    date: new Date("12-12-2022"),
+    date: new Date("2022-12-12"),
     type: LetterType.IFrame,
   },
   {
