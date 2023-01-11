@@ -21,6 +21,12 @@ export interface BaseLetter {
   initialPersistenceData: LetterPersistenceData;
 }
 
+export interface LetterSubmitInfo extends Pick<BaseLetter, "date" | type> {
+  toId: string;
+  fromId: string;
+  src: string;
+}
+
 export interface LetterPersistenceData {
   rotation: number;
   x: number;
