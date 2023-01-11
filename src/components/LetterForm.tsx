@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { Letter } from "../Letter";
+import { Letter } from "../types";
 
 interface Props {
   letter: Letter;

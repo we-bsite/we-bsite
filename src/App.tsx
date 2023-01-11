@@ -34,8 +34,6 @@ function App() {
       y: -5,
     },
     srcContent: "your letter of internet dreams & hopes",
-    //TODO: replace with form at launch
-    src: "mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams",
     date: new Date(),
     type: LetterType.Content,
     ctaContent: <LetterForm letter={Letters[0]}></LetterForm>,

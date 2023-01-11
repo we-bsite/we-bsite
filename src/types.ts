@@ -16,12 +16,11 @@ export interface BaseLetter {
   to: Person | string;
   from: Person;
   date: Date;
-  src: string;
   ctaContent?: React.ReactNode;
   initialPersistenceData: LetterPersistenceData;
 }
 
-export interface LetterSubmitInfo extends Pick<BaseLetter, "date" | type> {
+export interface LetterSubmitInfo extends Pick<BaseLetter, "date" | "type"> {
   toId: string;
   fromId: string;
   src: string;
@@ -39,6 +38,7 @@ export interface LetterSharedData {
 }
 interface IFrameLetter extends BaseLetter {
   type: LetterType.IFrame;
+  src: string;
 }
 interface ContentLetter extends BaseLetter {
   type: LetterType.Content;
