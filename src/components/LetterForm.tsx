@@ -20,11 +20,12 @@ export function LetterForm({ letter }: Props) {
 
   return (
     <>
-      <Dialog.Trigger asChild>
+      {/* <Dialog.Trigger asChild>
         <button className="submit">Submit yours →</button>
-      </Dialog.Trigger>
+      </Dialog.Trigger> */}
       {/* TODO: onclick enter edit mode */}
-      <button className="submit">Edit letter</button>
+      {/* this maybe open up a bigger modal with the letter and then lets u edit all the fields and then persists to local storage if you exit so ur progress is always saved and u can come back and submit anytime */}
+      <button className="submit">Edit your letter →</button>
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" />
         <Dialog.Content className="DialogContent">

@@ -47,7 +47,6 @@ function App() {
       submitLetter,
       {
         ...submitLetter,
-        ctaContent: <LetterForm letter={Letters[1]}></LetterForm>,
       },
     ]);
   }, []);
