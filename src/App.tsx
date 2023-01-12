@@ -1,7 +1,7 @@
 import { useYDoc, useYMap } from "zustand-yjs";
 import { LetterView } from "./Letter";
 import people from "./people.json";
-import Y from 'yjs'
+import Y from "yjs";
 import { IndexeddbPersistence } from "y-indexeddb";
 
 export interface Person {
@@ -23,7 +23,7 @@ export interface BaseLetter {
   date: Date;
   src: string;
   ctaText?: string;
-  initialPersistenceData: LetterPersistenceData
+  initialPersistenceData: LetterPersistenceData;
 }
 
 export interface LetterPersistenceData {
@@ -47,7 +47,7 @@ interface ContentLetter extends BaseLetter {
 
 export type Letter = IFrameLetter | ContentLetter;
 
-type LetterID = `${string}-${number}`
+type LetterID = `${string}-${number}`;
 export const letters: Record<LetterID, Letter> = {
   "spencer-0": {
     to: "reboot & internet",
@@ -58,7 +58,7 @@ export const letters: Record<LetterID, Letter> = {
       x: 50,
       y: 13,
     },
-    date: new Date("12-02-2021"),
+    date: new Date("2021-12-02"),
     type: LetterType.IFrame,
   },
   "jacky-0": {
@@ -70,7 +70,7 @@ export const letters: Record<LetterID, Letter> = {
       x: 0,
       y: 0,
     },
-    date: new Date("07-14-2022"),
+    date: new Date("2022-07-14"),
     type: LetterType.IFrame,
   },
   "spencer-1": {
@@ -82,7 +82,7 @@ export const letters: Record<LetterID, Letter> = {
       x: 0,
       y: -55,
     },
-    date: new Date("12-11-2022"),
+    date: new Date("2022-12-11"),
     type: LetterType.IFrame,
   },
   "jacky-1": {
@@ -94,7 +94,7 @@ export const letters: Record<LetterID, Letter> = {
       x: -10,
       y: 40,
     },
-    date: new Date("12-26-2022"),
+    date: new Date("2022-12-26"),
     type: LetterType.IFrame,
   },
   "katherine-0": {
@@ -136,20 +136,20 @@ export const letters: Record<LetterID, Letter> = {
     type: LetterType.Content,
     ctaText: "Submit yours →",
   },
-}
+};
 
 const connectDoc = (doc: Y.Doc) => {
-  console.log(`connected to ${doc.guid}`)
-  const index = new IndexeddbPersistence('(we)bsite-persistence', doc)
+  console.log(`connected to ${doc.guid}`);
+  const index = new IndexeddbPersistence("(we)bsite-persistence", doc);
   return () => {
-    index.destroy()
-    console.log('disconnected')
-  }
-}
+    index.destroy();
+    console.log("disconnected");
+  };
+};
 
 function App() {
-  const yDoc = useYDoc('(we)bsite-persistence', connectDoc)
-  const sharedMap = yDoc.getMap<LetterSharedData>('shared')
+  const yDoc = useYDoc("(we)bsite-persistence", connectDoc);
+  const sharedMap = yDoc.getMap<LetterSharedData>("shared");
   return (
     <>
       <div className="App">
