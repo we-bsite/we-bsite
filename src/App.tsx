@@ -78,6 +78,9 @@ function App() {
             catalyst for change by showing all the love, care, memories, and
             dreams that people have for the internet.
           </p>
+          <p>
+            <em>What do you want from the internet?</em>
+          </p>
         </div>
         <div className="toolbar">
           {/* reset letters */}

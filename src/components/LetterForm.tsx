@@ -47,7 +47,7 @@ export function LetterFormDialogContent() {
             want to be with, what spaces you'd like to spend time in, memories,
             feelings, hopes, and what it means to you.
           </p>
-          <p>you can submit a link to your written dream or write it here.</p>
+          <p>what do you want from the internet?</p>
         </Dialog.Description>
         <div className="mainDialogContent">
           <DraggableLetter
@@ -56,6 +56,7 @@ export function LetterFormDialogContent() {
             disableDrag={true}
           />
         </div>
+        <p>you can submit a link to your written dream or write it here.</p>
         <div
           style={{
             display: "flex",
