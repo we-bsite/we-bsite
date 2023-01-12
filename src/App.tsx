@@ -1,13 +1,16 @@
-import { useYDoc, useYMap } from "zustand-yjs";
-import { LetterView } from "./components/Letter";
+import { useYDoc } from "zustand-yjs";
+import { DraggableLetter } from "./components/Letter";
 import people from "./data/people.json";
 import { IndexeddbPersistence } from "y-indexeddb";
 import * as Dialog from "@radix-ui/react-dialog";
 import { YJS_ROOM } from "./constants";
-import { LetterType, LetterSharedData, Letter } from "./types";
+import { LetterType, LetterSharedData, LetterInterface } from "./types";
 import { Letters } from "./data/letters";
 import { useEffect, useState } from "react";
-import { LetterForm } from "./components/LetterForm";
+import {
+  LetterFormButton,
+  LetterFormDialogContent,
+} from "./components/LetterForm";
 import { ShuffleIcon, ResetIcon, ViewGridIcon } from "@radix-ui/react-icons";
 
 const connectDoc = (doc: Y.Doc) => {
@@ -19,32 +22,31 @@ const connectDoc = (doc: Y.Doc) => {
   };
 };
 
+export const SubmitLetterMetadata: LetterInterface = {
+  id: "submit-0",
+  to: people.someone,
+  from: people.you,
+  initialPersistenceData: {
+    rotation: 1,
+    x: -5,
+    y: -5,
+  },
+  srcContent: "your letter of internet dreams & hopes",
+  date: new Date(),
+  type: LetterType.Content,
+};
+
 function App() {
   const yDoc = useYDoc(YJS_ROOM, connectDoc);
   const sharedMap = yDoc.getMap<LetterSharedData>("shared");
-  const [letters, setLetters] = useState<Letter[] | undefined>();
-
-  const submitLetter: Letter = {
-    id: "submit-0",
-    to: people.someone,
-    from: people.you,
-    initialPersistenceData: {
-      rotation: 1,
-      x: -5,
-      y: -5,
-    },
-    srcContent: "your letter of internet dreams & hopes",
-    date: new Date(),
-    type: LetterType.Content,
-    ctaContent: <LetterForm letter={Letters[0]}></LetterForm>,
-  };
+  const [letters, setLetters] = useState<LetterInterface[] | undefined>();
 
   useEffect(() => {
     setLetters([
       ...Letters,
-      submitLetter,
       {
-        ...submitLetter,
+        ...SubmitLetterMetadata,
+        ctaContent: <LetterFormButton letter={Letters[0]}></LetterFormButton>,
       },
     ]);
   }, []);
@@ -93,10 +95,9 @@ function App() {
         </div>
         <div id="desk">
           {letters?.map((letter) => (
-            <LetterView
+            <DraggableLetter
               letter={letter}
               key={letter.id}
-              id={letter.id}
               shared={sharedMap}
             />
           ))}
@@ -114,6 +115,7 @@ function App() {
             .
           </p>
         </footer>
+        <LetterFormDialogContent />
       </Dialog.Root>
     </>
   );

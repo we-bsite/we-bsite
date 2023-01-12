@@ -1,7 +1,7 @@
 import people from "./people.json";
-import { Letter, LetterType } from "../types";
+import { LetterInterface, LetterType } from "../types";
 
-export const Letters: Array<Letter> = [
+export const Letters: Array<LetterInterface> = [
   {
     id: "spencer-0",
     to: "reboot & internet",

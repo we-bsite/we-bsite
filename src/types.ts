@@ -45,5 +45,5 @@ interface ContentLetter extends BaseLetter {
   srcContent: React.ReactNode;
 }
 
-export type Letter = IFrameLetter | ContentLetter;
+export type LetterInterface = IFrameLetter | ContentLetter;
 type LetterID = `${string}-${number}`;
