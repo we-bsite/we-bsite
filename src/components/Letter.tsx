@@ -182,7 +182,9 @@ export function LetterView({
     );
   };
 
-  // Persist to local storage to save state.
+  // Persist to local storage to save state. Probably need to extract to
+  // separate file and pass in the editable things.
+  // export to LetterForm
   const [fromName, setFromName] = useState(from.name);
   const [toName, setToName] = useState(typeof to === "string" ? to : to.name);
   const [fromStamp, setFromStamp] = useState(from.stamp);
@@ -204,7 +206,11 @@ export function LetterView({
 
   return (
     <>
-      <div className={`letterHead ${isDragging ? "dragging" : ""}`}>
+      <div
+        className={`letterHead ${isDragging ? "dragging" : ""} ${
+          isEditable ? "disabled" : ""
+        }`}
+      >
         <div>
           <div>
             <span className="header">From: </span>{" "}
@@ -240,9 +246,11 @@ export function LetterView({
         </div>
         <div className="stamps">
           {isEditable ? (
-            <div className="stamp">
-              <label className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
-                <span className="flex items-center space-x-2">
+            <div className="stamp cursor-pointer">
+              <label className="flex justify-center w-full h-32 px-4 appearance-none cursor-pointer hover:background-gray-400 focus:outline-none">
+                {fromStamp ? (
+                  <img src={fromStamp} />
+                ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-6 h-6 text-gray-600"
@@ -257,7 +265,7 @@ export function LetterView({
                       d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                     />
                   </svg>
-                </span>
+                )}
                 <input
                   accept="image/*"
                   type="file"

@@ -1,7 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { SubmitLetterMetadata } from "../App";
 import { LetterInterface } from "../types";
-import { DraggableLetter, LetterView } from "./Letter";
+import { Letter } from "./Letter";
 
 interface Props {
   letter: LetterInterface;
@@ -33,12 +33,13 @@ export function LetterFormDialogContent() {
   const submitDream = async () => {
     // TODO: submit dream api
   };
+
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="DialogOverlay" />
       <Dialog.Content className="DialogContent">
         <Dialog.Title className="DialogTitle">
-          tell your internet dream
+          tell your internet dream (coming soon)
         </Dialog.Title>
         <Dialog.Description className="DialogDescription">
           <p>
@@ -50,7 +51,7 @@ export function LetterFormDialogContent() {
           <p>what do you want from the internet?</p>
         </Dialog.Description>
         <div className="mainDialogContent">
-          <DraggableLetter
+          <Letter
             letter={SubmitLetterMetadata}
             isEditable={true}
             disableDrag={true}
@@ -66,7 +67,7 @@ export function LetterFormDialogContent() {
         >
           {/* TODO: disable until all filled in */}
           <Dialog.Close asChild>
-            <button className="submit" onClick={submitDream}>
+            <button className="submit" onClick={submitDream} disabled={true}>
               Tell Dream
             </button>
           </Dialog.Close>
@@ -80,3 +81,5 @@ export function LetterFormDialogContent() {
     </Dialog.Portal>
   );
 }
+
+export function LetterForm() {}

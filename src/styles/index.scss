@@ -163,7 +163,7 @@ h3 {
   height: auto;
   width: auto;
 
-  & > img,
+  & img,
   & svg {
     height: 30px;
     width: 30px;
@@ -173,7 +173,7 @@ h3 {
     border-style: solid;
   }
 
-  & svg {
+  & label {
     cursor: pointer;
   }
 }
@@ -218,7 +218,7 @@ $letter-zoom-scale: 0.5;
     cursor: pointer;
     display: flex;
 
-    &.dragging {
+    &.dragging:not(.disabled) {
       cursor: grabbing;
     }
   }
@@ -282,7 +282,6 @@ button {
 }
 
 .DialogContent {
-  // background-color: rgb(242, 242, 242);
   background-color: $color-main;
   border-radius: 6px;
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
@@ -312,20 +311,7 @@ button {
 
 .DialogDescription {
   margin: 10px 0 20px;
-  font-size: 15px;
   line-height: 1.5;
-}
-
-.Button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  padding: 0 15px;
-  font-size: 15px;
-  line-height: 1;
-  font-weight: 500;
-  height: 35px;
 }
 
 .mainDialogContent {
