@@ -17,12 +17,7 @@ interface Props {
   disableDrag?: boolean;
 }
 
-export function DraggableLetter({
-  letter,
-  shared,
-  isEditable,
-  disableDrag,
-}: Props) {
+export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
   const [isDragging, setDragging] = useState(disableDrag ? true : false);
   const { id, initialPersistenceData } = letter;
   const saved = disableDrag ? undefined : localStorage.getItem(id);
