@@ -12,7 +12,7 @@ export const Letters: Array<LetterInterface> = [
       x: 50,
       y: 13,
     },
-    date: new Date("12-02-2021"),
+    date: new Date("2021-12-02"),
     type: LetterType.IFrame,
   },
   {
@@ -25,7 +25,7 @@ export const Letters: Array<LetterInterface> = [
       x: 0,
       y: 0,
     },
-    date: new Date("07-14-2022"),
+    date: new Date("2022-07-14"),
     type: LetterType.IFrame,
   },
   {
@@ -38,7 +38,7 @@ export const Letters: Array<LetterInterface> = [
       x: 0,
       y: -55,
     },
-    date: new Date("12-11-2022"),
+    date: new Date("2022-12-11"),
     type: LetterType.IFrame,
   },
   {
@@ -51,7 +51,7 @@ export const Letters: Array<LetterInterface> = [
       x: -10,
       y: 40,
     },
-    date: new Date("12-26-2022"),
+    date: new Date("2022-12-26"),
     type: LetterType.IFrame,
   },
   {
