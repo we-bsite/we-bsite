@@ -1,27 +1,8 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { SubmitLetterMetadata } from "../App";
-import { LetterInterface } from "../types";
 import { Letter } from "./Letter";
 
-interface Props {
-  letter: LetterInterface;
-}
-
-export function LetterFormButton({ letter }: Props) {
-  /**
-   * things to submit
-   * - who are you?
-   * - to
-   * - date (if different from date submitted)
-   * - src OR srcContent
-   */
-
-  {
-    /* TODO: onclick enter edit mode */
-  }
-  {
-    /* this maybe open up a bigger modal with the letter and then lets u edit all the fields and then persists to local storage if you exit so ur progress is always saved and u can come back and submit anytime */
-  }
+export function LetterFormButton() {
   return (
     <Dialog.Trigger asChild>
       <button className="submit">Edit your letter</button>

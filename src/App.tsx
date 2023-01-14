@@ -16,6 +16,7 @@ export const SubmitLetterMetadata: LetterInterface = {
   srcContent: "your letter of internet dreams & hopes",
   date: new Date(),
   type: LetterType.Content,
+  ctaContent: <LetterFormButton></LetterFormButton>,
 };
 
 function App() {

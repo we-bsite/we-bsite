@@ -19,13 +19,13 @@ export function Desk() {
       ...Letters,
       {
         ...SubmitLetterMetadata,
-        ctaContent: <LetterFormButton letter={Letters[0]}></LetterFormButton>,
+        ctaContent: <LetterFormButton />,
       },
     ]);
   }, []);
 
-  return (
-    <>
+  const renderToolbar = () => {
+    return (
       <div className="toolbar">
         {/* reset letters */}
         <button>
@@ -40,6 +40,12 @@ export function Desk() {
           <ViewGridIcon />
         </button>
       </div>
+    );
+  };
+
+  return (
+    <>
+      {/* {renderToolbar()} */}
       <div id="desk">
         {letters?.map((letter) => (
           <Letter letter={letter} key={letter.id} shared={sharedMap} />
