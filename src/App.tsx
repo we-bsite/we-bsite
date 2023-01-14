@@ -1,7 +1,10 @@
 import people from "./data/people.json";
 import * as Dialog from "@radix-ui/react-dialog";
 import { LetterType, LetterInterface } from "./types";
-import { LetterFormDialogContent } from "./components/LetterForm";
+import {
+  LetterFormButton,
+  LetterFormDialogContent,
+} from "./components/LetterForm";
 import { Desk } from "./components/Desk";
 
 export const SubmitLetterMetadata: LetterInterface = {
@@ -16,7 +19,7 @@ export const SubmitLetterMetadata: LetterInterface = {
   srcContent: "your letter of internet dreams & hopes",
   date: new Date(),
   type: LetterType.Content,
-  ctaContent: <LetterFormButton></LetterFormButton>,
+  ctaContent: <LetterFormButton />,
 };
 
 function App() {
