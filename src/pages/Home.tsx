@@ -1,6 +1,6 @@
-import people from "./data/people.json";
+import people from "../data/people.json";
 import * as Dialog from "@radix-ui/react-dialog";
-import { LetterType, LetterInterface } from "./types";
+import { LetterType, LetterInterface } from "../types";
 import {
   LetterFormButton,
   LetterFormDialogContent,
@@ -21,7 +21,7 @@ export const SubmitLetterMetadata: LetterInterface = {
   type: LetterType.Content,
 };
 
-function App() {
+function Home() {
   return (
     <>
       <Dialog.Root>
@@ -73,4 +73,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
