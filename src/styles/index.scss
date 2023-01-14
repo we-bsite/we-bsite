@@ -1,10 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 // $color-main: #0288d1;
 $color-main: #d1efff;
+$color-accent: #aee68b;
 $color-bg: #213547;
+$color-overlay: #9185687b;
 $color-shadow: #334b6177;
+$color-box-shadow: #2e2f3030;
 $color-letter: #faf9f5;
 $color-letter-border: #d9d3c1;
 $date-stamp-border-size: 2px;
+$zindex-overlay: 100;
+$zindex-dialog: $zindex-overlay + 1;
 
 :root {
   font-family: "EB Garamond", Avenir, Helvetica, Arial, sans-serif;
@@ -46,7 +55,7 @@ body {
 button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  padding: 0.2em 0.6em;
   font-size: 1em;
   font-weight: 500;
 
@@ -103,6 +112,12 @@ h3 {
       }
     }
   }
+
+  &.disabled {
+    .letterHead.letterHead {
+      cursor: initial;
+    }
+  }
 }
 
 .stamps {
@@ -148,13 +163,18 @@ h3 {
   height: auto;
   width: auto;
 
-  & > img {
+  & img,
+  & svg {
     height: 30px;
     width: 30px;
     border-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAAXNSR0IArs4c6QAAAJtJREFUOE9jLIiw+8/AwMAwYcUhRhgbxgfRyGIgPi45ZP0oBsE0UUozwlwDsolSw0C+ApkDdym690m1AKv3YYLkuBjmQlj4Y7iUVBcjOwZuKHKYIttIjIvR1cPDlCaGoqdTUsIWm0tBjsQZpuR6f9RQBpRsOjSTFLF5H2uOwpZOiTUQpo5g3ifVQOSCG2veJ9dAdBfTpuSnRR0FABXZWnBmPtz1AAAAAElFTkSuQmCC")
       4 / 4px / 0 round;
     border-width: 4px;
     border-style: solid;
+  }
+
+  & label {
+    cursor: pointer;
   }
 }
 
@@ -178,62 +198,62 @@ $letter-zoom-scale: 0.5;
   @media (max-width: 1270px) {
     // overflow-x: scroll;
   }
+}
 
-  .letter {
+.letter {
+  overflow: hidden;
+  border: 1px solid $color-letter-border;
+  border-radius: 5px;
+  background: $color-letter;
+  width: fit-content;
+
+  .header {
+    font-weight: bold;
+  }
+
+  .letterHead {
+    text-shadow: 0 0 5px $color-shadow;
+    line-height: 1.6;
+    padding: 0.8em;
+    cursor: pointer;
+    display: flex;
+
+    &.dragging:not(.disabled) {
+      cursor: grabbing;
+    }
+  }
+
+  .spacer {
+    flex-grow: 1;
+    position: relative;
+  }
+
+  .link-to-letter > a {
+    padding: 0.2em 0.8em;
+  }
+
+  .letter-content-wrapper {
+    width: 300px;
+    height: 300px;
     overflow: hidden;
-    border: 1px solid $color-letter-border;
-    border-radius: 5px;
-    background: $color-letter;
-    width: fit-content;
+    border-top: 1px solid $color-letter-border;
+    border-bottom: 1px solid $color-letter-border;
 
-    .header {
-      font-weight: bold;
+    iframe {
+      border: none;
+      width: 100% * calc(1 / $letter-zoom-scale);
+      height: 100% * calc(1 / $letter-zoom-scale);
+      -webkit-transform: scale($letter-zoom-scale);
+      transform: scale($letter-zoom-scale);
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
     }
 
-    .letterHead {
-      text-shadow: 0 0 5px $color-shadow;
-      line-height: 1.6;
-      padding: 0.8em;
-      cursor: pointer;
-      display: flex;
-
-      &.dragging {
-        cursor: grabbing;
-      }
-    }
-
-    .spacer {
-      flex-grow: 1;
-      position: relative;
-    }
-
-    .link-to-letter > a {
-      padding: 0.2em 0.8em;
-    }
-
-    .letter-content-wrapper {
-      width: 300px;
-      height: 300px;
-      overflow: hidden;
-      border-top: 1px solid $color-letter-border;
-      border-bottom: 1px solid $color-letter-border;
-
-      iframe {
-        border: none;
-        width: 100% * calc(1 / $letter-zoom-scale);
-        height: 100% * calc(1 / $letter-zoom-scale);
-        -webkit-transform: scale($letter-zoom-scale);
-        transform: scale($letter-zoom-scale);
-        -webkit-transform-origin: 0 0;
-        transform-origin: 0 0;
-      }
-
-      &.direct {
-        background: linear-gradient(180deg, $color-letter 0%, $color-main 80%);
-        text-align: center;
-        padding-top: 20px;
-        font-family: cursive;
-      }
+    &.direct {
+      background: linear-gradient(180deg, $color-letter 0%, $color-main 80%);
+      text-align: center;
+      padding-top: 20px;
+      font-family: cursive;
     }
   }
 }
@@ -247,4 +267,111 @@ footer {
 // cursor chat overrides
 #cursor-chat-layer .cursor > p {
   padding: 0.3rem 0.6rem !important;
+}
+
+button {
+  background: $color-accent;
+}
+
+.DialogOverlay {
+  background-color: $color-overlay;
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: $zindex-overlay;
+}
+
+.DialogContent {
+  background-color: $color-main;
+  border-radius: 6px;
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 500px;
+  max-height: 85vh;
+  padding: 40px;
+
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: $zindex-dialog;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.DialogTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.2em;
+}
+
+.DialogDescription {
+  margin: 10px 0 20px;
+  line-height: 1.5;
+}
+
+.mainDialogContent {
+  display: flex;
+  justify-content: center;
+}
+
+.stampInput {
+  display: none;
+  width: inherit;
+  height: inherit;
+}
+
+.dialogInput {
+  all: unset;
+  width: 80px;
+
+  &:focus {
+    box-shadow: 0 0 4px 2px $color-box-shadow;
+    // background: white;
+  }
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  margin-left: 0.05em;
+
+  position: absolute;
+  left: 0;
+  z-index: 10;
+
+  button {
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    box-shadow: 0 0 6px 1px $color-box-shadow;
+  }
+}
+
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dialogCloseButton {
+  font-family: inherit;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0;
 }
