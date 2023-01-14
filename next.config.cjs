@@ -4,12 +4,12 @@ const nextConfig = {
   swcMinify: true,
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn-images-1.medium.com",
-        port: "",
-        pathname: "/**",
-      },
+      // {
+      //   protocol: "https",
+      //   hostname: "cdn-images-1.medium.com",
+      //   port: "",
+      //   pathname: "/**",
+      // },
     ],
   },
 };
