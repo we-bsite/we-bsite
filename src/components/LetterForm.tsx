@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { SubmitLetterMetadata } from "../Home";
+import { SubmitLetterMetadata } from "./Home";
 import { Letter } from "./Letter";
 
 export function LetterFormButton() {

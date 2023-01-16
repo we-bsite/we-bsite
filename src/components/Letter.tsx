@@ -3,7 +3,7 @@ import {
   LetterPersistenceData,
   LetterSharedData,
   LetterType,
-} from "../../types";
+} from "../types";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import Draggable from "react-draggable";
