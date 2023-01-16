@@ -3,6 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { LetterType, LetterInterface } from "../types";
 import { LetterFormButton, LetterFormDialogContent } from "./LetterForm";
 import { Desk } from "./Desk";
+import { useEffect } from "react";
 
 export const SubmitLetterMetadata: LetterInterface = {
   id: "submit-0",
@@ -19,6 +20,12 @@ export const SubmitLetterMetadata: LetterInterface = {
 };
 
 function Home() {
+  useEffect(() => {
+    console.log(
+      "Hi there friend. If you'd like, poke around the source code! https://github.com/we-bsite/we-bsite"
+    );
+  }, []);
+
   return (
     <>
       <Dialog.Root>
@@ -54,15 +61,12 @@ function Home() {
         <footer>
           (we)bsite is a project by{" "}
           <a href={people.spencer.url}>{people.spencer.fullName}</a> and{" "}
-          <a href={people.jacky.url}>{people.jacky.fullName}</a>. Poke around{" "}
-          <a href="https://github.com/we-bsite/we-bsite">the source code</a>!{" "}
-          <p>
-            if your ears are perked, please{" "}
-            <a href="mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams">
-              reach out to us
-            </a>
-            .
-          </p>
+          <a href={people.jacky.url}>{people.jacky.fullName}</a>. if your ears
+          are perked, please{" "}
+          <a href="mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams">
+            reach out to us
+          </a>
+          .
         </footer>
         <LetterFormDialogContent />
       </Dialog.Root>
