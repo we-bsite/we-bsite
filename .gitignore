@@ -24,6 +24,9 @@ node_modules/
 # Optional npm cache directory
 .npm
 
+# Next.js build output
+.next
+
 # Optional eslint cache
 .eslintcache
 

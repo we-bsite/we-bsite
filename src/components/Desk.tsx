@@ -7,7 +7,7 @@ import { LetterFormButton } from "./LetterForm";
 import { Letter } from "./Letter";
 import { ShuffleIcon, ResetIcon, ViewGridIcon } from "@radix-ui/react-icons";
 import { connectDoc } from "../utils/yjs";
-import { SubmitLetterMetadata } from "../App";
+import { SubmitLetterMetadata } from "./Home";
 
 export function Desk() {
   const yDoc = useYDoc(YJS_ROOM, connectDoc);

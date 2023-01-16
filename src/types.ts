@@ -47,3 +47,5 @@ interface ContentLetter extends BaseLetter {
 
 export type LetterInterface = IFrameLetter | ContentLetter;
 type LetterID = `${string}-${number}`;
+
+export type ApiLetter = Omit<LetterInterface, "initialPersistenceData">;
