@@ -9,6 +9,8 @@ import { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import dayjs from "dayjs";
 import Y from "yjs";
+import { withQueryParams } from "../utils/url";
+import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 
 interface Props {
   letter: LetterInterface;
@@ -133,7 +135,10 @@ export function LetterView({
         // on drag, render the iframe
         mainContent = (
           <div className="letter-content-wrapper">
-            <iframe loading="lazy" src={src}></iframe>
+            <iframe
+              loading="lazy"
+              src={withQueryParams(src, { device: "mobile" })}
+            ></iframe>
           </div>
         );
         // TODO: remove shared and move cta back to DraggableLetter
@@ -149,7 +154,10 @@ export function LetterView({
                 })
               }
             >
-              Read letter →
+              Read letter{" "}
+              <OpenInNewWindowIcon
+                style={{ verticalAlign: "middle", marginBottom: "3px" }}
+              />
             </a>
           </div>
         );
