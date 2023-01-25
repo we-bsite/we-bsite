@@ -1,6 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
 
+if (
+  !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+) {
+  throw new Error("supabase url not found in environment settings.");
+}
+
 export const supabase = createClient(
-  "https://aexeukglvemeibikbgtj.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFleGV1a2dsdmVtZWliaWtiZ3RqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzM5MTY1ODYsImV4cCI6MTk4OTQ5MjU4Nn0.iriy9kALFIitA5hFLcfJGyBcjGUsG03R7alVHKv9p9s"
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
