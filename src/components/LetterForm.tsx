@@ -1,5 +1,8 @@
 import * as Dialog from "@radix-ui/react-dialog";
+import { useContext } from "react";
+import { UserLetterContext } from "../context/UserLetterContext";
 import { supabase } from "../lib/supabaseClient";
+import { LetterInteractionData } from "../types";
 import { SubmitLetterMetadata } from "./Home";
 import { Letter } from "./Letter";
 
@@ -12,13 +15,30 @@ export function LetterFormButton() {
 }
 
 export function LetterFormDialogContent() {
+  const { fromName, toName, fromStamp, content, type, onLetterSubmitted } =
+    useContext(UserLetterContext);
+  const submitDisabled =
+    !fromName || !toName || !fromStamp || !content || !type;
+
   const submitDream = async () => {
-    // grab content from localstorage
+    if (submitDisabled) {
+      return;
+    }
 
-    // persist in supabase
-    await supabase.from("letters").insert({});
+    await supabase.from("letters").insert({
+      from_person: {
+        name: fromName,
+        stamp: fromStamp,
+      },
+      to_person: toName,
+      letter_content: {
+        content,
+        type,
+      },
+      interaction_data: { numDrags: 0, numOpens: 0 } as LetterInteractionData,
+    });
 
-    // clear the info about the letter, leave stuff about the person
+    onLetterSubmitted();
   };
 
   return (
@@ -52,9 +72,12 @@ export function LetterFormDialogContent() {
             justifyContent: "flex-end",
           }}
         >
-          {/* TODO: disable until all filled in */}
           <Dialog.Close asChild>
-            <button className="submit" onClick={submitDream} disabled={true}>
+            <button
+              className="submit"
+              onClick={submitDream}
+              disabled={submitDisabled}
+            >
               Tell Dream
             </button>
           </Dialog.Close>

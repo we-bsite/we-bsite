@@ -1,52 +1,16 @@
 import { useYDoc } from "zustand-yjs";
 import { YJS_ROOM } from "../constants";
-import { LetterSharedData, LetterInterface } from "../types";
-import { Letters } from "../data/letters";
-import { useEffect, useState } from "react";
-import { LetterFormButton } from "./LetterForm";
+import { LetterInteractionData, LetterInterface } from "../types";
 import { Letter } from "./Letter";
 import { ShuffleIcon, ResetIcon, ViewGridIcon } from "@radix-ui/react-icons";
 import { connectDoc } from "../utils/yjs";
-import { SubmitLetterMetadata } from "./Home";
-import { supabase } from "../lib/supabaseClient";
+import { useContext } from "react";
+import { UserLetterContext } from "../context/UserLetterContext";
 
 export function Desk() {
   const yDoc = useYDoc(YJS_ROOM, connectDoc);
-  const sharedMap = yDoc.getMap<LetterSharedData>("shared");
-  const [letters, setLetters] = useState<LetterInterface[] | undefined>();
-  const [loading, setLoading] = useState(false);
-
-  async function fetchLetters() {
-    try {
-      setLoading(true);
-      const { data, error, status } = await supabase
-        .from("letters")
-        .select("*")
-        // TODO: add pagination
-        .limit(500);
-
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      setLetters([
-        ...((data ? data : []) as LetterInterface[]),
-        ...Letters,
-        {
-          ...SubmitLetterMetadata,
-          ctaContent: <LetterFormButton />,
-        },
-      ]);
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    void fetchLetters();
-  }, []);
+  const sharedMap = yDoc.getMap<LetterInteractionData>("shared");
+  const { letters } = useContext(UserLetterContext);
 
   const renderToolbar = () => {
     return (

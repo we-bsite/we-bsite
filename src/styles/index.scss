@@ -238,6 +238,7 @@ $letter-zoom-scale: 0.5;
     overflow: hidden;
     border-top: 1px solid $color-letter-border;
     border-bottom: 1px solid $color-letter-border;
+    position: relative;
 
     iframe {
       border: none;
@@ -375,4 +376,29 @@ button {
   top: 10px;
   right: 10px;
   padding: 0;
+}
+
+.iframePreview {
+  &:hover {
+  }
+}
+
+.letterTextInput {
+  all: unset;
+  height: 100%;
+  width: 90%;
+  overflow-x: none;
+  word-wrap: break-word;
+}
+
+.letterIframeInput {
+  z-index: 1;
+  top: 0;
+  left: 10%;
+  position: absolute;
+  width: 80%;
+}
+
+.letterTypeSelect {
+  margin-bottom: 0.5em;
 }

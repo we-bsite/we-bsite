@@ -1,8 +1,9 @@
 import {
   LetterInterface,
   LetterPersistenceData,
-  LetterSharedData,
+  LetterInteractionData,
   LetterType,
+  LetterTypeToDisplay,
 } from "../types";
 import { motion } from "framer-motion";
 import { useContext, useRef, useState } from "react";
@@ -15,7 +16,7 @@ import { UserLetterContext } from "../context/UserLetterContext";
 
 interface Props {
   letter: LetterInterface;
-  shared?: Y.Map<LetterSharedData>;
+  shared?: Y.Map<LetterInteractionData>;
   isEditable?: boolean;
   disableDrag?: boolean;
 }
@@ -103,7 +104,7 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
 
 interface LetterViewProps {
   letter: LetterInterface;
-  shared?: Y.Map<LetterSharedData>;
+  shared?: Y.Map<LetterInteractionData>;
   isDragging?: boolean;
   isEditable?: boolean;
 }
@@ -114,7 +115,7 @@ export function LetterView({
   isDragging,
   isEditable,
 }: LetterViewProps) {
-  const { id, to, from, date, type } = letter;
+  const { id, to, from, date } = letter;
 
   const currentSharedData = shared?.get(id) || {
     // This is the first time that the panel has opened
@@ -134,21 +135,26 @@ export function LetterView({
     type: letterType,
   } = userLetterContext;
 
+  const type = isEditable ? letterType : letter.type;
+
   const renderContent = () => {
     let mainContent;
     let cta;
     switch (type) {
       case LetterType.IFrame:
-        if (!shared) {
-          throw new Error(
-            'LetterView: "shared" is required for iframe letters'
-          );
-        }
-        const { src } = letter;
+        const src = isEditable ? content : letter.content;
         // TODO: only load iframe if it's in the top-layer of z-index, otherwise render placeholder.
         // on drag, render the iframe
         mainContent = (
           <div className="letter-content-wrapper">
+            {isEditable ? (
+              <input
+                className="letterIframeInput"
+                placeholder="https://yourwebsite.com/letter"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            ) : null}
             <iframe
               loading="lazy"
               src={withQueryParams(src, { device: "mobile" })}
@@ -177,14 +183,20 @@ export function LetterView({
         );
         break;
       case LetterType.Content:
-        const { srcContent, ctaContent } = letter;
-        // TODO: render editable version of content
+        const { ctaContent } = letter;
+        const srcContent = isEditable ? content : letter.content;
         mainContent = (
-          <div className="letter-content-wrapper direct">
-            {srcContent}
+          <div className={"letter-content-wrapper direct"}>
             {isEditable ? (
-              <p>drop a link and see it come to life or simply add your text</p>
-            ) : null}
+              <textarea
+                className="letterTextInput"
+                placeholder="your letter of internet dreams & hopes"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            ) : (
+              srcContent
+            )}
           </div>
         );
         cta = ctaContent || null;
@@ -193,7 +205,19 @@ export function LetterView({
 
     return (
       <>
-        {/* {isEditable ? } renderSelect */}
+        {isEditable ? (
+          <select
+            className="letterTypeSelect"
+            value={letterType}
+            onChange={(e) => setType(e.target.value as LetterType)}
+          >
+            {Object.values(LetterType).map((type) => (
+              <option key={type} value={type}>
+                {LetterTypeToDisplay[type]}
+              </option>
+            ))}
+          </select>
+        ) : null}
         {mainContent}
         {cta}
       </>
@@ -281,11 +305,11 @@ export function LetterView({
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    stroke-width="2"
+                    strokeWidth="2"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                     />
                   </svg>

@@ -13,6 +13,6 @@ CREATE TABLE IF NOT EXISTS letters(
     from_person jsonb,
     creation_timestamp TIMESTAMP with time zone default timezone('utc'::text, now()) not null,
     letter_content jsonb not null,
-    initial_persistence_data jsonb,
+    interaction_data jsonb,
     CONSTRAINT unique_letter UNIQUE (from_person, letter_content)
 );

@@ -15,7 +15,7 @@ export const SubmitLetterMetadata: LetterInterface = {
     x: -5,
     y: -5,
   },
-  srcContent: "your letter of internet dreams & hopes",
+  content: "your letter of internet dreams & hopes",
   date: new Date(),
   type: LetterType.Content,
 };
