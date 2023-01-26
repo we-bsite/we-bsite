@@ -1,4 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
+import { supabase } from "../lib/supabaseClient";
 import { SubmitLetterMetadata } from "./Home";
 import { Letter } from "./Letter";
 
@@ -12,7 +13,12 @@ export function LetterFormButton() {
 
 export function LetterFormDialogContent() {
   const submitDream = async () => {
-    // TODO: submit dream api
+    // grab content from localstorage
+
+    // persist in supabase
+    await supabase.from("letters").insert({});
+
+    // clear the info about the letter, leave stuff about the person
   };
 
   return (

@@ -5,12 +5,13 @@ import {
   LetterType,
 } from "../types";
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import dayjs from "dayjs";
 import Y from "yjs";
 import { withQueryParams } from "../utils/url";
 import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
+import { UserLetterContext } from "../context/UserLetterContext";
 
 interface Props {
   letter: LetterInterface;
@@ -116,9 +117,22 @@ export function LetterView({
   const { id, to, from, date, type } = letter;
 
   const currentSharedData = shared?.get(id) || {
+    // This is the first time that the panel has opened
     numOpens: 0,
+    // This is the first time that the panel has been dragged
     numDrags: 0,
   };
+
+  const userLetterContext = useContext(UserLetterContext);
+  const {
+    setFromName,
+    setToName,
+    setFromStamp,
+    setContent,
+    setType,
+    content,
+    type: letterType,
+  } = userLetterContext;
 
   const renderContent = () => {
     let mainContent;
@@ -179,18 +193,20 @@ export function LetterView({
 
     return (
       <>
+        {/* {isEditable ? } renderSelect */}
         {mainContent}
         {cta}
       </>
     );
   };
 
-  // Persist to local storage to save state. Probably need to extract to
-  // separate file and pass in the editable things.
-  // export to LetterForm
-  const [fromName, setFromName] = useState(from.name);
-  const [toName, setToName] = useState(typeof to === "string" ? to : to.name);
-  const [fromStamp, setFromStamp] = useState(from.stamp);
+  const fromName = isEditable ? userLetterContext.fromName : from.name;
+  const toName = isEditable
+    ? userLetterContext.toName
+    : typeof to === "string"
+    ? to
+    : to.name;
+  const fromStamp = isEditable ? userLetterContext.fromStamp : from.stamp;
 
   async function onUploadStamp(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -220,7 +236,8 @@ export function LetterView({
             {isEditable ? (
               <input
                 className="dialogInput"
-                placeholder={fromName}
+                value={fromName}
+                placeholder={"you"}
                 onChange={(e) => setFromName(e.target.value)}
               />
             ) : (
@@ -232,8 +249,12 @@ export function LetterView({
             {isEditable ? (
               <input
                 className="dialogInput"
+                placeholder="the internet"
                 value={toName}
-                onChange={(e) => setToName(e.target.value)}
+                onChange={(e) => {
+                  const name = e.target.value;
+                  setToName(name);
+                }}
               />
             ) : (
               toName
