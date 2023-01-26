@@ -13,6 +13,7 @@ import Y from "yjs";
 import { withQueryParams } from "../utils/url";
 import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { UserLetterContext } from "../context/UserLetterContext";
+import { ensureExists } from "../utils/ensure";
 
 interface Props {
   letter: LetterInterface;
@@ -168,7 +169,7 @@ export function LetterView({
               href={src}
               target="_blank"
               onClick={() =>
-                shared.set(id, {
+                ensureExists(shared).set(id, {
                   ...currentSharedData,
                   numOpens: currentSharedData.numOpens + 1,
                 })
