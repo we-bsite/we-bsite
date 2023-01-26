@@ -176,6 +176,7 @@ export function LetterView({
                   numOpens: currentSharedData.numOpens + 1,
                 })
               }
+              rel="noreferrer"
             >
               Read letter{" "}
               <OpenInNewWindowIcon
