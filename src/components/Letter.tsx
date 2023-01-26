@@ -30,6 +30,8 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
     saved ? JSON.parse(saved) : {}
   );
   const position = {
+    x: 0,
+    y: 0,
     ...initialPersistenceData,
     ...savedPersistenceData.current,
   };
@@ -52,7 +54,7 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
         // TODO: move rotation to css random generation
         animate={{
           transform: position
-            ? `rotate(${isDragging ? 0 : position.rotation}deg)`
+            ? `rotate(${isDragging ? 0 : position.rotation || 0}deg)`
             : "",
           boxShadow: isDragging
             ? "0 0 35px rgba(51, 75, 97, 0.35)"

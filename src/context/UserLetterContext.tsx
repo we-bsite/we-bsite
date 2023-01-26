@@ -89,7 +89,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
             const { letter_content } = dbLetter;
 
             return {
-              id: dbLetter.id,
+              id: String(dbLetter.id),
               from: dbLetter.from_person,
               to: dbLetter.to_person,
               date: new Date(dbLetter.creation_timestamp),
