@@ -62,3 +62,8 @@ export interface DatabaseLetter {
   letter_content: LetterContent;
   interaction_data: LetterInteractionData;
 }
+
+export type DatabaseLetterInsertInfo = Omit<
+  DatabaseLetter,
+  "id" | "creation_timestamp"
+>;

@@ -2,7 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { useContext } from "react";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { supabase } from "../lib/supabaseClient";
-import { LetterInteractionData } from "../types";
+import { DatabaseLetterInsertInfo, LetterInteractionData } from "../types";
 import { SubmitLetterMetadata } from "./Home";
 import { Letter } from "./Letter";
 
@@ -25,7 +25,7 @@ export function LetterFormDialogContent() {
       return;
     }
 
-    await supabase.from("letters").insert({
+    const toInsert: DatabaseLetterInsertInfo = {
       from_person: {
         name: fromName,
         stamp: fromStamp,
@@ -38,8 +38,10 @@ export function LetterFormDialogContent() {
       interaction_data: {
         numDrags: 0,
         numOpens: 0,
-      } as LetterInteractionData,
-    });
+      },
+    };
+
+    await supabase.from("letters").insert(toInsert);
 
     onLetterSubmitted();
   };
