@@ -52,8 +52,8 @@ export function LetterFormDialogContent() {
           <p>
             tell us what about the internet you love, you hate, what you wish
             for, what you dream it could be, who you want it to be for, who you
-            want to be with, what spaces you'd like to spend time in, memories,
-            feelings, hopes, and what it means to you.
+            want to be with, what spaces you&apos;d like to spend time in,
+            memories, feelings, hopes, and what it means to you.
           </p>
           <p>what do you want from the internet?</p>
         </Dialog.Description>
