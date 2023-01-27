@@ -35,7 +35,7 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
     ...initialPersistenceData,
     ...savedPersistenceData.current,
   };
-  // TODO: annotate this with the total number persisted in server.
+  // TODO: Migrate this to extract from the letter and DB with the total number persisted in server.
   const currentSharedData = shared?.get(id) || {
     numOpens: 0,
     numDrags: 0,

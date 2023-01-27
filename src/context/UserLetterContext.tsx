@@ -72,6 +72,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
   async function fetchLetters() {
     try {
       setLoading(true);
+      // TODO: stream this and can avoid the re-fetch when submit below
       const { data, error, status } = await supabase
         .from("letters")
         .select("*")
