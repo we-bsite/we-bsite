@@ -35,7 +35,10 @@ export function LetterFormDialogContent() {
         content,
         type,
       },
-      interaction_data: { numDrags: 0, numOpens: 0 } satisfies LetterInteractionData,
+      interaction_data: {
+        numDrags: 0,
+        numOpens: 0,
+      } as LetterInteractionData,
     });
 
     onLetterSubmitted();
