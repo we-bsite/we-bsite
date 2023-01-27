@@ -192,6 +192,7 @@ export function LetterView({
         mainContent = (
           <div className={"letter-content-wrapper direct"}>
             {isEditable ? (
+              // TODO: add gradient picker / cycler too
               <textarea
                 className="letterTextInput"
                 placeholder="your letter of internet dreams & hopes"
