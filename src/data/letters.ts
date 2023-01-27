@@ -6,7 +6,7 @@ export const Letters: Array<LetterInterface> = [
     id: "spencer-0",
     to: "reboot & internet",
     from: people.spencer,
-    src: "https://spencerchang.me/posts/everyday-magic",
+    content: "https://spencerchang.me/posts/everyday-magic",
     initialPersistenceData: {
       rotation: 3,
       x: 50,
@@ -19,7 +19,7 @@ export const Letters: Array<LetterInterface> = [
     id: "jacky-0",
     to: "reboot & internet",
     from: people.jacky,
-    src: "https://jzhao.xyz/posts/towards-data-neutrality/",
+    content: "https://jzhao.xyz/posts/towards-data-neutrality/",
     initialPersistenceData: {
       rotation: -2,
       x: 0,
@@ -32,7 +32,7 @@ export const Letters: Array<LetterInterface> = [
     id: "spencer-1",
     to: people.jacky,
     from: people.spencer,
-    src: "https://spencerchang.me/posts/our-internet",
+    content: "https://spencerchang.me/posts/our-internet",
     initialPersistenceData: {
       rotation: 5,
       x: 0,
@@ -45,7 +45,7 @@ export const Letters: Array<LetterInterface> = [
     id: "jacky-1",
     to: people.spencer,
     from: people.jacky,
-    src: "https://jzhao.xyz/posts/communal-computing/",
+    content: "https://jzhao.xyz/posts/communal-computing/",
     initialPersistenceData: {
       rotation: 1,
       x: -10,
@@ -63,7 +63,7 @@ export const Letters: Array<LetterInterface> = [
       x: -5,
       y: -50,
     },
-    src: "https://whykatherine.github.io/assets/manifesto/manifesto.pdf",
+    content: "https://whykatherine.github.io/assets/manifesto/manifesto.pdf",
     date: new Date("2021-09-01"),
     type: LetterType.IFrame,
   },
@@ -76,7 +76,7 @@ export const Letters: Array<LetterInterface> = [
       x: -40,
       y: -5,
     },
-    src: "https://chias.blog/2022/there-is-an-internet-that-is-mine/",
+    content: "https://chias.blog/2022/there-is-an-internet-that-is-mine/",
     date: new Date("2022-12-12"),
     type: LetterType.IFrame,
   },

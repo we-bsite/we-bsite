@@ -1,28 +1,16 @@
 import { useYDoc } from "zustand-yjs";
 import { YJS_ROOM } from "../constants";
-import { LetterSharedData, LetterInterface } from "../types";
-import { Letters } from "../data/letters";
-import { useEffect, useState } from "react";
-import { LetterFormButton } from "./LetterForm";
+import { LetterInteractionData, LetterInterface } from "../types";
 import { Letter } from "./Letter";
 import { ShuffleIcon, ResetIcon, ViewGridIcon } from "@radix-ui/react-icons";
 import { connectDoc } from "../utils/yjs";
-import { SubmitLetterMetadata } from "./Home";
+import { useContext } from "react";
+import { UserLetterContext } from "../context/UserLetterContext";
 
 export function Desk() {
   const yDoc = useYDoc(YJS_ROOM, connectDoc);
-  const sharedMap = yDoc.getMap<LetterSharedData>("shared");
-  const [letters, setLetters] = useState<LetterInterface[] | undefined>();
-
-  useEffect(() => {
-    setLetters([
-      ...Letters,
-      {
-        ...SubmitLetterMetadata,
-        ctaContent: <LetterFormButton />,
-      },
-    ]);
-  }, []);
+  const sharedMap = yDoc.getMap<LetterInteractionData>("shared");
+  const { letters } = useContext(UserLetterContext);
 
   const renderToolbar = () => {
     return (
@@ -47,6 +35,7 @@ export function Desk() {
     <>
       {/* {renderToolbar()} */}
       <div id="desk">
+        {/* If loading add loading indicator */}
         {letters?.map((letter) => (
           <Letter letter={letter} key={letter.id} shared={sharedMap} />
         ))}

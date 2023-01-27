@@ -1,4 +1,8 @@
 import * as Dialog from "@radix-ui/react-dialog";
+import { useContext } from "react";
+import { UserLetterContext } from "../context/UserLetterContext";
+import { supabase } from "../lib/supabaseClient";
+import { DatabaseLetterInsertInfo, LetterInteractionData } from "../types";
 import { SubmitLetterMetadata } from "./Home";
 import { Letter } from "./Letter";
 
@@ -11,8 +15,35 @@ export function LetterFormButton() {
 }
 
 export function LetterFormDialogContent() {
+  const { fromName, toName, fromStamp, content, type, onLetterSubmitted } =
+    useContext(UserLetterContext);
+  const submitDisabled =
+    !fromName || !toName || !fromStamp || !content || !type;
+
   const submitDream = async () => {
-    // TODO: submit dream api
+    if (submitDisabled) {
+      return;
+    }
+
+    const toInsert: DatabaseLetterInsertInfo = {
+      from_person: {
+        name: fromName,
+        stamp: fromStamp,
+      },
+      to_person: toName,
+      letter_content: {
+        content,
+        type,
+      },
+      interaction_data: {
+        numDrags: 0,
+        numOpens: 0,
+      },
+    };
+
+    await supabase.from("letters").insert(toInsert);
+
+    onLetterSubmitted();
   };
 
   return (
@@ -26,8 +57,8 @@ export function LetterFormDialogContent() {
           <p>
             tell us what about the internet you love, you hate, what you wish
             for, what you dream it could be, who you want it to be for, who you
-            want to be with, what spaces you'd like to spend time in, memories,
-            feelings, hopes, and what it means to you.
+            want to be with, what spaces you&apos;d like to spend time in,
+            memories, feelings, hopes, and what it means to you.
           </p>
           <p>what do you want from the internet?</p>
         </Dialog.Description>
@@ -46,9 +77,12 @@ export function LetterFormDialogContent() {
             justifyContent: "flex-end",
           }}
         >
-          {/* TODO: disable until all filled in */}
           <Dialog.Close asChild>
-            <button className="submit" onClick={submitDream} disabled={true}>
+            <button
+              className="submit"
+              onClick={submitDream}
+              disabled={submitDisabled}
+            >
               Tell Dream
             </button>
           </Dialog.Close>
