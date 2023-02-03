@@ -17,8 +17,7 @@ export function LetterFormButton() {
 export function LetterFormDialogContent() {
   const { fromName, toName, fromStamp, content, type, onLetterSubmitted } =
     useContext(UserLetterContext);
-  const submitDisabled =
-    !fromName || !toName || !fromStamp || !content || !type;
+  const submitDisabled = !fromName || !toName || !content || !type;
 
   const submitDream = async () => {
     if (submitDisabled) {
@@ -51,7 +50,7 @@ export function LetterFormDialogContent() {
       <Dialog.Overlay className="DialogOverlay" />
       <Dialog.Content className="DialogContent">
         <Dialog.Title className="DialogTitle">
-          tell your internet dream (coming soon)
+          tell your internet dream
         </Dialog.Title>
         <Dialog.Description className="DialogDescription">
           <p>
