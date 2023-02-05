@@ -65,12 +65,16 @@ button {
   transition: border-color 0.25s;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   border-color: #646cff;
 }
-button:focus,
-button:focus-visible {
+button:focus:not(:disabled),
+button:focus-visible:not(:disabled) {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
 
 .App {
@@ -394,11 +398,12 @@ button {
 .letterIframeInput {
   z-index: 1;
   top: 0;
-  left: 10%;
   position: absolute;
   width: 80%;
 }
 
 .letterTypeSelect {
+  border: 4px solid #aee68b;
   margin-bottom: 0.5em;
+  display: flex;
 }
