@@ -3,7 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { LetterType, LetterInterface } from "../types";
 import { LetterFormButton, LetterFormDialogContent } from "./LetterForm";
 import { Desk } from "./Desk";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { UserLetterContextProvider } from "../context/UserLetterContext";
 
 export const SubmitLetterMetadata: LetterInterface = {
@@ -21,6 +21,9 @@ export const SubmitLetterMetadata: LetterInterface = {
 };
 
 function Home() {
+  const [highestZ, setHighestZ] = useState<number>(0);
+  const bumpHighest = () => setHighestZ(highest => highest + 1)
+
   useEffect(() => {
     console.log(
       "Hi there friend. If you'd like, poke around the source code! https://github.com/we-bsite/we-bsite"
@@ -59,7 +62,7 @@ function Home() {
               <em>What do you want from the internet?</em>
             </p>
           </div>
-          <Desk />
+          <Desk highest={highestZ} bumpHighest={bumpHighest} />
           <footer>
             (we)bsite is a project by{" "}
             <a href={people.spencer.url}>{people.spencer.fullName}</a> and{" "}
@@ -70,7 +73,7 @@ function Home() {
             </a>
             .
           </footer>
-          <LetterFormDialogContent />
+          <LetterFormDialogContent highest={highestZ} bumpHighest={bumpHighest} />
         </Dialog.Root>
       </UserLetterContextProvider>
     </>
