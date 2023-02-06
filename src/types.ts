@@ -40,7 +40,15 @@ export interface LetterPersistenceData {
   z?: number;
 }
 
-export interface LetterInteractionData {
+type RGB = `rgb(${number}, ${number}, ${number})`;
+type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
+type HEX = `#${string}`;
+
+export type Color = RGB | RGBA | HEX;
+
+export type LetterInteractionData = Record<Color, LetterInteraction>;
+
+interface LetterInteraction {
   numOpens: number;
   numDrags: number;
 }

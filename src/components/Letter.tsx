@@ -13,6 +13,7 @@ import Y from "yjs";
 import { withQueryParams } from "../utils/url";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { ensureExists } from "../utils/ensure";
+import { Fingerprint } from "./Fingerprint";
 
 interface Props {
   letter: LetterInterface;
@@ -20,6 +21,7 @@ interface Props {
   isEditable?: boolean;
   disableDrag?: boolean;
 }
+const FingerprintSize = 50;
 
 export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
   const { highestZIndex, bumpHighestZIndex } = useContext(UserLetterContext);
@@ -44,9 +46,14 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
     numOpens: 0,
     numDrags: 0,
   };
+  const ref = useRef<HTMLDivElement>(null);
+  const [fingerprintPosition, setFingerprintPosition] = useState<{
+    top: number;
+    left: number;
+  }>({ top: 0, left: 0 });
 
   const letterContent = (
-    <div style={{ zIndex: z }}>
+    <div style={{ zIndex: z }} ref={ref} className="letterContent">
       <motion.div
         className="letter"
         transition={{
@@ -66,6 +73,15 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
         }}
         initial={false}
       >
+        {isDragging && (
+          <Fingerprint
+            width={FingerprintSize}
+            height={FingerprintSize}
+            top={fingerprintPosition.top}
+            left={fingerprintPosition.left}
+            color={"rgba(255, 193, 87, 1.00)"}
+          />
+        )}
         <LetterView
           letter={letter}
           shared={shared}
@@ -83,10 +99,21 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
       handle=".letterHead"
       defaultClassName="letter-container"
       defaultPosition={position}
-      onStart={() => {
+      onStart={(e: any, draggableData) => {
+        if (ref.current) {
+          const { top, left } = ref.current.getBoundingClientRect();
+          const newTop = e.clientY - top;
+          const newLeft = e.clientX - left;
+          console.log(newLeft);
+          console.log(newTop);
+          setFingerprintPosition({
+            top: newTop,
+            left: newLeft,
+          });
+        }
         setDragging(true);
         setZ(highestZIndex + 1);
-        bumpHighestZIndex()
+        bumpHighestZIndex();
       }}
       onStop={(_, dragData) => {
         localStorage.setItem(
@@ -97,10 +124,10 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
             z,
           })
         );
-        shared?.set(id, {
-          ...currentSharedData,
-          numDrags: currentSharedData.numDrags + 1,
-        });
+        // shared?.set(id, {
+        //   ...currentSharedData,
+        //   numDrags: currentSharedData.numDrags + 1,
+        // });
 
         setDragging(false);
       }}
@@ -174,7 +201,10 @@ export function LetterView({
                 }
                 rel="noreferrer"
               >
-                <img src="/wax-seal.png" alt="Wax seal that brings you to the letter" />
+                <img
+                  src="/wax-seal.png"
+                  alt="Wax seal that brings you to the letter"
+                />
               </a>
             </div>
             <iframe
@@ -231,8 +261,8 @@ export function LetterView({
   const toName = isEditable
     ? userLetterContext.toName
     : typeof to === "string"
-      ? to
-      : to.name;
+    ? to
+    : to.name;
   const fromStamp = isEditable ? userLetterContext.fromStamp : from.stamp;
 
   async function onUploadStamp(e: React.ChangeEvent<HTMLInputElement>) {
@@ -253,8 +283,9 @@ export function LetterView({
   return (
     <>
       <div
-        className={`letterHead ${isDragging ? "dragging" : ""} ${isEditable ? "disabled" : ""
-          }`}
+        className={`letterHead ${isDragging ? "dragging" : ""} ${
+          isEditable ? "disabled" : ""
+        }`}
       >
         <div>
           <div>

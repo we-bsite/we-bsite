@@ -200,7 +200,7 @@ $letter-zoom-scale: 0.5;
   display: flex;
   grid-gap: 2em;
   justify-content: center;
-  z-index: 2;
+  z-index: 3;
   // position: absolute;
   left: 0;
   width: calc(100vw - 80px);
@@ -427,4 +427,14 @@ button {
   border: 4px solid #aee68b;
   margin-bottom: 0.5em;
   display: flex;
+}
+
+.letterContent {
+  position: relative;
+}
+
+.activeFingerprint {
+  position: absolute;
+  z-index: 2;
+  // border-radius: 50%;
 }

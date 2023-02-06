@@ -34,10 +34,7 @@ export function LetterFormDialogContent() {
         content,
         type,
       },
-      interaction_data: {
-        numDrags: 0,
-        numOpens: 0,
-      },
+      interaction_data: {},
     };
 
     await supabase.from("letters").insert(toInsert);
