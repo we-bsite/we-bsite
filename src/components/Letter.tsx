@@ -11,7 +11,6 @@ import Draggable from "react-draggable";
 import dayjs from "dayjs";
 import Y from "yjs";
 import { withQueryParams } from "../utils/url";
-import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { ensureExists } from "../utils/ensure";
 
@@ -20,9 +19,11 @@ interface Props {
   shared?: Y.Map<LetterInteractionData>;
   isEditable?: boolean;
   disableDrag?: boolean;
+  highest: number;
+  bumpHighest: () => void;
 }
 
-export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
+export function Letter({ letter, shared, isEditable, disableDrag, highest, bumpHighest }: Props) {
   const [isDragging, setDragging] = useState(disableDrag ? true : false);
   const { id, initialPersistenceData } = letter;
   const saved = disableDrag ? undefined : localStorage.getItem(id);
@@ -32,9 +33,13 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
   const position = {
     x: 0,
     y: 0,
+    z: 0,
     ...initialPersistenceData,
     ...savedPersistenceData.current,
   };
+
+  const [z, setZ] = useState<number>(position.z);
+
   // TODO: Migrate this to extract from the letter and DB with the total number persisted in server.
   const currentSharedData = shared?.get(id) || {
     numOpens: 0,
@@ -42,7 +47,7 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
   };
 
   const letterContent = (
-    <div>
+    <div style={{ zIndex: z }}>
       <motion.div
         className="letter"
         transition={{
@@ -81,15 +86,16 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
       defaultPosition={position}
       onStart={() => {
         setDragging(true);
-        // TODO: update z-index to be the highest.
+        setZ(highest + 1);
+        bumpHighest()
       }}
       onStop={(_, dragData) => {
-        // TODO: persist z-index
         localStorage.setItem(
           id,
           JSON.stringify({
             x: dragData.x,
             y: dragData.y,
+            z,
           })
         );
         shared?.set(id, {
@@ -142,7 +148,6 @@ export function LetterView({
 
   const renderContent = () => {
     let mainContent;
-    let cta;
     switch (type) {
       case LetterType.IFrame:
         const src = isEditable ? content : letter.content;
@@ -158,31 +163,26 @@ export function LetterView({
                 onChange={(e) => setContent(e.target.value)}
               />
             ) : null}
+            <div className="link-to-letter">
+              <a
+                href={src}
+                target="_blank"
+                onClick={() =>
+                  ensureExists(shared).set(id, {
+                    ...currentSharedData,
+                    numOpens: currentSharedData.numOpens + 1,
+                  })
+                }
+                rel="noreferrer"
+              >
+                <img src="/wax-seal.png" alt="Wax seal that brings you to the letter" />
+              </a>
+            </div>
             <iframe
               loading="lazy"
+              scrolling="no"
               src={withQueryParams(src, { device: "mobile" })}
             ></iframe>
-          </div>
-        );
-        // TODO: remove shared and move cta back to DraggableLetter
-        cta = (
-          <div className="link-to-letter">
-            <a
-              href={src}
-              target="_blank"
-              onClick={() =>
-                ensureExists(shared).set(id, {
-                  ...currentSharedData,
-                  numOpens: currentSharedData.numOpens + 1,
-                })
-              }
-              rel="noreferrer"
-            >
-              Read letter{" "}
-              <OpenInNewWindowIcon
-                style={{ verticalAlign: "middle", marginBottom: "3px" }}
-              />
-            </a>
           </div>
         );
         break;
@@ -190,7 +190,7 @@ export function LetterView({
         const { ctaContent } = letter;
         const srcContent = isEditable ? content : letter.content;
         mainContent = (
-          <div className={"letter-content-wrapper direct"}>
+          <div className="letter-content-wrapper direct">
             {isEditable ? (
               // TODO: add gradient picker / cycler too
               <textarea
@@ -202,9 +202,9 @@ export function LetterView({
             ) : (
               srcContent
             )}
+            {ctaContent}
           </div>
         );
-        cta = ctaContent || null;
         break;
     }
 
@@ -224,7 +224,6 @@ export function LetterView({
           </select>
         ) : null}
         {mainContent}
-        {cta}
       </>
     );
   };
@@ -233,8 +232,8 @@ export function LetterView({
   const toName = isEditable
     ? userLetterContext.toName
     : typeof to === "string"
-    ? to
-    : to.name;
+      ? to
+      : to.name;
   const fromStamp = isEditable ? userLetterContext.fromStamp : from.stamp;
 
   async function onUploadStamp(e: React.ChangeEvent<HTMLInputElement>) {
@@ -255,9 +254,8 @@ export function LetterView({
   return (
     <>
       <div
-        className={`letterHead ${isDragging ? "dragging" : ""} ${
-          isEditable ? "disabled" : ""
-        }`}
+        className={`letterHead ${isDragging ? "dragging" : ""} ${isEditable ? "disabled" : ""
+          }`}
       >
         <div>
           <div>
@@ -320,7 +318,7 @@ export function LetterView({
                   </svg>
                 )}
                 <input
-                  accept="image/*"
+                  accept="image/png, image/jpeg"
                   type="file"
                   className="stampInput"
                   onChange={onUploadStamp}

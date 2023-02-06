@@ -37,6 +37,7 @@ export interface LetterPersistenceData {
   rotation?: number;
   x?: number;
   y?: number;
+  z?: number;
 }
 
 export interface LetterInteractionData {

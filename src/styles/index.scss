@@ -112,7 +112,11 @@ h3 {
           translateY(random() * 25 - 12.5 + px);
       }
       &:nth-of-type(#{$i}) .dateStamp:nth-of-type(#{$j}) {
-        transform: rotate((((random()) * 80) - 40) + deg);
+        $rot: ((random()) * 80) - 40;
+        transform: rotate(($rot) + deg);
+        &:before {
+          transform: translateX((-(random() * 15) - 60) + px) rotate((((random()) * 15) - 15 - $rot) + deg);
+        }
       }
     }
   }
@@ -135,7 +139,6 @@ h3 {
   position: absolute;
   padding: 0.5em;
   border-radius: 50%;
-  border: $date-stamp-border-size solid rgba(33, 32, 32, 0.7);
   width: 36px;
   height: 36px;
   opacity: 0.6;
@@ -146,20 +149,20 @@ h3 {
   justify-content: center;
   font-family: "Special Elite";
   font-size: 0.8em;
-  background: $color-letter;
   line-height: normal;
   text-align: center;
 
-  &:after {
+  &:before {
     content: "";
     position: absolute;
+    overflow: visible;
     left: -$date-stamp-border-size;
     top: -$date-stamp-border-size;
-    width: calc(100% + ($date-stamp-border-size * 2));
-    height: calc(100% + ($date-stamp-border-size * 2));
-    border-radius: 50%;
-    background-image: url("http://i.imgur.com/5O74VI6.jpg");
-    mix-blend-mode: lighten;
+    width: 150px;
+    height: 70px;
+    opacity: 0.4;
+    background-image: url("date-stamp.png");
+    background-size: cover;
   }
 }
 
@@ -175,6 +178,7 @@ h3 {
       4 / 4px / 0 round;
     border-width: 4px;
     border-style: solid;
+    pointer-events: none;
   }
 
   & label {
@@ -232,8 +236,22 @@ $letter-zoom-scale: 0.5;
     position: relative;
   }
 
-  .link-to-letter > a {
-    padding: 0.2em 0.8em;
+  .link-to-letter {
+    position: absolute;
+    z-index: 999999999999;
+    top: 50%;
+    left: 50%;
+    margin: -50px 0 0 -65px;
+    & img {
+      width: 100px;
+    }
+    & > a {
+      padding: 0.2em 0.8em;
+    }
+  }
+
+  .edit-letter {
+    margin-top: 1em;
   }
 
   .letter-content-wrapper {

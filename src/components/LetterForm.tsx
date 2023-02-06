@@ -2,14 +2,14 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { useContext } from "react";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { supabase } from "../lib/supabaseClient";
-import { DatabaseLetterInsertInfo, LetterInteractionData } from "../types";
+import { DatabaseLetterInsertInfo } from "../types";
 import { SubmitLetterMetadata } from "./Home";
 import { Letter } from "./Letter";
 
 export function LetterFormButton() {
   return (
     <Dialog.Trigger asChild>
-      <button className="submit">Edit your letter</button>
+      <button className="submit edit-letter">Edit your letter</button>
     </Dialog.Trigger>
   );
 }
@@ -41,7 +41,6 @@ export function LetterFormDialogContent() {
     };
 
     await supabase.from("letters").insert(toInsert);
-
     onLetterSubmitted();
   };
 
