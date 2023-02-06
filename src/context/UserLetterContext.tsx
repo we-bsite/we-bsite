@@ -8,6 +8,7 @@ import { supabase } from "../lib/supabaseClient";
 import { SubmitLetterMetadata } from "../components/Home";
 
 interface UserLetterContextType {
+  loading: boolean,
   letters: LetterInterface[];
   fromName: string;
   toName: string;
@@ -20,6 +21,8 @@ interface UserLetterContextType {
   setContent: (content: string) => void;
   setType: (setType: LetterType) => void;
   onLetterSubmitted: () => void;
+  highestZIndex: number,
+  bumpHighestZIndex: () => void;
 }
 
 type PersistedUserLetterContextInfo = Pick<
@@ -27,7 +30,8 @@ type PersistedUserLetterContextInfo = Pick<
   "fromName" | "toName" | "fromStamp" | "content" | "type"
 >;
 
-const DefaultUserLetterContext = {
+const DefaultUserLetterContext: UserLetterContextType = {
+  loading: true,
   letters: [],
   fromName: "",
   toName: "the internet",
@@ -40,6 +44,8 @@ const DefaultUserLetterContext = {
   setContent: () => {},
   setType: () => {},
   onLetterSubmitted: () => {},
+  highestZIndex: 0,
+  bumpHighestZIndex: () => {},
 };
 export const UserLetterContext = createContext<UserLetterContextType>(
   DefaultUserLetterContext
@@ -67,7 +73,10 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
     setUserContext({ ...userContext, type });
 
   const [letters, setLetters] = useState<LetterInterface[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  
+  const [highestZIndex, setHighestZIndex] = useState<number>(0);
+  const bumpHighestZIndex = () => setHighestZIndex(highest => highest + 1)
 
   async function fetchLetters() {
     try {
@@ -142,6 +151,9 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         setContent,
         setType,
         onLetterSubmitted,
+        loading,
+        highestZIndex,
+        bumpHighestZIndex
       }}
     >
       {children}

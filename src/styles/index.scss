@@ -112,9 +112,12 @@ h3 {
           translateY(random() * 25 - 12.5 + px);
       }
       &:nth-of-type(#{$i}) .dateStamp:nth-of-type(#{$j}) {
+        // rotation is in the range [-40,40]deg 
         $rot: ((random()) * 80) - 40;
         transform: rotate(($rot) + deg);
         &:before {
+          // translate is [-75, -45]px 
+          // rotate is [-15,15]px (offset from parent rotation)
           transform: translateX((-(random() * 15) - 60) + px) rotate((((random()) * 15) - 15 - $rot) + deg);
         }
       }
@@ -238,7 +241,7 @@ $letter-zoom-scale: 0.5;
 
   .link-to-letter {
     position: absolute;
-    z-index: 999999999999;
+    z-index: 1;
     top: 50%;
     left: 50%;
     margin: -50px 0 0 -65px;

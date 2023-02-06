@@ -14,12 +14,7 @@ export function LetterFormButton() {
   );
 }
 
-interface Props {
-  highest: number;
-  bumpHighest: () => void;
-}
-
-export function LetterFormDialogContent({ highest, bumpHighest }: Props) {
+export function LetterFormDialogContent() {
   const { fromName, toName, fromStamp, content, type, onLetterSubmitted } =
     useContext(UserLetterContext);
   const submitDisabled = !fromName || !toName || !content || !type;
@@ -67,8 +62,6 @@ export function LetterFormDialogContent({ highest, bumpHighest }: Props) {
         </Dialog.Description>
         <div className="mainDialogContent">
           <Letter
-            highest={highest}
-            bumpHighest={bumpHighest}
             letter={SubmitLetterMetadata}
             isEditable={true}
             disableDrag={true}
@@ -101,5 +94,3 @@ export function LetterFormDialogContent({ highest, bumpHighest }: Props) {
     </Dialog.Portal>
   );
 }
-
-export function LetterForm() { }

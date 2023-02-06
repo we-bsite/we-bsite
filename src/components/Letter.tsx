@@ -19,11 +19,10 @@ interface Props {
   shared?: Y.Map<LetterInteractionData>;
   isEditable?: boolean;
   disableDrag?: boolean;
-  highest: number;
-  bumpHighest: () => void;
 }
 
-export function Letter({ letter, shared, isEditable, disableDrag, highest, bumpHighest }: Props) {
+export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
+  const { highestZIndex, bumpHighestZIndex } = useContext(UserLetterContext);
   const [isDragging, setDragging] = useState(disableDrag ? true : false);
   const { id, initialPersistenceData } = letter;
   const saved = disableDrag ? undefined : localStorage.getItem(id);
@@ -86,8 +85,8 @@ export function Letter({ letter, shared, isEditable, disableDrag, highest, bumpH
       defaultPosition={position}
       onStart={() => {
         setDragging(true);
-        setZ(highest + 1);
-        bumpHighest()
+        setZ(highestZIndex + 1);
+        bumpHighestZIndex()
       }}
       onStop={(_, dragData) => {
         localStorage.setItem(
