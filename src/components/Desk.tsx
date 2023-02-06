@@ -34,15 +34,6 @@ export function Desk() {
   return (
     <>
       {/* {renderToolbar()} */}
-      <div
-        id="test"
-        style={{
-          position: "absolute",
-          background: "red",
-          width: "100px",
-          height: "100px",
-        }}
-      ></div>
       <div id="desk">
         {/* If loading add loading indicator */}
         {letters?.map((letter) => (
