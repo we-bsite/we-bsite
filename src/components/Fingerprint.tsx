@@ -6,9 +6,10 @@ interface Props {
   color: Color;
   top: number;
   left: number;
+  hide?: boolean;
 }
 
-export function Fingerprint({ width, height, color, top, left }: Props) {
+export function Fingerprint({ width, height, color, top, left, hide }: Props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -17,20 +18,21 @@ export function Fingerprint({ width, height, color, top, left }: Props) {
       {...{ "xmlns:svgjs": "http://svgjs.dev/svgjs" }}
       viewBox={`0 0 ${width * 4} ${height * 4}`}
       className="activeFingerprint"
-      width={width}
-      height={height}
+      width={width * 2}
+      height={height * 2}
       style={{
-        top: `${top - height / 2}px`,
-        left: `${left - width / 2}px`,
+        top: `${top - height}px`,
+        left: `${left - width}px`,
+        display: hide ? "none" : "block",
       }}
     >
       <defs>
         <filter
           id="bbblurry-filter"
-          x="-100%"
-          y="-100%"
-          width="400%"
-          height="400%"
+          x="-50%"
+          y="-50%"
+          width="200%"
+          height="200%"
           filterUnits="objectBoundingBox"
           primitiveUnits="userSpaceOnUse"
           color-interpolation-filters="sRGB"
@@ -51,8 +53,8 @@ export function Fingerprint({ width, height, color, top, left }: Props) {
         <ellipse
           rx={width}
           ry={height}
-          cx={width}
-          cy={height}
+          cx={width * 2}
+          cy={height * 2}
           fill={color}
         ></ellipse>
       </g>

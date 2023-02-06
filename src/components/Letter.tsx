@@ -73,15 +73,14 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
         }}
         initial={false}
       >
-        {isDragging && (
-          <Fingerprint
-            width={FingerprintSize}
-            height={FingerprintSize}
-            top={fingerprintPosition.top}
-            left={fingerprintPosition.left}
-            color={"rgba(255, 193, 87, 1.00)"}
-          />
-        )}
+        <Fingerprint
+          width={FingerprintSize}
+          height={FingerprintSize}
+          top={fingerprintPosition.top}
+          left={fingerprintPosition.left}
+          color={"rgba(255, 193, 87, 1.00)"}
+          hide={!isDragging}
+        />
         <LetterView
           letter={letter}
           shared={shared}
@@ -100,12 +99,13 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
       defaultClassName="letter-container"
       defaultPosition={position}
       onStart={(e: any, draggableData) => {
+        setDragging(true);
         if (ref.current) {
           const { top, left } = ref.current.getBoundingClientRect();
           const newTop = e.clientY - top;
           const newLeft = e.clientX - left;
-          console.log(newLeft);
-          console.log(newTop);
+          // console.log(newLeft);
+          // console.log(newTop);
           setFingerprintPosition({
             top: newTop,
             left: newLeft,
