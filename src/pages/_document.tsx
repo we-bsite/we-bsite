@@ -21,6 +21,7 @@ export default function Document() {
           type="text/css"
           href="https://unpkg.com/cursor-chat/dist/style.css"
         />
+        <script defer data-domain="we-b.site" src="https://plausible.io/js/script.js"></script>
       </Head>
       <body>
         <div id="cursor-chat-layer">

@@ -1,7 +1,7 @@
 import people from "../data/people.json";
 import * as Dialog from "@radix-ui/react-dialog";
 import { LetterType, LetterInterface } from "../types";
-import { LetterFormButton, LetterFormDialogContent } from "./LetterForm";
+import { LetterFormDialogContent } from "./LetterForm";
 import { Desk } from "./Desk";
 import { useEffect } from "react";
 import { UserLetterContextProvider } from "../context/UserLetterContext";
