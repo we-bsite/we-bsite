@@ -10,6 +10,11 @@ interface Props {
 }
 
 export function Fingerprint({ width, height, color, top, left, hide }: Props) {
+  // TODO: try to make this performance better. things to try
+  // - https://www.crmarsh.com/svg-performance/
+  // - use a div with a blur
+  // - What about image for the blob/fingerprint and then a layer with background-blend-mode with a specific colour
+  // try encoding the svg as an image source?
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

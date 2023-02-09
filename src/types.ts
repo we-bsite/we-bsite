@@ -1,10 +1,3 @@
-export interface Person {
-  name: string;
-  url?: string;
-  fullName?: string;
-  stamp?: string;
-}
-
 export enum LetterType {
   IFrame = "IFrame",
   Content = "Content",
@@ -20,10 +13,11 @@ export interface LetterInterface {
   to: Person | string;
   from: Person;
   date: Date;
-  initialPersistenceData: LetterPersistenceData;
   content: string;
+  letterInteractionData: LetterInteractionData;
 
   // Not persisted
+  initialPersistenceData: LetterPersistenceData;
   ctaContent?: React.ReactNode;
 }
 
@@ -44,7 +38,7 @@ type RGB = `rgb(${number}, ${number}, ${number})`;
 type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
 type HEX = `#${string}`;
 
-export type Color = RGB | RGBA | HEX;
+export type Color = RGB | RGBA | HEX | string;
 
 export type LetterInteractionData = Record<Color, LetterInteraction>;
 
@@ -55,12 +49,17 @@ interface LetterInteraction {
 
 export type ApiLetter = Omit<LetterInterface, "initialPersistenceData">;
 
+export interface Person extends PersonInfo {
+  url?: string;
+  color: Color;
+}
+
 /**
  * DB TYPES
  */
 interface PersonInfo {
   name: string;
-  stamp: string;
+  stamp?: string;
 }
 
 export interface DatabaseLetter {

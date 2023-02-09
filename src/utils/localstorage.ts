@@ -14,6 +14,8 @@ export function getLocalStorageItem<T>(key: string): T | null {
 // https://www.joshwcomeau.com/react/persisting-react-state-in-localstorage/
 // also this for handling nextjs SSR
 // https://upmostly.com/next-js/using-localstorage-in-next-js
+// NOTE: NEVER EVER PASS IN A "IN-MEMORY" OBJECt
+// AS DEFAULT VALUE, IT RERENDERS FOREVER
 export function useStickyState<T>(
   localStorageId: string,
   defaultValue: T

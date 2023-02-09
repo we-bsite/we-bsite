@@ -5,6 +5,7 @@ import { LetterFormDialogContent } from "./LetterForm";
 import { Desk } from "./Desk";
 import { useEffect } from "react";
 import { UserLetterContextProvider } from "../context/UserLetterContext";
+import { ColorPicker } from "./ColorPicker";
 
 export const SubmitLetterMetadata: LetterInterface = {
   id: "submit-0",
@@ -32,6 +33,7 @@ function Home() {
       <UserLetterContextProvider>
         <Dialog.Root>
           <div className="App">
+            <ColorPicker />
             <h1>(we)bsite</h1>
             <p>
               <em>(we)bsite</em> is a living collection of internet dreams from
