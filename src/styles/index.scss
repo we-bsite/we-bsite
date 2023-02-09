@@ -83,6 +83,7 @@ button:disabled {
   padding: 0 2em;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
 }
 
 #root {
@@ -437,4 +438,10 @@ button {
   position: absolute;
   z-index: 2;
   // border-radius: 50%;
+}
+
+.profile {
+  position: absolute;
+  top: 0;
+  right: 0;
 }

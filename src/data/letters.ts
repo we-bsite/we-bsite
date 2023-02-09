@@ -1,6 +1,7 @@
 import people from "./people.json";
 import { LetterInterface, LetterType } from "../types";
 
+// TODO: add these to database
 export const Letters: Array<LetterInterface> = [
   {
     id: "spencer-0",

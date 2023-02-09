@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren } from "react";
+import { createContext, PropsWithChildren, useCallback, useMemo } from "react";
 import {
   Color,
   DatabaseLetter,
@@ -54,7 +54,7 @@ const DefaultUserLetterContext: UserLetterContextType = {
   content: "",
   type: LetterType.IFrame,
   currentUser: {
-    name: "Anonymous",
+    name: "",
     color: randomColor(),
   },
   setFromName: () => {},
@@ -79,9 +79,9 @@ export const UserLetterContext = createContext<UserLetterContextType>(
 );
 
 const UserContextStorageId = "user-letter-context";
-const UserColorStorageId = "user-color";
 
 export function UserLetterContextProvider({ children }: PropsWithChildren) {
+  // const randColor = useMemo(() => randomColor(), []);
   const [userContext, setUserContext] =
     useStickyState<PersistedUserLetterContextInfo>(
       UserContextStorageId,

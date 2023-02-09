@@ -10,8 +10,8 @@ export const LetterTypeToDisplay: Record<LetterType, string> = {
 export interface LetterInterface {
   id: string;
   type: LetterType;
-  to: Person | string;
-  from: Person;
+  to: PersonWithoutColor | string;
+  from: PersonWithoutColor;
   date: Date;
   content: string;
   letterInteractionData: LetterInteractionData;
@@ -53,6 +53,8 @@ export interface Person extends PersonInfo {
   url?: string;
   color: Color;
 }
+
+type PersonWithoutColor = Omit<Person, "color">;
 
 /**
  * DB TYPES
