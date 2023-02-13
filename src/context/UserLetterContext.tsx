@@ -5,8 +5,9 @@ import {
   LetterInteractionData,
   LetterInterface,
   LetterType,
-  LiveLetterInteractionData,
+  WebsiteAwarenessData,
   Person,
+  LiveLetterInteractionAwareness,
 } from "../types";
 import { useStickyState } from "../utils/localstorage";
 import { Letters } from "../data/letters";
@@ -15,10 +16,9 @@ import { LetterFormButton } from "../components/LetterForm";
 import { supabase } from "../lib/supabaseClient";
 import { SubmitLetterMetadata } from "../components/Home";
 import randomColor from "randomcolor";
-import { useYDoc } from "zustand-yjs";
+import { useYAwareness, useYDoc } from "zustand-yjs";
 import { YJS_ROOM } from "../constants";
 import { connectDoc } from "../utils/yjs";
-import { Map as YMap } from "yjs";
 
 interface UserLetterContextType {
   loading: boolean;
@@ -29,7 +29,8 @@ interface UserLetterContextType {
   content: string;
   currentUser: Person;
   type: LetterType;
-  sharedFingerprints: YMap<YMap<LiveLetterInteractionData>>;
+  sharedFingerprints: Array<LiveLetterInteractionAwareness>;
+  setFingerprint: (fingerprint: WebsiteAwarenessData["fingerprint"]) => void;
   setFromName: (fromName: string) => void;
   setToName: (toName: string) => void;
   setFromStamp: (fromStamp: string) => void;
@@ -63,7 +64,8 @@ const DefaultUserLetterContext: UserLetterContextType = {
     name: "",
     color: randomColor(),
   },
-  sharedFingerprints: new YMap(),
+  sharedFingerprints: [],
+  setFingerprint: () => {},
   setFromName: () => {},
   setToName: () => {},
   setFromStamp: () => {},
@@ -88,10 +90,6 @@ export const UserLetterContext = createContext<UserLetterContextType>(
 const UserContextStorageId = "user-letter-context";
 
 export function UserLetterContextProvider({ children }: PropsWithChildren) {
-  const yDoc = useYDoc(YJS_ROOM, connectDoc);
-  const sharedFingerprints =
-    yDoc.getMap<YMap<LiveLetterInteractionData>>("sharedFingerprints");
-
   // const randColor = useMemo(() => randomColor(), []);
   const [userContext, setUserContext] =
     useStickyState<PersistedUserLetterContextInfo>(
@@ -115,6 +113,34 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
   const setType = (type: LetterType) =>
     setUserContext({ ...userContext, type });
   const setColor = (color: Color) => setUserContext({ ...userContext, color });
+
+  const currentUser = useMemo(
+    () => ({
+      name: fromName,
+      stamp: fromStamp,
+      color,
+      // TODO: add url
+    }),
+    [color, fromName, fromStamp]
+  );
+  const yDoc = useYDoc(YJS_ROOM, connectDoc);
+
+  const [awarenessData, setAwarenessData] =
+    useYAwareness<WebsiteAwarenessData>(yDoc);
+
+  // TODO: jank conversion but it should be true
+  const sharedFingerprints: Array<LiveLetterInteractionAwareness> =
+    awarenessData
+      .filter((s) => Boolean(s.fingerprint))
+      .map((s) => s as LiveLetterInteractionAwareness);
+  function setFingerprint(fingerprint?: WebsiteAwarenessData["fingerprint"]) {
+    setAwarenessData({ fingerprint });
+  }
+
+  // Handle local awareness data for user
+  useEffect(() => {
+    setAwarenessData({ user: currentUser });
+  }, [currentUser, setAwarenessData]);
 
   const [letters, setLetters] = useState<LetterInterface[]>([]);
   const [loading, setLoading] = useState(true);
@@ -201,12 +227,8 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         content,
         type,
         sharedFingerprints,
-        currentUser: {
-          name: fromName,
-          stamp: fromStamp,
-          color,
-          // TODO: add url
-        },
+        currentUser: currentUser,
+        setFingerprint,
         setFromName,
         setToName,
         setFromStamp,

@@ -38,12 +38,13 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
     highestZIndex,
     bumpHighestZIndex,
     sharedFingerprints,
+    setFingerprint,
   } = useContext(UserLetterContext);
   const { color } = currentUser;
 
   console.log(
     "SHARED FINGERPRINTS",
-    JSON.stringify(sharedFingerprints.get(id), null, 2)
+    JSON.stringify(sharedFingerprints, null, 2)
   );
 
   const position = {
@@ -62,9 +63,10 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
   // }>({ top: 0, left: 0 });
 
   function renderFingerprints() {
-    const letterFingerprints = sharedFingerprints.get(id);
-
-    if (!letterFingerprints) {
+    const letterFingerprints = sharedFingerprints.filter(
+      ({ fingerprint }) => fingerprint.letterId === id
+    );
+    if (!letterFingerprints.length) {
       return null;
     }
 
@@ -73,21 +75,22 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
       JSON.stringify(letterFingerprints, null, 2)
     );
 
-    return [...(letterFingerprints?.entries() || [])]?.map(
-      ([fingerprintColor, { top, left }]) => {
-        console.log(fingerprintColor);
-        return (
-          <Fingerprint
-            key={fingerprintColor}
-            top={top}
-            left={left}
-            color={fingerprintColor}
-            width={FingerprintSize}
-            height={FingerprintSize}
-          />
-        );
-      }
-    );
+    return letterFingerprints.map(({ user, fingerprint }) => {
+      const fingerprintColor = user.color;
+      const { top, left } = fingerprint;
+      console.log(fingerprintColor);
+
+      return (
+        <Fingerprint
+          key={fingerprintColor}
+          top={top}
+          left={left}
+          color={fingerprintColor}
+          width={FingerprintSize}
+          height={FingerprintSize}
+        />
+      );
+    });
   }
 
   const letterContent = (
@@ -139,15 +142,20 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
           //   left: newLeft,
           // });
 
-          const existingFingerprints =
-            sharedFingerprints.get(id) || new Y.Map();
-          existingFingerprints.set(color, {
+          setFingerprint({
             top: newTop,
             left: newLeft,
+            letterId: id,
           });
-          if (!sharedFingerprints.get(id)) {
-            sharedFingerprints?.set(id, existingFingerprints);
-          }
+          // const existingFingerprints =
+          //   sharedFingerprints.get(id) || new Y.Map();
+          // existingFingerprints.set(color, {
+          //   top: newTop,
+          //   left: newLeft,
+          // });
+          // if (!sharedFingerprints.get(id) && sharedFingerprints) {
+          //   sharedFingerprints?.set(id, existingFingerprints);
+          // }
         }
         setDragging(true);
         setZ(highestZIndex + 1);
@@ -155,7 +163,8 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
       }}
       onStop={(_, dragData) => {
         console.log("stopping drag");
-        sharedFingerprints?.get(id)?.delete(color);
+        // sharedFingerprints?.get(id)?.delete(color);
+        setFingerprint(undefined);
 
         localStorage.setItem(
           id,

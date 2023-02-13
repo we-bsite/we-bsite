@@ -41,10 +41,16 @@ type HEX = `#${string}`;
 export type Color = RGB | RGBA | HEX | string;
 
 export type LetterInteractionData = Record<Color, LetterInteraction>;
-export interface LiveLetterInteractionData {
-  top: number;
-  left: number;
-}
+export type WebsiteAwarenessData = {
+  user: Partial<Person> & Pick<Person, "color">;
+  fingerprint?: {
+    letterId: string;
+    top: number;
+    left: number;
+  };
+};
+
+export type LiveLetterInteractionAwareness = Required<WebsiteAwarenessData>;
 
 interface LetterInteraction {
   numOpens: number;
