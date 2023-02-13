@@ -1,4 +1,5 @@
 import { Color } from "../types";
+import { motion } from "framer-motion";
 
 interface Props {
   width: number;
@@ -16,7 +17,10 @@ export function Fingerprint({ width, height, color, top, left, hide }: Props) {
   // - What about image for the blob/fingerprint and then a layer with background-blend-mode with a specific colour
   // try encoding the svg as an image source?
   return (
-    <svg
+    <motion.svg
+      transition={{
+        type: "spring",
+      }}
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
       xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -25,10 +29,13 @@ export function Fingerprint({ width, height, color, top, left, hide }: Props) {
       className="activeFingerprint"
       width={width * 2}
       height={height * 2}
+      animate={{
+        // visibility: hide ? "hidden" : "visible",
+        opacity: hide ? "0" : "1",
+      }}
       style={{
         top: `${top - height}px`,
         left: `${left - width}px`,
-        visibility: hide ? "hidden" : "visible",
       }}
     >
       <defs>
@@ -63,6 +70,6 @@ export function Fingerprint({ width, height, color, top, left, hide }: Props) {
           fill={color}
         ></ellipse>
       </g>
-    </svg>
+    </motion.svg>
   );
 }
