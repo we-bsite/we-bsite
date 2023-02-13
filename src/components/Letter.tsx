@@ -29,8 +29,7 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
   const savedPersistenceData = useRef<LetterPersistenceData>(
     saved ? JSON.parse(saved) : {}
   );
-  // TODO: share the active fingerprints
-  // TODO: show the past fingerprints
+  // TODO: show the past fingerprints based on the letterInteractionData
 
   const {
     updateLetterInteraction,
