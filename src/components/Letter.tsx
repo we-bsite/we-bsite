@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import { useContext, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import dayjs from "dayjs";
-import Y from "yjs";
+import * as Y from "yjs";
 import { withQueryParams } from "../utils/url";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { Fingerprint } from "./Fingerprint";
@@ -29,13 +29,22 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
   const savedPersistenceData = useRef<LetterPersistenceData>(
     saved ? JSON.parse(saved) : {}
   );
+  // TODO: share the active fingerprints
+  // TODO: show the past fingerprints
+
   const {
     updateLetterInteraction,
     currentUser,
     highestZIndex,
     bumpHighestZIndex,
+    sharedFingerprints,
   } = useContext(UserLetterContext);
   const { color } = currentUser;
+
+  console.log(
+    "SHARED FINGERPRINTS",
+    JSON.stringify(sharedFingerprints.get(id), null, 2)
+  );
 
   const position = {
     x: 0,
@@ -47,10 +56,39 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
 
   const [z, setZ] = useState<number>(position.z);
   const ref = useRef<HTMLDivElement>(null);
-  const [fingerprintPosition, setFingerprintPosition] = useState<{
-    top: number;
-    left: number;
-  }>({ top: 0, left: 0 });
+  // const [fingerprintPosition, setFingerprintPosition] = useState<{
+  //   top: number;
+  //   left: number;
+  // }>({ top: 0, left: 0 });
+
+  function renderFingerprints() {
+    const letterFingerprints = sharedFingerprints.get(id);
+
+    if (!letterFingerprints) {
+      return null;
+    }
+
+    console.log(
+      "rendering fingerprints, ",
+      JSON.stringify(letterFingerprints, null, 2)
+    );
+
+    return [...(letterFingerprints?.entries() || [])]?.map(
+      ([fingerprintColor, { top, left }]) => {
+        console.log(fingerprintColor);
+        return (
+          <Fingerprint
+            key={fingerprintColor}
+            top={top}
+            left={left}
+            color={fingerprintColor}
+            width={FingerprintSize}
+            height={FingerprintSize}
+          />
+        );
+      }
+    );
+  }
 
   const letterContent = (
     <div style={{ zIndex: z }} ref={ref} className="letterContent">
@@ -73,14 +111,7 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
         }}
         initial={false}
       >
-        <Fingerprint
-          width={FingerprintSize}
-          height={FingerprintSize}
-          top={fingerprintPosition.top}
-          left={fingerprintPosition.left}
-          color={color}
-          hide={!isDragging}
-        />
+        {renderFingerprints()}
         <LetterView
           letter={letter}
           isDragging={isDragging}
@@ -103,16 +134,29 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
           const { top, left } = ref.current.getBoundingClientRect();
           const newTop = e.clientY - top;
           const newLeft = e.clientX - left;
-          setFingerprintPosition({
+          // setFingerprintPosition({
+          //   top: newTop,
+          //   left: newLeft,
+          // });
+
+          const existingFingerprints =
+            sharedFingerprints.get(id) || new Y.Map();
+          existingFingerprints.set(color, {
             top: newTop,
             left: newLeft,
           });
+          if (!sharedFingerprints.get(id)) {
+            sharedFingerprints?.set(id, existingFingerprints);
+          }
         }
         setDragging(true);
         setZ(highestZIndex + 1);
         bumpHighestZIndex();
       }}
       onStop={(_, dragData) => {
+        console.log("stopping drag");
+        sharedFingerprints?.get(id)?.delete(color);
+
         localStorage.setItem(
           id,
           JSON.stringify({
@@ -174,6 +218,7 @@ export function LetterView({
         mainContent = (
           <div className="letter-content-wrapper">
             {isEditable ? (
+              // TODO: clean this to always add http/https (or validate?)
               <input
                 className="letterIframeInput"
                 placeholder="https://yourwebsite.com/letter"

@@ -5,6 +5,7 @@ import {
   LetterInteractionData,
   LetterInterface,
   LetterType,
+  LiveLetterInteractionData,
   Person,
 } from "../types";
 import { useStickyState } from "../utils/localstorage";
@@ -14,6 +15,10 @@ import { LetterFormButton } from "../components/LetterForm";
 import { supabase } from "../lib/supabaseClient";
 import { SubmitLetterMetadata } from "../components/Home";
 import randomColor from "randomcolor";
+import { useYDoc } from "zustand-yjs";
+import { YJS_ROOM } from "../constants";
+import { connectDoc } from "../utils/yjs";
+import { Map as YMap } from "yjs";
 
 interface UserLetterContextType {
   loading: boolean;
@@ -24,6 +29,7 @@ interface UserLetterContextType {
   content: string;
   currentUser: Person;
   type: LetterType;
+  sharedFingerprints: YMap<YMap<LiveLetterInteractionData>>;
   setFromName: (fromName: string) => void;
   setToName: (toName: string) => void;
   setFromStamp: (fromStamp: string) => void;
@@ -57,6 +63,7 @@ const DefaultUserLetterContext: UserLetterContextType = {
     name: "",
     color: randomColor(),
   },
+  sharedFingerprints: new YMap(),
   setFromName: () => {},
   setToName: () => {},
   setFromStamp: () => {},
@@ -81,6 +88,10 @@ export const UserLetterContext = createContext<UserLetterContextType>(
 const UserContextStorageId = "user-letter-context";
 
 export function UserLetterContextProvider({ children }: PropsWithChildren) {
+  const yDoc = useYDoc(YJS_ROOM, connectDoc);
+  const sharedFingerprints =
+    yDoc.getMap<YMap<LiveLetterInteractionData>>("sharedFingerprints");
+
   // const randColor = useMemo(() => randomColor(), []);
   const [userContext, setUserContext] =
     useStickyState<PersistedUserLetterContextInfo>(
@@ -189,6 +200,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         fromStamp,
         content,
         type,
+        sharedFingerprints,
         currentUser: {
           name: fromName,
           stamp: fromStamp,

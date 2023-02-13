@@ -41,6 +41,10 @@ type HEX = `#${string}`;
 export type Color = RGB | RGBA | HEX | string;
 
 export type LetterInteractionData = Record<Color, LetterInteraction>;
+export interface LiveLetterInteractionData {
+  top: number;
+  left: number;
+}
 
 interface LetterInteraction {
   numOpens: number;
