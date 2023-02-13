@@ -15,6 +15,7 @@ export const Letters: Array<LetterInterface> = [
     },
     date: new Date("2021-12-02"),
     type: LetterType.IFrame,
+    letterInteractionData: {},
   },
   {
     id: "jacky-0",
@@ -28,6 +29,7 @@ export const Letters: Array<LetterInterface> = [
     },
     date: new Date("2022-07-14"),
     type: LetterType.IFrame,
+    letterInteractionData: {},
   },
   {
     id: "spencer-1",
@@ -41,6 +43,7 @@ export const Letters: Array<LetterInterface> = [
     },
     date: new Date("2022-12-11"),
     type: LetterType.IFrame,
+    letterInteractionData: {},
   },
   {
     id: "jacky-1",
@@ -54,6 +57,7 @@ export const Letters: Array<LetterInterface> = [
     },
     date: new Date("2022-12-26"),
     type: LetterType.IFrame,
+    letterInteractionData: {},
   },
   {
     id: "katherine-0",
@@ -67,6 +71,7 @@ export const Letters: Array<LetterInterface> = [
     content: "https://whykatherine.github.io/assets/manifesto/manifesto.pdf",
     date: new Date("2021-09-01"),
     type: LetterType.IFrame,
+    letterInteractionData: {},
   },
   {
     id: "chia-0",
@@ -80,5 +85,6 @@ export const Letters: Array<LetterInterface> = [
     content: "https://chias.blog/2022/there-is-an-internet-that-is-mine/",
     date: new Date("2022-12-12"),
     type: LetterType.IFrame,
+    letterInteractionData: {},
   },
 ];
