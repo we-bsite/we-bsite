@@ -7,10 +7,9 @@ interface Props {
   color: Color;
   top: number;
   left: number;
-  hide?: boolean;
 }
 
-export function Fingerprint({ width, height, color, top, left, hide }: Props) {
+export function Fingerprint({ width, height, color, top, left }: Props) {
   // TODO: try to make this performance better. things to try
   // - https://www.crmarsh.com/svg-performance/
   // - use a div with a blur
@@ -18,9 +17,6 @@ export function Fingerprint({ width, height, color, top, left, hide }: Props) {
   // try encoding the svg as an image source?
   return (
     <motion.svg
-      transition={{
-        type: "spring",
-      }}
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
       xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -29,10 +25,12 @@ export function Fingerprint({ width, height, color, top, left, hide }: Props) {
       className="activeFingerprint"
       width={width * 2}
       height={height * 2}
-      animate={{
-        // visibility: hide ? "hidden" : "visible",
-        opacity: hide ? "0" : "1",
+      transition={{
+        type: "spring",
       }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       style={{
         top: `${top - height}px`,
         left: `${left - width}px`,

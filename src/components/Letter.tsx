@@ -6,11 +6,10 @@ import {
   LetterType,
   LetterTypeToDisplay,
 } from "../types";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useContext, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import dayjs from "dayjs";
-import * as Y from "yjs";
 import { withQueryParams } from "../utils/url";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { Fingerprint } from "./Fingerprint";
@@ -56,25 +55,26 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
     const letterFingerprints = sharedFingerprints.filter(
       ({ fingerprint }) => fingerprint.letterId === id
     );
-    if (!letterFingerprints.length) {
-      return null;
-    }
 
-    return letterFingerprints.map(({ user, fingerprint }) => {
-      const fingerprintColor = user.color;
-      const { top, left } = fingerprint;
+    return (
+      <AnimatePresence>
+        {letterFingerprints.map(({ user, fingerprint }) => {
+          const fingerprintColor = user.color;
+          const { top, left } = fingerprint;
 
-      return (
-        <Fingerprint
-          key={fingerprintColor}
-          top={top}
-          left={left}
-          color={fingerprintColor}
-          width={FingerprintSize}
-          height={FingerprintSize}
-        />
-      );
-    });
+          return (
+            <Fingerprint
+              key={fingerprintColor}
+              top={top}
+              left={left}
+              color={fingerprintColor}
+              width={FingerprintSize}
+              height={FingerprintSize}
+            />
+          );
+        })}
+      </AnimatePresence>
+    );
   }
 
   const letterContent = (
