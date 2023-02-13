@@ -113,13 +113,14 @@ h3 {
           translateY(random() * 25 - 12.5 + px);
       }
       &:nth-of-type(#{$i}) .dateStamp:nth-of-type(#{$j}) {
-        // rotation is in the range [-40,40]deg 
+        // rotation is in the range [-40,40]deg
         $rot: ((random()) * 80) - 40;
         transform: rotate(($rot) + deg);
         &:before {
-          // translate is [-75, -45]px 
+          // translate is [-75, -45]px
           // rotate is [-15,15]px (offset from parent rotation)
-          transform: translateX((-(random() * 15) - 60) + px) rotate((((random()) * 15) - 15 - $rot) + deg);
+          transform: translateX((-(random() * 15) - 60) + px)
+            rotate((((random()) * 15) - 15 - $rot) + deg);
         }
       }
     }
@@ -437,7 +438,6 @@ button {
 .activeFingerprint {
   position: absolute;
   z-index: 2;
-  // border-radius: 50%;
 }
 
 .profile {
