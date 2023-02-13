@@ -41,11 +41,6 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
   } = useContext(UserLetterContext);
   const { color } = currentUser;
 
-  console.log(
-    "SHARED FINGERPRINTS",
-    JSON.stringify(sharedFingerprints, null, 2)
-  );
-
   const position = {
     x: 0,
     y: 0,
@@ -56,10 +51,6 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
 
   const [z, setZ] = useState<number>(position.z);
   const ref = useRef<HTMLDivElement>(null);
-  // const [fingerprintPosition, setFingerprintPosition] = useState<{
-  //   top: number;
-  //   left: number;
-  // }>({ top: 0, left: 0 });
 
   function renderFingerprints() {
     const letterFingerprints = sharedFingerprints.filter(
@@ -69,15 +60,9 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
       return null;
     }
 
-    console.log(
-      "rendering fingerprints, ",
-      JSON.stringify(letterFingerprints, null, 2)
-    );
-
     return letterFingerprints.map(({ user, fingerprint }) => {
       const fingerprintColor = user.color;
       const { top, left } = fingerprint;
-      console.log(fingerprintColor);
 
       return (
         <Fingerprint
@@ -136,33 +121,18 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
           const { top, left } = ref.current.getBoundingClientRect();
           const newTop = e.clientY - top;
           const newLeft = e.clientX - left;
-          // setFingerprintPosition({
-          //   top: newTop,
-          //   left: newLeft,
-          // });
 
           setFingerprint({
             top: newTop,
             left: newLeft,
             letterId: id,
           });
-          // const existingFingerprints =
-          //   sharedFingerprints.get(id) || new Y.Map();
-          // existingFingerprints.set(color, {
-          //   top: newTop,
-          //   left: newLeft,
-          // });
-          // if (!sharedFingerprints.get(id) && sharedFingerprints) {
-          //   sharedFingerprints?.set(id, existingFingerprints);
-          // }
         }
         setDragging(true);
         setZ(highestZIndex + 1);
         bumpHighestZIndex();
       }}
       onStop={(_, dragData) => {
-        console.log("stopping drag");
-        // sharedFingerprints?.get(id)?.delete(color);
         setFingerprint(undefined);
 
         localStorage.setItem(

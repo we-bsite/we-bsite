@@ -90,7 +90,6 @@ export const UserLetterContext = createContext<UserLetterContextType>(
 const UserContextStorageId = "user-letter-context";
 
 export function UserLetterContextProvider({ children }: PropsWithChildren) {
-  // const randColor = useMemo(() => randomColor(), []);
   const [userContext, setUserContext] =
     useStickyState<PersistedUserLetterContextInfo>(
       UserContextStorageId,

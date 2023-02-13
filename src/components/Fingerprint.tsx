@@ -28,7 +28,7 @@ export function Fingerprint({ width, height, color, top, left, hide }: Props) {
       style={{
         top: `${top - height}px`,
         left: `${left - width}px`,
-        display: hide ? "none" : "block",
+        visibility: hide ? "hidden" : "visible",
       }}
     >
       <defs>
