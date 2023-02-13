@@ -13,7 +13,6 @@ import dayjs from "dayjs";
 import Y from "yjs";
 import { withQueryParams } from "../utils/url";
 import { UserLetterContext } from "../context/UserLetterContext";
-import { ensureExists } from "../utils/ensure";
 import { Fingerprint } from "./Fingerprint";
 
 interface Props {
@@ -47,8 +46,6 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
   };
 
   const [z, setZ] = useState<number>(position.z);
-
-  // TODO: Migrate this to extract from the letter and DB with the total number persisted in server.
   const ref = useRef<HTMLDivElement>(null);
   const [fingerprintPosition, setFingerprintPosition] = useState<{
     top: number;
@@ -106,8 +103,6 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
           const { top, left } = ref.current.getBoundingClientRect();
           const newTop = e.clientY - top;
           const newLeft = e.clientX - left;
-          // console.log(newLeft);
-          // console.log(newTop);
           setFingerprintPosition({
             top: newTop,
             left: newLeft,
