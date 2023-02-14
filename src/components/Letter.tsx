@@ -62,8 +62,6 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
           const fingerprintColor = user.color;
           const { top, left } = fingerprint;
 
-          console.log("rendering fingerprint ", top, left);
-
           return (
             <Fingerprint
               key={fingerprintColor}
@@ -130,8 +128,6 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
               : { clientX: e.clientX, clientY: e.clientY };
           const newTop = clientY - top;
           const newLeft = clientX - left;
-
-          console.log("newposition ", newTop, newLeft);
 
           setFingerprint({
             top: newTop,

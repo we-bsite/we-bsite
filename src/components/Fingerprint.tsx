@@ -16,7 +16,6 @@ export function Fingerprint({ width, height, color, top, left }: Props) {
   // - What about image for the blob/fingerprint and then a layer with background-blend-mode with a specific colour
   // try encoding the svg as an image source?
 
-  console.log("rendering fingerprint at ", top, left);
   return (
     <motion.div
       transition={{
