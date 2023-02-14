@@ -13,5 +13,6 @@ CREATE TABLE IF NOT EXISTS letters(
     from_person jsonb,
     creation_timestamp TIMESTAMP with time zone default timezone('utc'::text, now()) not null,
     letter_content jsonb not null,
+    /* This will be a map from color to num_drags */
     interaction_data jsonb
 );

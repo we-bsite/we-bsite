@@ -1,34 +1,45 @@
+// NOTE: next image is not supportive of any network domain host
+/* eslint-disable @next/next/no-img-element */
 import {
   LetterInterface,
   LetterPersistenceData,
-  LetterInteractionData,
   LetterType,
   LetterTypeToDisplay,
 } from "../types";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useContext, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import dayjs from "dayjs";
-import Y from "yjs";
 import { withQueryParams } from "../utils/url";
 import { UserLetterContext } from "../context/UserLetterContext";
-import { ensureExists } from "../utils/ensure";
+import { Fingerprint } from "./Fingerprint";
 
 interface Props {
   letter: LetterInterface;
-  shared?: Y.Map<LetterInteractionData>;
   isEditable?: boolean;
   disableDrag?: boolean;
 }
+const FingerprintSize = 50;
 
-export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
-  const { highestZIndex, bumpHighestZIndex } = useContext(UserLetterContext);
+export function Letter({ letter, isEditable, disableDrag }: Props) {
   const [isDragging, setDragging] = useState(disableDrag ? true : false);
-  const { id, initialPersistenceData } = letter;
+  const { id, initialPersistenceData, letterInteractionData } = letter;
   const saved = disableDrag ? undefined : localStorage.getItem(id);
   const savedPersistenceData = useRef<LetterPersistenceData>(
     saved ? JSON.parse(saved) : {}
   );
+  // TODO: show the past fingerprints based on the letterInteractionData
+
+  const {
+    updateLetterInteraction,
+    currentUser,
+    highestZIndex,
+    bumpHighestZIndex,
+    sharedFingerprints,
+    setFingerprint,
+  } = useContext(UserLetterContext);
+  const { color } = currentUser;
+
   const position = {
     x: 0,
     y: 0,
@@ -38,15 +49,36 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
   };
 
   const [z, setZ] = useState<number>(position.z);
+  const ref = useRef<HTMLDivElement>(null);
 
-  // TODO: Migrate this to extract from the letter and DB with the total number persisted in server.
-  const currentSharedData = shared?.get(id) || {
-    numOpens: 0,
-    numDrags: 0,
-  };
+  function renderFingerprints() {
+    const letterFingerprints = sharedFingerprints.filter(
+      ({ fingerprint }) => fingerprint.letterId === id
+    );
+
+    return (
+      <AnimatePresence>
+        {letterFingerprints.map(({ user, fingerprint }) => {
+          const fingerprintColor = user.color;
+          const { top, left } = fingerprint;
+
+          return (
+            <Fingerprint
+              key={fingerprintColor}
+              top={top}
+              left={left}
+              color={fingerprintColor}
+              width={FingerprintSize}
+              height={FingerprintSize}
+            />
+          );
+        })}
+      </AnimatePresence>
+    );
+  }
 
   const letterContent = (
-    <div style={{ zIndex: z }}>
+    <div style={{ zIndex: z }} ref={ref} className="letterContent">
       <motion.div
         className="letter"
         transition={{
@@ -66,9 +98,9 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
         }}
         initial={false}
       >
+        {renderFingerprints()}
         <LetterView
           letter={letter}
-          shared={shared}
           isDragging={isDragging}
           isEditable={isEditable}
         />
@@ -83,12 +115,26 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
       handle=".letterHead"
       defaultClassName="letter-container"
       defaultPosition={position}
-      onStart={() => {
+      onStart={(e: any, draggableData) => {
+        setDragging(true);
+        if (ref.current) {
+          const { top, left } = ref.current.getBoundingClientRect();
+          const newTop = e.clientY - top;
+          const newLeft = e.clientX - left;
+
+          setFingerprint({
+            top: newTop,
+            left: newLeft,
+            letterId: id,
+          });
+        }
         setDragging(true);
         setZ(highestZIndex + 1);
-        bumpHighestZIndex()
+        bumpHighestZIndex();
       }}
       onStop={(_, dragData) => {
+        setFingerprint(undefined);
+
         localStorage.setItem(
           id,
           JSON.stringify({
@@ -97,11 +143,15 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
             z,
           })
         );
-        shared?.set(id, {
-          ...currentSharedData,
-          numDrags: currentSharedData.numDrags + 1,
-        });
-
+        const newLetterInteractionData = { ...letterInteractionData };
+        if (!newLetterInteractionData[color]) {
+          newLetterInteractionData[color] = {
+            numDrags: 0,
+            numOpens: 0,
+          };
+        }
+        newLetterInteractionData[color].numDrags++;
+        void updateLetterInteraction(id, newLetterInteractionData);
         setDragging(false);
       }}
     >
@@ -112,25 +162,16 @@ export function Letter({ letter, shared, isEditable, disableDrag }: Props) {
 
 interface LetterViewProps {
   letter: LetterInterface;
-  shared?: Y.Map<LetterInteractionData>;
   isDragging?: boolean;
   isEditable?: boolean;
 }
 
 export function LetterView({
   letter,
-  shared,
   isDragging,
   isEditable,
 }: LetterViewProps) {
   const { id, to, from, date } = letter;
-
-  const currentSharedData = shared?.get(id) || {
-    // This is the first time that the panel has opened
-    numOpens: 0,
-    // This is the first time that the panel has been dragged
-    numDrags: 0,
-  };
 
   const userLetterContext = useContext(UserLetterContext);
   const {
@@ -155,6 +196,7 @@ export function LetterView({
         mainContent = (
           <div className="letter-content-wrapper">
             {isEditable ? (
+              // TODO: clean this to always add http/https (or validate?)
               <input
                 className="letterIframeInput"
                 placeholder="https://yourwebsite.com/letter"
@@ -166,15 +208,16 @@ export function LetterView({
               <a
                 href={src}
                 target="_blank"
-                onClick={() =>
-                  ensureExists(shared).set(id, {
-                    ...currentSharedData,
-                    numOpens: currentSharedData.numOpens + 1,
-                  })
+                onClick={
+                  // TODO: if needed persist num opens too here
+                  () => {}
                 }
                 rel="noreferrer"
               >
-                <img src="/wax-seal.png" alt="Wax seal that brings you to the letter" />
+                <img
+                  src="/wax-seal.png"
+                  alt="Wax seal that brings you to the letter"
+                />
               </a>
             </div>
             <iframe
@@ -231,8 +274,8 @@ export function LetterView({
   const toName = isEditable
     ? userLetterContext.toName
     : typeof to === "string"
-      ? to
-      : to.name;
+    ? to
+    : to.name;
   const fromStamp = isEditable ? userLetterContext.fromStamp : from.stamp;
 
   async function onUploadStamp(e: React.ChangeEvent<HTMLInputElement>) {
@@ -253,8 +296,9 @@ export function LetterView({
   return (
     <>
       <div
-        className={`letterHead ${isDragging ? "dragging" : ""} ${isEditable ? "disabled" : ""
-          }`}
+        className={`letterHead ${isDragging ? "dragging" : ""} ${
+          isEditable ? "disabled" : ""
+        }`}
       >
         <div>
           <div>
@@ -299,7 +343,7 @@ export function LetterView({
             <div className="stamp cursor-pointer">
               <label className="flex justify-center w-full h-32 px-4 appearance-none cursor-pointer hover:background-gray-400 focus:outline-none">
                 {fromStamp ? (
-                  <img src={fromStamp} />
+                  <img alt="stamp" src={fromStamp} />
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -326,12 +370,12 @@ export function LetterView({
             </div>
           ) : fromStamp ? (
             <div className="stamp">
-              <img src={fromStamp} />
+              <img alt="stamp" src={fromStamp} />
             </div>
           ) : null}
           {typeof to !== "string" && to.stamp ? (
             <div className="stamp">
-              <img src={to.stamp} />
+              <img alt="stamp" src={to.stamp} />
             </div>
           ) : null}
         </div>

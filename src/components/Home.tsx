@@ -5,6 +5,7 @@ import { LetterFormDialogContent } from "./LetterForm";
 import { Desk } from "./Desk";
 import { useEffect } from "react";
 import { UserLetterContextProvider } from "../context/UserLetterContext";
+import { Profile } from "./Profile";
 
 export const SubmitLetterMetadata: LetterInterface = {
   id: "submit-0",
@@ -18,6 +19,7 @@ export const SubmitLetterMetadata: LetterInterface = {
   content: "your letter of internet dreams & hopes",
   date: new Date(),
   type: LetterType.Content,
+  letterInteractionData: {},
 };
 
 function Home() {
@@ -32,6 +34,7 @@ function Home() {
       <UserLetterContextProvider>
         <Dialog.Root>
           <div className="App">
+            <Profile />
             <h1>(we)bsite</h1>
             <p>
               <em>(we)bsite</em> is a living collection of internet dreams from

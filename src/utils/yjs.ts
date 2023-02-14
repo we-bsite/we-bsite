@@ -1,12 +1,25 @@
-import { IndexeddbPersistence } from "y-indexeddb";
+import { useEffect } from "react";
+import { WebrtcProvider } from "y-webrtc";
 import Y from "yjs";
+import { StartAwarenessFunction } from "zustand-yjs";
 import { YJS_ROOM } from "../constants";
 
-export const connectDoc = (doc: Y.Doc) => {
+export const connectDoc = (
+  doc: Y.Doc,
+  startAwareness: StartAwarenessFunction
+) => {
   console.log(`Connecting to the internet... ${doc.guid} initialized`);
-  const index = new IndexeddbPersistence(YJS_ROOM, doc);
+
+  // Hack to get around server-side rendering build
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+
+  const provider = new WebrtcProvider(YJS_ROOM, doc);
+  const stopAwareness = startAwareness(provider);
   return () => {
-    index.destroy();
+    provider.disconnect();
+    stopAwareness();
     console.log("Disconnected from the internet...");
   };
 };

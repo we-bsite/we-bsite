@@ -1,34 +1,56 @@
-import { createContext, PropsWithChildren } from "react";
-import { DatabaseLetter, LetterInterface, LetterType } from "../types";
+import { createContext, PropsWithChildren, useCallback, useMemo } from "react";
+import {
+  Color,
+  DatabaseLetter,
+  LetterInteractionData,
+  LetterInterface,
+  LetterType,
+  WebsiteAwarenessData,
+  Person,
+  LiveLetterInteractionAwareness,
+} from "../types";
 import { useStickyState } from "../utils/localstorage";
 import { Letters } from "../data/letters";
 import { useEffect, useState } from "react";
 import { LetterFormButton } from "../components/LetterForm";
 import { supabase } from "../lib/supabaseClient";
 import { SubmitLetterMetadata } from "../components/Home";
+import randomColor from "randomcolor";
+import { useYAwareness, useYDoc } from "zustand-yjs";
+import { YJS_ROOM } from "../constants";
+import { connectDoc } from "../utils/yjs";
 
 interface UserLetterContextType {
-  loading: boolean,
+  loading: boolean;
   letters: LetterInterface[];
   fromName: string;
   toName: string;
   fromStamp: string;
   content: string;
+  currentUser: Person;
   type: LetterType;
+  sharedFingerprints: Array<LiveLetterInteractionAwareness>;
+  setFingerprint: (fingerprint: WebsiteAwarenessData["fingerprint"]) => void;
   setFromName: (fromName: string) => void;
   setToName: (toName: string) => void;
   setFromStamp: (fromStamp: string) => void;
   setContent: (content: string) => void;
   setType: (setType: LetterType) => void;
+  setColor: (color: Color) => void;
   onLetterSubmitted: () => void;
-  highestZIndex: number,
+  highestZIndex: number;
   bumpHighestZIndex: () => void;
+  updateLetterInteraction: (
+    id: string,
+    newInteractionData: LetterInteractionData
+  ) => void;
 }
 
 type PersistedUserLetterContextInfo = Pick<
   UserLetterContextType,
   "fromName" | "toName" | "fromStamp" | "content" | "type"
->;
+> &
+  Pick<UserLetterContextType["currentUser"], "color">;
 
 const DefaultUserLetterContext: UserLetterContextType = {
   loading: true,
@@ -38,15 +60,29 @@ const DefaultUserLetterContext: UserLetterContextType = {
   fromStamp: "",
   content: "",
   type: LetterType.IFrame,
+  currentUser: {
+    name: "",
+    color: randomColor(),
+  },
+  sharedFingerprints: [],
+  setFingerprint: () => {},
   setFromName: () => {},
   setToName: () => {},
   setFromStamp: () => {},
   setContent: () => {},
   setType: () => {},
+  setColor: () => {},
   onLetterSubmitted: () => {},
   highestZIndex: 0,
   bumpHighestZIndex: () => {},
+  updateLetterInteraction: () => {},
 };
+
+const DefaultPersistedUserLetterContext: PersistedUserLetterContextInfo = {
+  ...DefaultUserLetterContext,
+  color: DefaultUserLetterContext.currentUser.color,
+};
+
 export const UserLetterContext = createContext<UserLetterContextType>(
   DefaultUserLetterContext
 );
@@ -57,10 +93,14 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
   const [userContext, setUserContext] =
     useStickyState<PersistedUserLetterContextInfo>(
       UserContextStorageId,
-      DefaultUserLetterContext
+      DefaultPersistedUserLetterContext
     );
 
-  const { fromName, toName, fromStamp, content, type } = userContext;
+  // TODO: if you want to get ip of user
+  // <script src="https://cdn.jsdelivr.net/gh/joeymalvinni/webrtc-ip/dist/bundle.dev.js"></script>
+  // getIPs().then(res => document.write(res.join('\n')))
+
+  const { fromName, toName, fromStamp, content, type, color } = userContext;
   const setFromName = (fromName: string) =>
     setUserContext({ ...userContext, fromName });
   const setToName = (toName: string) =>
@@ -71,12 +111,41 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
     setUserContext({ ...userContext, content });
   const setType = (type: LetterType) =>
     setUserContext({ ...userContext, type });
+  const setColor = (color: Color) => setUserContext({ ...userContext, color });
+
+  const currentUser = useMemo(
+    () => ({
+      name: fromName,
+      stamp: fromStamp,
+      color,
+      // TODO: add url
+    }),
+    [color, fromName, fromStamp]
+  );
+  const yDoc = useYDoc(YJS_ROOM, connectDoc);
+
+  const [awarenessData, setAwarenessData] =
+    useYAwareness<WebsiteAwarenessData>(yDoc);
+
+  // TODO: jank conversion but it should be true
+  const sharedFingerprints: Array<LiveLetterInteractionAwareness> =
+    awarenessData
+      .filter((s) => Boolean(s.fingerprint))
+      .map((s) => s as LiveLetterInteractionAwareness);
+  function setFingerprint(fingerprint?: WebsiteAwarenessData["fingerprint"]) {
+    setAwarenessData({ fingerprint });
+  }
+
+  // Handle local awareness data for user
+  useEffect(() => {
+    setAwarenessData({ user: currentUser });
+  }, [currentUser, setAwarenessData]);
 
   const [letters, setLetters] = useState<LetterInterface[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   const [highestZIndex, setHighestZIndex] = useState<number>(0);
-  const bumpHighestZIndex = () => setHighestZIndex(highest => highest + 1)
+  const bumpHighestZIndex = () => setHighestZIndex((highest) => highest + 1);
 
   async function fetchLetters() {
     try {
@@ -96,7 +165,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       if (data) {
         fetchedLetters = (data as DatabaseLetter[]).map<LetterInterface>(
           (dbLetter) => {
-            const { letter_content } = dbLetter;
+            const { letter_content, interaction_data } = dbLetter;
 
             return {
               id: String(dbLetter.id),
@@ -106,7 +175,8 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
               type: letter_content.type,
               content: letter_content.content,
               initialPersistenceData: {},
-            };
+              letterInteractionData: interaction_data,
+            } as LetterInterface;
           }
         );
       }
@@ -124,6 +194,16 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function updateLetterInteraction(
+    id: string,
+    newInteractionData: LetterInteractionData
+  ) {
+    await supabase
+      .from("letters")
+      .update({ interaction_data: newInteractionData })
+      .eq("id", id);
   }
 
   useEffect(() => {
@@ -145,15 +225,20 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         fromStamp,
         content,
         type,
+        sharedFingerprints,
+        currentUser: currentUser,
+        setFingerprint,
         setFromName,
         setToName,
         setFromStamp,
         setContent,
         setType,
+        setColor,
         onLetterSubmitted,
         loading,
         highestZIndex,
-        bumpHighestZIndex
+        bumpHighestZIndex,
+        updateLetterInteraction,
       }}
     >
       {children}

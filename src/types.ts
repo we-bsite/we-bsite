@@ -1,10 +1,3 @@
-export interface Person {
-  name: string;
-  url?: string;
-  fullName?: string;
-  stamp?: string;
-}
-
 export enum LetterType {
   IFrame = "IFrame",
   Content = "Content",
@@ -17,13 +10,14 @@ export const LetterTypeToDisplay: Record<LetterType, string> = {
 export interface LetterInterface {
   id: string;
   type: LetterType;
-  to: Person | string;
-  from: Person;
+  to: PersonWithoutColor | string;
+  from: PersonWithoutColor;
   date: Date;
-  initialPersistenceData: LetterPersistenceData;
   content: string;
+  letterInteractionData: LetterInteractionData;
 
   // Not persisted
+  initialPersistenceData: LetterPersistenceData;
   ctaContent?: React.ReactNode;
 }
 
@@ -40,19 +34,44 @@ export interface LetterPersistenceData {
   z?: number;
 }
 
-export interface LetterInteractionData {
+type RGB = `rgb(${number}, ${number}, ${number})`;
+type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
+type HEX = `#${string}`;
+
+export type Color = RGB | RGBA | HEX | string;
+
+export type LetterInteractionData = Record<Color, LetterInteraction>;
+export type WebsiteAwarenessData = {
+  user: Partial<Person> & Pick<Person, "color">;
+  fingerprint?: {
+    letterId: string;
+    top: number;
+    left: number;
+  };
+};
+
+export type LiveLetterInteractionAwareness = Required<WebsiteAwarenessData>;
+
+interface LetterInteraction {
   numOpens: number;
   numDrags: number;
 }
 
 export type ApiLetter = Omit<LetterInterface, "initialPersistenceData">;
 
+export interface Person extends PersonInfo {
+  url?: string;
+  color: Color;
+}
+
+type PersonWithoutColor = Omit<Person, "color">;
+
 /**
  * DB TYPES
  */
 interface PersonInfo {
   name: string;
-  stamp: string;
+  stamp?: string;
 }
 
 export interface DatabaseLetter {
