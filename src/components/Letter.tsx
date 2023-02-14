@@ -62,6 +62,8 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
           const fingerprintColor = user.color;
           const { top, left } = fingerprint;
 
+          console.log("rendering fingerprint ", top, left);
+
           return (
             <Fingerprint
               key={fingerprintColor}
@@ -115,12 +117,21 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
       handle=".letterHead"
       defaultClassName="letter-container"
       defaultPosition={position}
-      onStart={(e: any, draggableData) => {
+      onStart={(e, draggableData) => {
         setDragging(true);
         if (ref.current) {
           const { top, left } = ref.current.getBoundingClientRect();
-          const newTop = e.clientY - top;
-          const newLeft = e.clientX - left;
+          const { clientX, clientY } =
+            "touches" in e
+              ? {
+                  clientX: e.touches[0].clientX,
+                  clientY: e.touches[0].clientY,
+                }
+              : { clientX: e.clientX, clientY: e.clientY };
+          const newTop = clientY - top;
+          const newLeft = clientX - left;
+
+          console.log("newposition ", newTop, newLeft);
 
           setFingerprint({
             top: newTop,

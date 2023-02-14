@@ -219,6 +219,7 @@ $letter-zoom-scale: 0.5;
   border-radius: 5px;
   background: $color-letter;
   width: fit-content;
+  user-select: none;
 
   .header {
     font-weight: bold;
