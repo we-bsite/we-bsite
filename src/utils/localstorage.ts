@@ -12,10 +12,7 @@ export function getLocalStorageItem<T>(key: string): T | null {
 
 // shoutout to my boy josh comeau for this hook template.
 // https://www.joshwcomeau.com/react/persisting-react-state-in-localstorage/
-// also this for handling nextjs SSR
-// https://upmostly.com/next-js/using-localstorage-in-next-js
-// NOTE: NEVER EVER PASS IN A "IN-MEMORY" OBJECt
-// AS DEFAULT VALUE, IT RERENDERS FOREVER
+// https://dev.to/joshwcomeau/comment/m114
 export function useStickyState<T>(
   localStorageId: string,
   defaultValue: T
@@ -25,8 +22,11 @@ export function useStickyState<T>(
   // not defined at compile-time on server.
   React.useEffect(() => {
     const stickyValue = getLocalStorageItem<T>(localStorageId);
-    setValue(stickyValue || defaultValue);
-  }, [defaultValue, localStorageId]);
+    if (stickyValue !== null) {
+      setValue(stickyValue);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localStorageId]);
 
   React.useEffect(() => {
     localStorage.setItem(localStorageId, JSON.stringify(value));
