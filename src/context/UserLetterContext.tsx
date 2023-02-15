@@ -164,26 +164,13 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       let fetchedLetters: LetterInterface[] = [];
       if (data) {
         fetchedLetters = (data as DatabaseLetter[]).map<LetterInterface>(
-          (dbLetter) => {
-            const { letter_content, interaction_data } = dbLetter;
-
-            return {
-              id: String(dbLetter.id),
-              from: dbLetter.from_person,
-              to: dbLetter.to_person,
-              date: new Date(dbLetter.creation_timestamp),
-              type: letter_content.type,
-              content: letter_content.content,
-              initialPersistenceData: {},
-              letterInteractionData: interaction_data,
-            } as LetterInterface;
-          }
+          mapDbLetterToLetterInterface
         );
       }
 
       setLetters([
-        ...fetchedLetters,
         ...Letters,
+        ...fetchedLetters,
         {
           ...SubmitLetterMetadata,
           ctaContent: <LetterFormButton />,
@@ -210,10 +197,61 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
     void fetchLetters();
   }, []);
 
+  function mapDbLetterToLetterInterface(
+    dbLetter: DatabaseLetter
+  ): LetterInterface {
+    const { letter_content, interaction_data } = dbLetter;
+
+    return {
+      id: String(dbLetter.id),
+      from: dbLetter.from_person,
+      to: dbLetter.to_person,
+      date: new Date(dbLetter.creation_timestamp),
+      type: letter_content.type,
+      content: letter_content.content,
+      initialPersistenceData: {},
+      letterInteractionData: interaction_data,
+    } as LetterInterface;
+  }
+
+  useEffect(() => {
+    console.log("set up channel");
+    const channel = supabase
+      .channel("*")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "letters" },
+        (payload) => {
+          console.log("loaded payload: ", payload);
+          try {
+            setLoading(true);
+            const newLetter: DatabaseLetter = payload.new as DatabaseLetter;
+            setLetters((letters: any) => [
+              ...letters.slice(0, letters.length - 1),
+              mapDbLetterToLetterInterface(newLetter),
+              {
+                ...SubmitLetterMetadata,
+                ctaContent: <LetterFormButton />,
+              },
+            ]);
+          } catch (err: any) {
+            alert(err.message);
+          } finally {
+            setLoading(false);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [letters]);
+
   const onLetterSubmitted = () => {
     // Resets values that shouldn't be persisted.
     setUserContext({ ...userContext, content: "", toName: "the internet" });
-    fetchLetters();
+    // fetchLetters();
   };
 
   return (
