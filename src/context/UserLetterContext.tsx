@@ -19,6 +19,7 @@ import randomColor from "randomcolor";
 import { useYAwareness, useYDoc } from "zustand-yjs";
 import { YJS_ROOM } from "../constants";
 import { connectDoc } from "../utils/yjs";
+import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
 
 interface UserLetterContextType {
   loading: boolean;
@@ -216,10 +217,11 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     console.log("set up channel");
+
     const channel = supabase
-      .channel("*")
+      .channel("public:letters")
       .on(
-        "postgres_changes",
+        REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
         { event: "INSERT", schema: "public", table: "letters" },
         (payload) => {
           console.log("loaded payload: ", payload);
