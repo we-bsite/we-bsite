@@ -48,7 +48,7 @@ export function Fingerprint({ width, height, color, top, left }: Props) {
             height="200%"
             filterUnits="objectBoundingBox"
             primitiveUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
             <feGaussianBlur
               stdDeviation="30"

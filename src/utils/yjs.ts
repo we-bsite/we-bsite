@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { initCursorChat } from "cursor-chat";
 import { WebrtcProvider } from "y-webrtc";
 import Y from "yjs";
 import { StartAwarenessFunction } from "zustand-yjs";
@@ -15,11 +15,13 @@ export const connectDoc = (
     return () => {};
   }
 
+  const stopCursorChatCallback = initCursorChat("(we)bsite", { yDoc: doc })
   const provider = new WebrtcProvider(YJS_ROOM, doc);
-  const stopAwareness = startAwareness(provider);
+  const stopAwarenessCallback = startAwareness(provider);
   return () => {
     provider.disconnect();
-    stopAwareness();
+    stopAwarenessCallback();
+    stopCursorChatCallback();
     console.log("Disconnected from the internet...");
   };
 };

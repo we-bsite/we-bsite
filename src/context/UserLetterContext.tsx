@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useCallback, useMemo } from "react";
+import { createContext, PropsWithChildren, useMemo } from "react";
 import {
   Color,
   DatabaseLetter,
