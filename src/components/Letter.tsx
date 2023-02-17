@@ -13,17 +13,19 @@ import dayjs from "dayjs";
 import { withQueryParams } from "../utils/url";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { Fingerprint } from "./Fingerprint";
+import { randomWithSeed } from "../utils";
 
 interface Props {
   letter: LetterInterface;
   isEditable?: boolean;
   disableDrag?: boolean;
+  idx: number;
 }
 const FingerprintSize = 50;
 
-export function Letter({ letter, isEditable, disableDrag }: Props) {
+export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
   const [isDragging, setDragging] = useState(disableDrag ? true : false);
-  const { id, initialPersistenceData, letterInteractionData } = letter;
+  const { id, letterInteractionData } = letter;
   const saved = disableDrag ? undefined : localStorage.getItem(id);
   const savedPersistenceData = useRef<LetterPersistenceData>(
     saved ? JSON.parse(saved) : {}
@@ -40,11 +42,14 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
   } = useContext(UserLetterContext);
   const { color } = currentUser;
 
+  const randomRotation = 10 * randomWithSeed(idx) - 5;
+  const initialRandomX = 40 * randomWithSeed(idx) - 20;
+  const initialRandomY = 40 * randomWithSeed(idx) - 20;
+
   const position = {
-    x: 0,
-    y: 0,
+    x: initialRandomX,
+    y: initialRandomY,
     z: 0,
-    ...initialPersistenceData,
     ...savedPersistenceData.current,
   };
 
@@ -87,10 +92,9 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
           duration: 0.3,
           bounce: 0.8,
         }}
-        // TODO: move rotation to css random generation
         animate={{
           transform: position
-            ? `rotate(${isDragging ? 0 : position.rotation || 0}deg)`
+            ? `rotate(${isDragging ? 0 : randomRotation || 0}deg)`
             : "",
           boxShadow: isDragging
             ? "0 0 35px rgba(51, 75, 97, 0.35)"

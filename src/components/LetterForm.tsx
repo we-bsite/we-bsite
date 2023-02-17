@@ -62,6 +62,7 @@ export function LetterFormDialogContent() {
             letter={SubmitLetterMetadata}
             isEditable={true}
             disableDrag={true}
+            idx={0}
           />
         </div>
         <p>you can submit a link to your written dream or write it here.</p>

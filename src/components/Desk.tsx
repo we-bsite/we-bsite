@@ -30,8 +30,8 @@ export function Desk() {
       {/* {renderToolbar()} */}
       <div id="desk">
         {/* If loading add loading indicator */}
-        {letters?.map((letter) => (
-          <Letter letter={letter} key={letter.id} />
+        {letters?.map((letter, idx) => (
+          <Letter letter={letter} key={letter.id} idx={idx} />
         ))}
       </div>
     </>
