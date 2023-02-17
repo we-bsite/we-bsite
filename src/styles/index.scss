@@ -224,7 +224,7 @@ $letter-zoom-scale: 0.5;
   .header {
     font-weight: bold;
   }
-  
+
   &:hover .link-to-letter:after {
     background-position: -20%;
   }
@@ -258,18 +258,27 @@ $letter-zoom-scale: 0.5;
     background-image: url("/grain.png");
     background-size: cover;
 
+    img {
+      box-shadow: 0 0 6px 1px $color-box-shadow;
+      border-radius: 50%;
+    }
+
     &:after {
       position: absolute;
       pointer-events: none;
       height: 100%;
       width: 100%;
       content: "";
-      background: linear-gradient(320deg,#0000 33%,rgba(255,255,255,0.3) 50%,#0000 66%);
+      background: linear-gradient(
+        320deg,
+        #0000 33%,
+        rgba(255, 255, 255, 0.3) 50%,
+        #0000 66%
+      );
       background-size: 300% 100%;
-      transition: background-position 0.4s cubic-bezier(.85,-0.01,.28,.99);
+      transition: background-position 0.4s cubic-bezier(0.85, -0.01, 0.28, 0.99);
       background-position: 120%;
     }
-    
 
     & img {
       width: 70px;

@@ -1,4 +1,3 @@
-import people from "../data/people.json";
 import * as Dialog from "@radix-ui/react-dialog";
 import { LetterType, LetterInterface } from "../types";
 import { LetterFormDialogContent } from "./LetterForm";
@@ -9,13 +8,8 @@ import { Profile } from "./Profile";
 
 export const SubmitLetterMetadata: LetterInterface = {
   id: "submit-0",
-  to: people.someone,
-  from: people.you,
-  initialPersistenceData: {
-    rotation: 1,
-    x: -5,
-    y: -5,
-  },
+  to: "the internet",
+  from: { name: "you" },
   content: "your letter of internet dreams & hopes",
   date: new Date(),
   type: LetterType.Content,
@@ -65,9 +59,9 @@ function Home() {
           <Desk />
           <footer>
             (we)bsite is a project by{" "}
-            <a href={people.spencer.url}>{people.spencer.fullName}</a> and{" "}
-            <a href={people.jacky.url}>{people.jacky.fullName}</a>. if your ears
-            are perked, please{" "}
+            <a href="https://www.spencerchang.me/">Spencer Chang</a> and{" "}
+            <a href="https://jzhao.xyz">Jacky Zhao</a>. if your ears are perked,
+            please{" "}
             <a href="mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams">
               reach out to us
             </a>
