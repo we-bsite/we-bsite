@@ -215,45 +215,45 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
     } as LetterInterface;
   }
 
-  useEffect(() => {
-    console.log("set up channel");
+  // useEffect(() => {
+  //   console.log("set up channel");
 
-    const channel = supabase
-      .channel("public:letters")
-      .on(
-        REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
-        { event: "INSERT", schema: "public", table: "letters" },
-        (payload) => {
-          console.log("loaded payload: ", payload);
-          try {
-            setLoading(true);
-            const newLetter: DatabaseLetter = payload.new as DatabaseLetter;
-            setLetters((letters: any) => [
-              ...letters.slice(0, letters.length - 1),
-              mapDbLetterToLetterInterface(newLetter),
-              {
-                ...SubmitLetterMetadata,
-                ctaContent: <LetterFormButton />,
-              },
-            ]);
-          } catch (err: any) {
-            alert(err.message);
-          } finally {
-            setLoading(false);
-          }
-        }
-      )
-      .subscribe();
+  //   const channel = supabase
+  //     .channel("any")
+  //     .on(
+  //       REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
+  //       { event: "INSERT", schema: "public", table: "letters" },
+  //       (payload) => {
+  //         console.log("loaded payload: ", payload);
+  //         try {
+  //           setLoading(true);
+  //           const newLetter: DatabaseLetter = payload.new as DatabaseLetter;
+  //           setLetters((letters: any) => [
+  //             ...letters.slice(0, letters.length - 1),
+  //             mapDbLetterToLetterInterface(newLetter),
+  //             {
+  //               ...SubmitLetterMetadata,
+  //               ctaContent: <LetterFormButton />,
+  //             },
+  //           ]);
+  //         } catch (err: any) {
+  //           alert(err.message);
+  //         } finally {
+  //           setLoading(false);
+  //         }
+  //       }
+  //     )
+  //     .subscribe();
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [letters]);
+  //   return () => {
+  //     supabase.removeChannel(channel);
+  //   };
+  // }, [letters]);
 
   const onLetterSubmitted = () => {
     // Resets values that shouldn't be persisted.
     setUserContext({ ...userContext, content: "", toName: "the internet" });
-    // fetchLetters();
+    fetchLetters();
   };
 
   return (
