@@ -291,8 +291,8 @@ $letter-zoom-scale: 0.5;
     position: relative;
 
     iframe {
-      filter: blur(2.5px);
       border: none;
+      filter: blur(2.5px);
       width: 100% * calc(1 / $letter-zoom-scale);
       height: 100% * calc(1 / $letter-zoom-scale);
       -webkit-transform: scale($letter-zoom-scale);
