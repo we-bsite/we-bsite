@@ -10,7 +10,6 @@ import {
   LiveLetterInteractionAwareness,
 } from "../types";
 import { useStickyState } from "../utils/localstorage";
-import { Letters } from "../data/letters";
 import { useEffect, useState } from "react";
 import { LetterFormButton } from "../components/LetterForm";
 import { supabase } from "../lib/supabaseClient";
@@ -155,6 +154,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       const { data, error, status } = await supabase
         .from("letters")
         .select("*")
+        .order("id", { ascending: true })
         // TODO: add pagination
         .limit(500);
 
@@ -170,7 +170,6 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       }
 
       setLetters([
-        ...Letters,
         ...fetchedLetters,
         {
           ...SubmitLetterMetadata,
@@ -207,10 +206,9 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       id: String(dbLetter.id),
       from: dbLetter.from_person,
       to: dbLetter.to_person,
-      date: new Date(dbLetter.creation_timestamp),
+      date: new Date(letter_content.date || dbLetter.creation_timestamp),
       type: letter_content.type,
       content: letter_content.content,
-      initialPersistenceData: {},
       letterInteractionData: interaction_data,
     } as LetterInterface;
   }

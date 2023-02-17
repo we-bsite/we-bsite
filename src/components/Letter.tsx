@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import { withQueryParams } from "../utils/url";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { Fingerprint } from "./Fingerprint";
-import { randomWithSeed } from "../utils";
+import seedrandom from "seedrandom";
 
 interface Props {
   letter: LetterInterface;
@@ -30,7 +30,6 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
   const savedPersistenceData = useRef<LetterPersistenceData>(
     saved ? JSON.parse(saved) : {}
   );
-  // TODO: show the past fingerprints based on the letterInteractionData
 
   const {
     updateLetterInteraction,
@@ -42,9 +41,10 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
   } = useContext(UserLetterContext);
   const { color } = currentUser;
 
-  const randomRotation = 10 * randomWithSeed(idx) - 5;
-  const initialRandomX = 40 * randomWithSeed(idx) - 20;
-  const initialRandomY = 40 * randomWithSeed(idx) - 20;
+  const randomGenerator = seedrandom(String(idx));
+  const randomRotation = 10 * randomGenerator() - 5;
+  const initialRandomX = 30 * randomGenerator() - 15;
+  const initialRandomY = 30 * randomGenerator() - 15;
 
   const position = {
     x: initialRandomX,
@@ -82,6 +82,37 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
     );
   }
 
+  const pastFingerprints = Object.entries(letterInteractionData).map(
+    ([color, data], idx) => {
+      const { numDrags } = data;
+      // evenly distribute it among the width/height of the handle, 300 x 100px
+      const randomGenerator = seedrandom(color);
+      const top = 100 * randomGenerator();
+      const left = 300 * randomGenerator();
+      // scale opacity based on numDrags, logarithmic distribution between .1 and up to .6
+      const opacity = Math.min(0.8, 0.1 + Math.log(numDrags) / 10);
+
+      return (
+        // <Fingerprint
+        //   key={color}
+        //   width={12}
+        //   height={12}
+        //   opacity={opacity}
+        //   color={color}
+        //   top={top}
+        //   left={left}
+        //   type={FingerprintType.Passive}
+        //   style={{ filter: "blur(1.2px)" }}
+        // />
+        <div
+          key={color}
+          className="pastFingerprintContainer"
+          style={{ top, left, background: color, opacity }}
+        ></div>
+      );
+    }
+  );
+
   const letterContent = (
     <div style={{ zIndex: z }} ref={ref} className="letterContent">
       <motion.div
@@ -102,6 +133,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
         }}
         initial={false}
       >
+        {pastFingerprints}
         {renderFingerprints()}
         <LetterView
           letter={letter}
@@ -126,9 +158,9 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
           const { clientX, clientY } =
             "touches" in e
               ? {
-                clientX: e.touches[0].clientX,
-                clientY: e.touches[0].clientY,
-              }
+                  clientX: e.touches[0].clientX,
+                  clientY: e.touches[0].clientY,
+                }
               : { clientX: e.clientX, clientY: e.clientY };
           const newTop = clientY - top;
           const newLeft = clientX - left;
@@ -145,7 +177,6 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
       }}
       onStop={(_, dragData) => {
         setFingerprint(undefined);
-
         localStorage.setItem(
           id,
           JSON.stringify({
@@ -179,9 +210,9 @@ interface LetterViewProps {
 
 function cleanSubmittedUrl(url: string): string {
   if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url
+    return url;
   } else {
-    return `https://${url}`
+    return `https://${url}`;
   }
 }
 
@@ -228,7 +259,7 @@ export function LetterView({
                 target="_blank"
                 onClick={
                   // TODO: if needed persist num opens too here
-                  () => { }
+                  () => {}
                 }
                 rel="noreferrer"
               >
@@ -291,8 +322,8 @@ export function LetterView({
   const toName = isEditable
     ? userLetterContext.toName
     : typeof to === "string"
-      ? to
-      : to.name;
+    ? to
+    : to.name;
   const fromStamp = isEditable ? userLetterContext.fromStamp : from.stamp;
 
   async function onUploadStamp(e: React.ChangeEvent<HTMLInputElement>) {
@@ -313,8 +344,9 @@ export function LetterView({
   return (
     <>
       <div
-        className={`letterHead ${isDragging ? "dragging" : ""} ${isEditable ? "disabled" : ""
-          }`}
+        className={`letterHead ${isDragging ? "dragging" : ""} ${
+          isEditable ? "disabled" : ""
+        }`}
       >
         <div>
           <div>

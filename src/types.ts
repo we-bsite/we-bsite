@@ -17,13 +17,13 @@ export interface LetterInterface {
   letterInteractionData: LetterInteractionData;
 
   // Not persisted
-  initialPersistenceData: LetterPersistenceData;
   ctaContent?: React.ReactNode;
 }
 
 interface LetterContent {
   content: string;
   type: LetterType;
+  date?: number;
 }
 
 // TODO: just generate these randomly and then persist to local storage, we don't need to hardcode these or persist them
@@ -57,7 +57,7 @@ interface LetterInteraction {
   numDrags: number;
 }
 
-export type ApiLetter = Omit<LetterInterface, "initialPersistenceData">;
+export type ApiLetter = LetterInterface;
 
 export interface Person extends PersonInfo {
   url?: string;
@@ -72,6 +72,7 @@ type PersonWithoutColor = Omit<Person, "color">;
 interface PersonInfo {
   name: string;
   stamp?: string;
+  url?: string;
 }
 
 export interface DatabaseLetter {
