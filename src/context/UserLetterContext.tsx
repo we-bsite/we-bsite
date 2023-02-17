@@ -220,7 +220,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       .channel("*")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "letters" },
+        { event: "INSERT", schema: "public", table: "letters" },
         (payload) => {
           console.log("loaded payload: ", payload);
           try {
