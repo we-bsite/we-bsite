@@ -236,6 +236,7 @@ $letter-zoom-scale: 0.5;
     cursor: pointer;
     display: flex;
     user-select: none;
+    border-bottom: 1px solid $color-letter-border;
 
     &.dragging:not(.disabled) {
       cursor: grabbing;
@@ -315,14 +316,15 @@ $letter-zoom-scale: 0.5;
       text-align: center;
       font-family: cursive;
       overflow-y: auto;
-      padding: 4px 10px 4px 10px;
+      padding: 1.5em 2em;
+      box-sizing: border-box;
       user-select: text;
 
       &::after {
         content: "";
         background: linear-gradient(transparent, $color-main);
         width: 100%;
-        height: 20px;
+        height: 40px;
         position: fixed;
         bottom: 0px;
         left: 0;
