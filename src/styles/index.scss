@@ -233,7 +233,7 @@ $letter-zoom-scale: 0.5;
     text-shadow: 0 0 5px $color-shadow;
     line-height: 1.6;
     padding: 0.8em;
-    cursor: pointer;
+    cursor: grab;
     display: flex;
     user-select: none;
     border-bottom: 1px solid $color-letter-border;
@@ -258,6 +258,7 @@ $letter-zoom-scale: 0.5;
     justify-content: center;
     // background-image: url("/grain.png");
     // background-size: cover;
+    // Cursor of touching the curtain? like a smooshed cursor
 
     img {
       box-shadow: 0 0 6px 1px $color-box-shadow;
@@ -284,6 +285,7 @@ $letter-zoom-scale: 0.5;
     & img {
       width: 70px;
       height: 68px;
+      // Cursor of a knife or fire to break teh seal?
     }
     & > a {
       padding: 0.2em 0.8em;
