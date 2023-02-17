@@ -122,9 +122,9 @@ export function Letter({ letter, isEditable, disableDrag }: Props) {
           const { clientX, clientY } =
             "touches" in e
               ? {
-                  clientX: e.touches[0].clientX,
-                  clientY: e.touches[0].clientY,
-                }
+                clientX: e.touches[0].clientX,
+                clientY: e.touches[0].clientY,
+              }
               : { clientX: e.clientX, clientY: e.clientY };
           const newTop = clientY - top;
           const newLeft = clientX - left;
@@ -173,6 +173,14 @@ interface LetterViewProps {
   isEditable?: boolean;
 }
 
+function cleanSubmittedUrl(url: string): string {
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url
+  } else {
+    return `https://${url}`
+  }
+}
+
 export function LetterView({
   letter,
   isDragging,
@@ -203,12 +211,11 @@ export function LetterView({
         mainContent = (
           <div className="letter-content-wrapper">
             {isEditable ? (
-              // TODO: clean this to always add http/https (or validate?)
               <input
                 className="letterIframeInput"
                 placeholder="https://yourwebsite.com/letter"
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
+                onChange={(e) => setContent(cleanSubmittedUrl(e.target.value))}
               />
             ) : null}
             <div className="link-to-letter">
@@ -217,7 +224,7 @@ export function LetterView({
                 target="_blank"
                 onClick={
                   // TODO: if needed persist num opens too here
-                  () => {}
+                  () => { }
                 }
                 rel="noreferrer"
               >
@@ -229,7 +236,6 @@ export function LetterView({
             </div>
             <iframe
               loading="lazy"
-              scrolling="no"
               src={withQueryParams(src, { device: "mobile" })}
             ></iframe>
           </div>
@@ -281,8 +287,8 @@ export function LetterView({
   const toName = isEditable
     ? userLetterContext.toName
     : typeof to === "string"
-    ? to
-    : to.name;
+      ? to
+      : to.name;
   const fromStamp = isEditable ? userLetterContext.fromStamp : from.stamp;
 
   async function onUploadStamp(e: React.ChangeEvent<HTMLInputElement>) {
@@ -303,9 +309,8 @@ export function LetterView({
   return (
     <>
       <div
-        className={`letterHead ${isDragging ? "dragging" : ""} ${
-          isEditable ? "disabled" : ""
-        }`}
+        className={`letterHead ${isDragging ? "dragging" : ""} ${isEditable ? "disabled" : ""
+          }`}
       >
         <div>
           <div>

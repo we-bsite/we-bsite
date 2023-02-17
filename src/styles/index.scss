@@ -252,10 +252,12 @@ $letter-zoom-scale: 0.5;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #45363640;
+    background-image: url("/grain.png");
+    background-size: cover;
 
     & img {
-      width: 100px;
+      width: 70px;
+      height: 68px;
     }
     & > a {
       padding: 0.2em 0.8em;
@@ -275,6 +277,7 @@ $letter-zoom-scale: 0.5;
     position: relative;
 
     iframe {
+      filter: blur(2.5px);
       border: none;
       width: 100% * calc(1 / $letter-zoom-scale);
       height: 100% * calc(1 / $letter-zoom-scale);
@@ -412,11 +415,6 @@ button {
   padding: 0;
 }
 
-.iframePreview {
-  &:hover {
-  }
-}
-
 .letterTextInput {
   all: unset;
   height: 100%;
@@ -426,7 +424,7 @@ button {
 }
 
 .letterIframeInput {
-  z-index: 1;
+  z-index: 2;
   top: 0;
   position: absolute;
   width: 80%;
