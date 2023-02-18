@@ -297,7 +297,6 @@ $letter-zoom-scale: 0.4;
       -webkit-transform-origin: 0 0;
       transform-origin: 0 0;
     }
-
   }
 }
 
@@ -362,6 +361,14 @@ $letter-zoom-scale: 0.4;
     line-height: 1.2;
     padding: 0.8em;
     user-select: none;
+    
+    &:hover {
+      img {
+        box-shadow: 2px 2px 15px 2px rgb(138 9 1 / 70%);
+        will-change: box-shadow;
+        transition: box-shadow 0.3s ease-in-out;
+      }
+    }
   }
 
   .spacer {
