@@ -116,22 +116,23 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
 
   const draggingValues = {
     boxShadow: "0 0 35px rgba(51, 75, 97, 0.35)",
-    transform: position ? "rotate(0deg)" : ""
-
-  }
+    transform: position ? "rotate(0deg)" : "",
+  };
   const stillValues = {
     boxShadow: "0 0 5px rgba(51, 75, 97, 0.2)",
-    transform: position ? `rotate(${randomRotation || 0}deg)` : ""
-  }
+    transform: position ? `rotate(${randomRotation || 0}deg)` : "",
+  };
 
   const letterContent = (
     <div style={{ zIndex: z }} ref={ref} className="letterContent">
       <motion.div
-        className={`letter ${isDragging ? "dragging" : ""} ${isEditable ? "disabled" : ""}`}
+        className={`letter ${isDragging ? "dragging" : ""} ${
+          isEditable ? "disabled" : ""
+        }`}
         tabIndex={0}
         onKeyUp={(e) => {
           if (e.key === "Enter" && letter.type === LetterType.IFrame) {
-            window.open(letter.content, "_blank")
+            window.open(letter.content, "_blank");
           }
         }}
         transition={{
@@ -166,16 +167,16 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
       onStart={(e, _draggableData) => {
         setDragging(true);
         if (letter.type === LetterType.IFrame) {
-          setCurrentDraggedLetter(letter.content)
+          setCurrentDraggedLetter(letter.content);
         }
         if (ref.current) {
           const { top, left } = ref.current.getBoundingClientRect();
           const { clientX, clientY } =
             "touches" in e
               ? {
-                clientX: e.touches[0].clientX,
-                clientY: e.touches[0].clientY,
-              }
+                  clientX: e.touches[0].clientX,
+                  clientY: e.touches[0].clientY,
+                }
               : { clientX: e.clientX, clientY: e.clientY };
           const newTop = clientY - top;
           const newLeft = clientX - left;
@@ -203,7 +204,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
         // if top of screen, letter dropped on desk
         const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
         if (clientY <= 200 && letter.type === LetterType.IFrame) {
-          window.open(letter.content, "_blank")
+          window.open(letter.content, "_blank");
         }
 
         const newLetterInteractionData = { ...letterInteractionData };
@@ -214,9 +215,10 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
           };
         }
         newLetterInteractionData[color].numDrags++;
+        // Only do this if you were dragging for at least 1 second
         void updateLetterInteraction(id, newLetterInteractionData);
         setDragging(false);
-        setCurrentDraggedLetter(undefined)
+        setCurrentDraggedLetter(undefined);
       }}
     >
       {letterContent}
@@ -238,10 +240,7 @@ function cleanSubmittedUrl(url: string): string {
   }
 }
 
-export function LetterView({
-  letter,
-  isEditable,
-}: LetterViewProps) {
+export function LetterView({ letter, isEditable }: LetterViewProps) {
   const { id, to, from, date } = letter;
 
   const userLetterContext = useContext(UserLetterContext);
@@ -290,6 +289,8 @@ export function LetterView({
           <div className="letter-content-wrapper">
             {isEditable ? (
               // TODO: add gradient picker / cycler too
+              // - styles, ala jackie liu
+              // - fonts (all serif: 'cursive', 'Garamond', 'Playfair Display', 'Georgia')
               <textarea
                 className="letterTextInput"
                 placeholder="your letter of internet dreams & hopes"
@@ -309,8 +310,8 @@ export function LetterView({
   const toName = isEditable
     ? userLetterContext.toName
     : typeof to === "string"
-      ? to
-      : to.name;
+    ? to
+    : to.name;
   const fromStamp = isEditable ? userLetterContext.fromStamp : from.stamp;
 
   async function onUploadStamp(e: React.ChangeEvent<HTMLInputElement>) {
@@ -330,9 +331,7 @@ export function LetterView({
 
   return (
     <div className={type === LetterType.IFrame ? "type-letter" : "type-note"}>
-      <div
-        className="letterHead"
-      >
+      <div className="letterHead">
         <div className="names">
           <div>
             <span className="header">From: </span>{" "}
@@ -372,18 +371,19 @@ export function LetterView({
           </div>
         </div>
         <div className="stamps">
-          {isEditable && <select
-            className="letterTypeSelect"
-            value={letterType}
-            onChange={(e) => setType(e.target.value as LetterType)}
-          >
-            {Object.values(LetterType).map((type) => (
-              <option key={type} value={type}>
-                {LetterTypeToDisplay[type]}
-              </option>
-            ))}
-          </select>
-          }
+          {isEditable && (
+            <select
+              className="letterTypeSelect"
+              value={letterType}
+              onChange={(e) => setType(e.target.value as LetterType)}
+            >
+              {Object.values(LetterType).map((type) => (
+                <option key={type} value={type}>
+                  {LetterTypeToDisplay[type]}
+                </option>
+              ))}
+            </select>
+          )}
           {isEditable ? (
             <div className="stamp cursor-pointer">
               <label className="flex justify-center w-full h-32 px-4 appearance-none cursor-pointer hover:background-gray-400 focus:outline-none">

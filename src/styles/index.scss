@@ -16,7 +16,7 @@ $zindex-overlay: 100;
 $zindex-dialog: $zindex-overlay + 1;
 
 :root {
-  font-family: "EB Garamond", Avenir, Helvetica, Arial, sans-serif;
+  font-family: "EB Garamond", "Garamond", serif;
   font-size: 18px;
   line-height: 34px;
   font-weight: 400;
@@ -174,7 +174,8 @@ h3 {
 }
 
 .stamp {
-  height: auto;
+  // NOTE: make sure this changes with the height of the image below
+  height: 36px;
   width: auto;
 
   & img,
@@ -247,7 +248,7 @@ $letter-zoom-scale: 0.4;
     margin-top: -80px;
   }
 
-  & .effect-layer { 
+  & .effect-layer {
     position: absolute;
     z-index: 3;
     width: 100%;
@@ -272,11 +273,11 @@ $letter-zoom-scale: 0.4;
           #0000 66%
         );
         background-size: 220% 100%;
-        transition: background-position 0.4s cubic-bezier(0.85, -0.01, 0.28, 0.99);
+        transition: background-position 0.4s
+          cubic-bezier(0.85, -0.01, 0.28, 0.99);
         background-position: 120%;
       }
     }
-    
   }
 
   & .letter-content-wrapper {
@@ -301,27 +302,32 @@ $letter-zoom-scale: 0.4;
 }
 
 .type-note {
-  & .letterHead {
+  .letterHead.letterHead {
     display: flex;
+    border-bottom: 1px solid #acb2b57d;
   }
 
-  & .letter-content-wrapper {
+  .letter-content-wrapper {
     // background: linear-gradient(180deg, $color-letter 0%, $color-main 80%);
     text-align: center;
     font-family: cursive;
     width: 325px;
     min-height: 130px;
-    max-height: 400px;
+    max-height: 340px;
     overflow-y: auto;
-    padding: 2em;
+    // keep this padding
+    padding: 0.6em 1.2em;
     box-sizing: border-box;
     user-select: text;
+    line-height: 30px;
+    text-align: left;
 
     &::after {
       content: "";
       background: linear-gradient(transparent, $color-letter);
       width: 100%;
-      height: 50px;
+      // Keep this aligned with the padding above
+      height: 22px;
       position: fixed;
       bottom: 0px;
       left: 0;
@@ -361,10 +367,11 @@ $letter-zoom-scale: 0.4;
     line-height: 1.2;
     padding: 0.8em;
     user-select: none;
-    
-    &:hover {
-      img {
-        box-shadow: 2px 2px 15px 2px rgb(138 9 1 / 70%);
+
+    .stamp {
+      &:hover {
+        // TODO: maybe use the same hover as fingerprint?
+        box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
         will-change: box-shadow;
         transition: box-shadow 0.3s ease-in-out;
       }
@@ -377,7 +384,8 @@ $letter-zoom-scale: 0.4;
   }
 
   .edit-letter {
-    margin-top: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
   }
 }
 
@@ -461,7 +469,8 @@ button {
   }
 }
 
-.letter input, .letter select {
+.letter input,
+.letter select {
   background-color: $color-letter;
   border: 1px solid $color-letter-border;
   border-radius: 5px;

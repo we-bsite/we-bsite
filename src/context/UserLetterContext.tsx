@@ -115,7 +115,9 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
   const setType = (type: LetterType) =>
     setUserContext({ ...userContext, type });
   const setColor = (color: Color) => setUserContext({ ...userContext, color });
-  const [currentDraggedLetter, setCurrentDraggedLetter] = useState<undefined | string>(undefined)
+  const [currentDraggedLetter, setCurrentDraggedLetter] = useState<
+    undefined | string
+  >(undefined);
 
   const currentUser = useMemo(
     () => ({
@@ -173,13 +175,16 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         );
       }
 
-      setLetters([
-        ...fetchedLetters,
-        {
-          ...SubmitLetterMetadata,
-          ctaContent: <LetterFormButton />,
-        },
-      ]);
+      const idxToInsertSubmitLetter = Math.min(
+        fetchedLetters.length - 1,
+        Math.floor(Math.random() * 4) + 4
+      );
+      fetchedLetters.splice(idxToInsertSubmitLetter, 0, {
+        ...SubmitLetterMetadata,
+        ctaContent: <LetterFormButton />,
+      });
+
+      setLetters(fetchedLetters);
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -282,7 +287,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         bumpHighestZIndex,
         updateLetterInteraction,
         currentDraggedLetter,
-        setCurrentDraggedLetter
+        setCurrentDraggedLetter,
       }}
     >
       {children}
