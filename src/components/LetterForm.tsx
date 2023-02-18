@@ -8,9 +8,11 @@ import { Letter } from "./Letter";
 
 export function LetterFormButton() {
   return (
-    <Dialog.Trigger asChild>
-      <button className="submit edit-letter">Edit your letter</button>
-    </Dialog.Trigger>
+    <div>
+      <Dialog.Trigger asChild>
+        <button className="submit edit-letter">Edit your letter</button>
+      </Dialog.Trigger>
+    </div>
   );
 }
 
@@ -65,7 +67,7 @@ export function LetterFormDialogContent() {
             idx={0}
           />
         </div>
-        <p>you can submit a link to your written dream or write it here.</p>
+        <p>you can submit a link to your written dream or write it here. </p>
         <div
           style={{
             display: "flex",
@@ -83,11 +85,6 @@ export function LetterFormDialogContent() {
             </button>
           </Dialog.Close>
         </div>
-        <Dialog.Close asChild>
-          <button className="dialogCloseButton" aria-label="Close">
-            x
-          </button>
-        </Dialog.Close>
       </Dialog.Content>
     </Dialog.Portal>
   );

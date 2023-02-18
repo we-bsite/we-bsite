@@ -18,7 +18,6 @@ import randomColor from "randomcolor";
 import { useYAwareness, useYDoc } from "zustand-yjs";
 import { YJS_ROOM } from "../constants";
 import { connectDoc } from "../utils/yjs";
-import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
 
 interface UserLetterContextType {
   loading: boolean;
@@ -44,6 +43,8 @@ interface UserLetterContextType {
     id: string,
     newInteractionData: LetterInteractionData
   ) => void;
+  currentDraggedLetter: string | undefined;
+  setCurrentDraggedLetter: (url: string | undefined) => void;
 }
 
 type PersistedUserLetterContextInfo = Pick<
@@ -76,6 +77,8 @@ const DefaultUserLetterContext: UserLetterContextType = {
   highestZIndex: 0,
   bumpHighestZIndex: () => {},
   updateLetterInteraction: () => {},
+  currentDraggedLetter: undefined,
+  setCurrentDraggedLetter: (_: string | undefined) => {},
 };
 
 const DefaultPersistedUserLetterContext: PersistedUserLetterContextInfo = {
@@ -112,6 +115,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
   const setType = (type: LetterType) =>
     setUserContext({ ...userContext, type });
   const setColor = (color: Color) => setUserContext({ ...userContext, color });
+  const [currentDraggedLetter, setCurrentDraggedLetter] = useState<undefined | string>(undefined)
 
   const currentUser = useMemo(
     () => ({
@@ -277,6 +281,8 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         highestZIndex,
         bumpHighestZIndex,
         updateLetterInteraction,
+        currentDraggedLetter,
+        setCurrentDraggedLetter
       }}
     >
       {children}

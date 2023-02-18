@@ -109,17 +109,17 @@ h3 {
     @for $j from 1 through 3 {
       &:nth-of-type(#{$i}) .stamp:nth-of-type(#{$j}) {
         transform: rotate((random() * 20 - 10) + deg)
-          translateX(random() * 25 - 12.5 + px)
-          translateY(random() * 25 - 12.5 + px);
+          translateX(random() * 10 - 5 + px)
+          translateY(random() * 10 - 5 + px);
       }
       &:nth-of-type(#{$i}) .dateStamp:nth-of-type(#{$j}) {
         // rotation is in the range [-40,40]deg
-        $rot: ((random()) * 80) - 40;
+        $rot: ((random()) * 50) - 25;
         transform: rotate(($rot) + deg);
         &:before {
           // translate is [-75, -45]px
           // rotate is [-15,15]px (offset from parent rotation)
-          transform: translateX((-(random() * 15) - 60) + px)
+          transform: translateX((-(random() * 15) - 50) + px)
             rotate((((random()) * 15) - 15 - $rot) + deg);
         }
       }
@@ -127,7 +127,7 @@ h3 {
   }
 
   &.disabled {
-    .letterHead.letterHead {
+    .letter.letter {
       cursor: initial;
     }
   }
@@ -138,6 +138,7 @@ h3 {
   display: flex;
   align-items: center;
   gap: 1em;
+  z-index: 5;
 }
 
 .dateStamp {
@@ -156,12 +157,13 @@ h3 {
   font-size: 0.8em;
   line-height: normal;
   text-align: center;
+  pointer-events: none;
 
   &:before {
     content: "";
     position: absolute;
     overflow: visible;
-    left: -$date-stamp-border-size;
+    left: -calc($date-stamp-border-size + 10px);
     top: -$date-stamp-border-size;
     width: 150px;
     height: 70px;
@@ -191,7 +193,7 @@ h3 {
   }
 }
 
-$letter-zoom-scale: 0.5;
+$letter-zoom-scale: 0.4;
 #deskPlaceholder {
   height: 500px;
   margin: 2em 0;
@@ -213,96 +215,81 @@ $letter-zoom-scale: 0.5;
   }
 }
 
-.letter {
-  overflow: hidden;
-  border: 1px solid $color-letter-border;
-  border-radius: 5px;
-  background: $color-letter;
-  width: fit-content;
-  user-select: none;
+.draggable-desk {
+  position: fixed;
+  text-align: center;
 
-  .header {
-    font-weight: bold;
+  & > img {
+    z-index: 3;
+    padding: 0 2em;
+    box-sizing: border-box;
+    width: 100vw;
   }
+}
 
-  &:hover .link-to-letter:after {
-    background-position: -20%;
-  }
-
-  .letterHead {
-    text-shadow: 0 0 5px $color-shadow;
-    line-height: 1.6;
-    padding: 0.8em;
-    cursor: pointer;
-    display: flex;
-    user-select: none;
-    border-bottom: 1px solid $color-letter-border;
-
-    &.dragging:not(.disabled) {
-      cursor: grabbing;
-    }
-  }
-
-  .spacer {
-    flex-grow: 1;
+.type-letter {
+  display: flex;
+  & .letterHead {
+    max-width: 130px;
+    box-sizing: border-box;
     position: relative;
+    display: flex;
+    align-items: center;
   }
 
-  .link-to-letter {
+  & .stamps {
+    position: absolute;
+    top: 20px;
+    right: -250px;
+  }
+
+  & .dateStamp {
+    margin-top: -80px;
+  }
+
+  & .effect-layer { 
     position: absolute;
     z-index: 3;
     width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    // background-image: url("/grain.png");
-    // background-size: cover;
+    pointer-events: none;
 
-    img {
-      box-shadow: 0 0 6px 1px $color-box-shadow;
-      border-radius: 50%;
-    }
-
-    &:after {
-      position: absolute;
-      pointer-events: none;
-      height: 100%;
+    & .sheen {
       width: 100%;
-      content: "";
-      background: linear-gradient(
-        320deg,
-        #0000 33%,
-        rgba(255, 255, 255, 0.3) 50%,
-        #0000 66%
-      );
-      background-size: 300% 100%;
-      transition: background-position 0.4s cubic-bezier(0.85, -0.01, 0.28, 0.99);
-      background-position: 120%;
+      height: 100%;
+      box-shadow: inset 0 0 10px 3px #00000055;
+      background-image: url("/grain.png");
+      background-size: cover;
+      &:after {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        content: "";
+        background: linear-gradient(
+          320deg,
+          #0000 33%,
+          rgba(255, 255, 255, 0.3) 50%,
+          #0000 66%
+        );
+        background-size: 220% 100%;
+        transition: background-position 0.4s cubic-bezier(0.85, -0.01, 0.28, 0.99);
+        background-position: 120%;
+      }
     }
-
-    & img {
-      width: 70px;
-      height: 68px;
-    }
-    & > a {
-      padding: 0.2em 0.8em;
-    }
+    
   }
 
-  .edit-letter {
-    margin-top: 1em;
-  }
-
-  .letter-content-wrapper {
-    width: 300px;
-    height: 300px;
+  & .letter-content-wrapper {
+    margin: 3.5em 1.5em 1.5em;
+    width: 225px;
+    height: 105px;
     overflow: hidden;
     position: relative;
+    border-radius: 10px;
 
     iframe {
-      border: none;
       filter: blur(2.5px);
+      border: none;
       width: 100% * calc(1 / $letter-zoom-scale);
       height: 100% * calc(1 / $letter-zoom-scale);
       -webkit-transform: scale($letter-zoom-scale);
@@ -311,25 +298,79 @@ $letter-zoom-scale: 0.5;
       transform-origin: 0 0;
     }
 
-    &.direct {
-      background: linear-gradient(180deg, $color-letter 0%, $color-main 80%);
-      text-align: center;
-      font-family: cursive;
-      overflow-y: auto;
-      padding: 1.5em 2em;
-      box-sizing: border-box;
-      user-select: text;
+  }
+}
 
-      &::after {
-        content: "";
-        background: linear-gradient(transparent, $color-main);
-        width: 100%;
-        height: 40px;
-        position: fixed;
-        bottom: 0px;
-        left: 0;
-      }
+.type-note {
+  & .letterHead {
+    display: flex;
+  }
+
+  & .letter-content-wrapper {
+    // background: linear-gradient(180deg, $color-letter 0%, $color-main 80%);
+    text-align: center;
+    font-family: cursive;
+    width: 325px;
+    min-height: 130px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 2em;
+    box-sizing: border-box;
+    user-select: text;
+
+    &::after {
+      content: "";
+      background: linear-gradient(transparent, $color-letter);
+      width: 100%;
+      height: 50px;
+      position: fixed;
+      bottom: 0px;
+      left: 0;
     }
+  }
+}
+
+.letter {
+  overflow: hidden;
+  border: 1px solid $color-letter-border;
+  border-radius: 5px;
+  background: $color-letter;
+  width: fit-content;
+  user-select: none;
+  cursor: pointer;
+  &.dragging:not(.disabled) {
+    cursor: grabbing;
+  }
+
+  .header {
+    font-weight: bold;
+  }
+
+  &:hover .effect-layer > .sheen:after {
+    background-position: -20%;
+  }
+
+  .names {
+    margin-left: 0.5em;
+    & > div {
+      margin: 0.5em 0;
+    }
+  }
+
+  .letterHead {
+    text-shadow: 0 0 5px $color-shadow;
+    line-height: 1.2;
+    padding: 0.8em;
+    user-select: none;
+  }
+
+  .spacer {
+    flex-grow: 1;
+    position: relative;
+  }
+
+  .edit-letter {
+    margin-top: 1em;
   }
 }
 
@@ -391,6 +432,7 @@ button {
 }
 
 .mainDialogContent {
+  padding: 2em;
   display: flex;
   justify-content: center;
 }
@@ -404,11 +446,24 @@ button {
 .dialogInput {
   all: unset;
   width: 80px;
+  z-index: 5;
+  display: block;
 
   &:focus {
     box-shadow: 0 0 4px 2px $color-box-shadow;
-    // background: white;
   }
+}
+
+.letter input, .letter select {
+  background-color: $color-letter;
+  border: 1px solid $color-letter-border;
+  border-radius: 5px;
+  padding: 3px 5px;
+  font-family: inherit;
+}
+
+.letterIframeInput {
+  margin: 1em 15px;
 }
 
 .toolbar {
@@ -468,7 +523,6 @@ button {
 }
 
 .letterTypeSelect {
-  border: 4px solid #aee68b;
   margin-bottom: 0.5em;
   display: flex;
 }
