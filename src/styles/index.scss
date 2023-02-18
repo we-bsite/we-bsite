@@ -15,6 +15,8 @@ $date-stamp-border-size: 2px;
 $zindex-overlay: 100;
 $zindex-dialog: $zindex-overlay + 1;
 
+$letter-note-width: 325px;
+
 :root {
   font-family: "EB Garamond", "Garamond", serif;
   font-size: 18px;
@@ -174,8 +176,9 @@ h3 {
 }
 
 .stamp {
+  display: flex;
   // NOTE: make sure this changes with the height of the image below
-  height: 36px;
+  height: 100%;
   width: auto;
 
   & img,
@@ -191,6 +194,12 @@ h3 {
 
   & label {
     cursor: pointer;
+    aspect-ratio: 1/1;
+    display: flex;
+
+    &.empty {
+      box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
+    }
   }
 }
 
@@ -311,7 +320,7 @@ $letter-zoom-scale: 0.4;
     // background: linear-gradient(180deg, $color-letter 0%, $color-main 80%);
     text-align: center;
     font-family: cursive;
-    width: 325px;
+    width: $letter-note-width;
     min-height: 130px;
     max-height: 340px;
     overflow-y: auto;
@@ -371,6 +380,7 @@ $letter-zoom-scale: 0.4;
     .stamp {
       &:hover {
         // TODO: maybe use the same hover as fingerprint?
+        // this is the same as on the label for upload
         box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
         will-change: box-shadow;
         transition: box-shadow 0.3s ease-in-out;
@@ -525,8 +535,8 @@ button {
 
 .letterTextInput {
   all: unset;
-  height: 100%;
-  width: 90%;
+  min-height: 180px;
+  width: 100%;
   overflow-x: none;
   word-wrap: break-word;
 }

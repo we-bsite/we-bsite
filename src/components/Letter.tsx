@@ -386,7 +386,11 @@ export function LetterView({ letter, isEditable }: LetterViewProps) {
           )}
           {isEditable ? (
             <div className="stamp cursor-pointer">
-              <label className="flex justify-center w-full h-32 px-4 appearance-none cursor-pointer hover:background-gray-400 focus:outline-none">
+              <label
+                className={`flex justify-center w-full h-32 px-4 appearance-none cursor-pointer hover:background-gray-400 focus:outline-none ${
+                  !fromStamp ? "empty" : ""
+                }`}
+              >
                 {fromStamp ? (
                   <img alt="stamp" src={fromStamp} />
                 ) : (

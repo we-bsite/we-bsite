@@ -57,7 +57,10 @@ export function LetterFormDialogContent() {
             want to be with, what spaces you&apos;d like to spend time in,
             memories, feelings, hopes, and what it means to you.
           </p>
-          <p>what do you want from the internet?</p>
+          {/* TODO: add a shimmer effect on this, like pluriverse */}
+          <b>
+            <p>what do you want from the internet?</p>
+          </b>
         </Dialog.Description>
         <div className="mainDialogContent">
           <Letter
@@ -67,7 +70,8 @@ export function LetterFormDialogContent() {
             idx={0}
           />
         </div>
-        <p>you can submit a link to your written dream or write it here. </p>
+        <p>{`you can submit a link to your written dream or write it here.`}</p>
+        <p>{`please pay for postage by uploading a stamp (please keep it as small as possible, ideally square, 32x32). If you don't have the means, we can accommodate you.`}</p>
         <div
           style={{
             display: "flex",
