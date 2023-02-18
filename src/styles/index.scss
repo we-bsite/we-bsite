@@ -225,8 +225,10 @@ $letter-zoom-scale: 0.5;
     font-weight: bold;
   }
 
-  &:hover .link-to-letter:after {
-    background-position: -20%;
+  &:hover {
+    .link-to-letter:after {
+      background-position: -20%;
+    }
   }
 
   .letterHead {
@@ -280,6 +282,14 @@ $letter-zoom-scale: 0.5;
       background-size: 300% 100%;
       transition: background-position 0.4s cubic-bezier(0.85, -0.01, 0.28, 0.99);
       background-position: 120%;
+    }
+
+    &:hover {
+      img {
+        box-shadow: 2px 2px 15px 2px rgb(138 9 1 / 70%);
+        will-change: box-shadow;
+        transition: box-shadow 0.3s ease-in-out;
+      }
     }
 
     & img {
