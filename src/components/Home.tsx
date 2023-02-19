@@ -11,7 +11,7 @@ export const SubmitLetterMetadata: LetterInterface = {
   id: "submit-0",
   to: "the internet",
   from: { name: "you" },
-  content: "write your letter of internet dreams & hopes",
+  content: "your letter of internet dreams & hopes",
   date: new Date(),
   type: LetterType.Content,
   letterInteractionData: {},

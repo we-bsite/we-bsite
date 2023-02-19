@@ -330,7 +330,11 @@ export function LetterView({ letter, isEditable }: LetterViewProps) {
   }
 
   return (
-    <div className={type === LetterType.IFrame ? "type-letter" : "type-note"}>
+    <div
+      className={`${type === LetterType.IFrame ? "type-letter" : "type-note"} ${
+        isEditable ? "editable" : ""
+      }`}
+    >
       <div className="letterHead">
         <div className="names">
           <div>
