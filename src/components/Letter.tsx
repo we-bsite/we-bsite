@@ -124,7 +124,6 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
   };
   const focusValues = {
     boxShadow: draggingValues.boxShadow,
-    transform: stillValues.boxShadow,
   };
 
   const letterContent = (
