@@ -269,7 +269,13 @@ export function LetterView({ letter, isEditable }: LetterViewProps) {
                 className="letterIframeInput"
                 placeholder="https://yourwebsite.com/letter"
                 value={content}
-                onChange={(e) => setContent(cleanSubmittedUrl(e.target.value))}
+                onChange={(e) => setContent(e.target.value)}
+                onBlur={(e) => {
+                  const cleanedUrl = cleanSubmittedUrl(e.target.value);
+                  if (cleanedUrl !== content) {
+                    setContent(cleanedUrl);
+                  }
+                }}
               />
             ) : null}
             <div className="effect-layer">
