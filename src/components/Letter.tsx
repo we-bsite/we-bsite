@@ -122,6 +122,10 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
     boxShadow: "0 0 5px rgba(51, 75, 97, 0.2)",
     transform: position ? `rotate(${randomRotation || 0}deg)` : "",
   };
+  const focusValues = {
+    boxShadow: draggingValues.boxShadow,
+    transform: stillValues.boxShadow,
+  };
 
   const letterContent = (
     <div style={{ zIndex: z }} ref={ref} className="letterContent">
@@ -142,7 +146,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
           bounce: 0.8,
         }}
         animate={isDragging ? draggingValues : stillValues}
-        // whileFocus={draggingValues}
+        whileFocus={focusValues}
         initial={false}
       >
         {pastFingerprints}
