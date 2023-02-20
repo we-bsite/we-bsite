@@ -234,6 +234,17 @@ $letter-zoom-scale: 0.4;
     box-sizing: border-box;
     width: 100vw;
   }
+
+  .instructions {
+    z-index: 4;
+    position: absolute;
+    bottom: 12%;
+    font-family: cursive;
+    // font-size: 2em;
+    text-align: center;
+    width: 100vw;
+    color: #a88052;
+  }
 }
 
 .type-letter {

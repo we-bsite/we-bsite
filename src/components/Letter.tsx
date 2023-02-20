@@ -14,6 +14,7 @@ import { withQueryParams } from "../utils/url";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { Fingerprint } from "./Fingerprint";
 import seedrandom from "seedrandom";
+import { currentDeskShowingHeight } from "./OpenLetterDesk";
 
 interface Props {
   letter: LetterInterface;
@@ -47,6 +48,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
   const initialRandomX = 30 * randomGenerator() - 15;
   const initialRandomY = 30 * randomGenerator() - 15;
 
+  // TODO: these should probably be percentages of screen size
   const position = {
     x: initialRandomX,
     y: initialRandomY,
@@ -204,8 +206,14 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
         );
 
         // if top of screen, letter dropped on desk
-        const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
-        if (clientY <= 200 && letter.type === LetterType.IFrame) {
+        const clientY =
+          "touches" in e
+            ? (e.touches?.[0] || e.changedTouches?.[0]).clientY
+            : e.clientY;
+        if (
+          clientY <= currentDeskShowingHeight() &&
+          letter.type === LetterType.IFrame
+        ) {
           window.open(letter.content, "_blank");
         }
 
