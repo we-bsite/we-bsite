@@ -122,6 +122,9 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
     boxShadow: "0 0 5px rgba(51, 75, 97, 0.2)",
     transform: position ? `rotate(${randomRotation || 0}deg)` : "",
   };
+  const focusValues = {
+    boxShadow: draggingValues.boxShadow,
+  };
 
   const letterContent = (
     <div style={{ zIndex: z }} ref={ref} className="letterContent">
@@ -268,7 +271,13 @@ export function LetterView({ letter, isEditable }: LetterViewProps) {
                 className="letterIframeInput"
                 placeholder="https://yourwebsite.com/letter"
                 value={content}
-                onChange={(e) => setContent(cleanSubmittedUrl(e.target.value))}
+                onChange={(e) => setContent(e.target.value)}
+                onBlur={(e) => {
+                  const cleanedUrl = cleanSubmittedUrl(e.target.value);
+                  if (cleanedUrl !== content) {
+                    setContent(cleanedUrl);
+                  }
+                }}
               />
             ) : null}
             <div className="effect-layer">
@@ -329,7 +338,11 @@ export function LetterView({ letter, isEditable }: LetterViewProps) {
   }
 
   return (
-    <div className={type === LetterType.IFrame ? "type-letter" : "type-note"}>
+    <div
+      className={`${type === LetterType.IFrame ? "type-letter" : "type-note"} ${
+        isEditable ? "editable" : ""
+      }`}
+    >
       <div className="letterHead">
         <div className="names">
           <div>

@@ -26,9 +26,7 @@ interface LetterContent {
   date?: number;
 }
 
-// TODO: just generate these randomly and then persist to local storage, we don't need to hardcode these or persist them
 export interface LetterPersistenceData {
-  rotation?: number;
   x?: number;
   y?: number;
   z?: number;

@@ -178,7 +178,6 @@ h3 {
 .stamp {
   display: flex;
   // NOTE: make sure this changes with the height of the image below
-  height: 100%;
   width: auto;
 
   & img,
@@ -298,7 +297,7 @@ $letter-zoom-scale: 0.4;
     border-radius: 10px;
 
     iframe {
-      filter: blur(2.5px);
+      filter: blur(1px);
       border: none;
       width: 100% * calc(1 / $letter-zoom-scale);
       height: 100% * calc(1 / $letter-zoom-scale);
@@ -314,6 +313,17 @@ $letter-zoom-scale: 0.4;
   .letterHead.letterHead {
     display: flex;
     border-bottom: 1px solid #acb2b57d;
+  }
+
+  &.editable {
+    .dialogInput {
+      display: inline;
+    }
+
+    .stamps {
+      flex-direction: column;
+      margin-left: 1em;
+    }
   }
 
   .letter-content-wrapper {

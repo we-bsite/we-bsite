@@ -10,7 +10,7 @@ export function LetterFormButton() {
   return (
     <div>
       <Dialog.Trigger asChild>
-        <button className="submit edit-letter">Edit your letter</button>
+        <button className="submit edit-letter">Write a letter</button>
       </Dialog.Trigger>
     </div>
   );
