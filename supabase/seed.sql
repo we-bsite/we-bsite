@@ -16,5 +16,6 @@ CREATE TABLE IF NOT EXISTS letters(
     /* See LetterContent type */
     letter_content jsonb not null,
     /* This will be a map from color to num_drags */
-    interaction_data jsonb
+    interaction_data jsonb,
+    should_hide boolean default false not null
 );

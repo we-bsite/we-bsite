@@ -82,9 +82,10 @@ export interface DatabaseLetter {
   creation_timestamp: number;
   letter_content: LetterContent;
   interaction_data: LetterInteractionData;
+  should_hide: boolean;
 }
 
 export type DatabaseLetterInsertInfo = Omit<
   DatabaseLetter,
-  "id" | "creation_timestamp"
+  "id" | "creation_timestamp" | "should_hide"
 >;

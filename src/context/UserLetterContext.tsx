@@ -154,6 +154,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       const { data, error, status } = await supabase
         .from("letters")
         .select("*")
+        .filter("should_hide", "eq", false)
         .order("id", { ascending: true })
         // TODO: add pagination
         .limit(500);
