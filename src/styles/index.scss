@@ -196,9 +196,9 @@ h3 {
     aspect-ratio: 1/1;
     display: flex;
 
-    // &.empty {
-    //   box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
-    // }
+    &.empty {
+      box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
+    }
   }
 }
 
@@ -238,7 +238,7 @@ $letter-zoom-scale: 0.4;
 
 .type-letter {
   display: flex;
-   .letterHead {
+  .letterHead {
     max-width: 130px;
     box-sizing: border-box;
     position: relative;
@@ -386,6 +386,16 @@ $letter-zoom-scale: 0.4;
     line-height: 1.2;
     padding: 0.8em;
     user-select: none;
+
+    .stamp {
+      &:hover {
+        // TODO: maybe use the same hover as fingerprint?
+        // this is the same as on the label for upload
+        box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
+        will-change: box-shadow;
+        transition: box-shadow 0.3s ease-in-out;
+      }
+    }
   }
 
   .spacer {
