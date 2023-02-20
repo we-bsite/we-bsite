@@ -5,6 +5,7 @@ import { Desk } from "./Desk";
 import { useEffect } from "react";
 import { UserLetterContextProvider } from "../context/UserLetterContext";
 import { Profile } from "./Profile";
+import { OpenLetterDesk } from "./OpenLetterDesk";
 
 export const SubmitLetterMetadata: LetterInterface = {
   id: "submit-0",
@@ -27,6 +28,7 @@ function Home() {
     <>
       <UserLetterContextProvider>
         <Dialog.Root>
+          <OpenLetterDesk />
           <div className="App">
             <Profile />
             <h1>(we)bsite</h1>

@@ -15,8 +15,10 @@ $date-stamp-border-size: 2px;
 $zindex-overlay: 100;
 $zindex-dialog: $zindex-overlay + 1;
 
+$letter-note-width: 325px;
+
 :root {
-  font-family: "EB Garamond", Avenir, Helvetica, Arial, sans-serif;
+  font-family: "EB Garamond", "Garamond", serif;
   font-size: 18px;
   line-height: 34px;
   font-weight: 400;
@@ -109,17 +111,17 @@ h3 {
     @for $j from 1 through 3 {
       &:nth-of-type(#{$i}) .stamp:nth-of-type(#{$j}) {
         transform: rotate((random() * 20 - 10) + deg)
-          translateX(random() * 25 - 12.5 + px)
-          translateY(random() * 25 - 12.5 + px);
+          translateX(random() * 10 - 5 + px)
+          translateY(random() * 10 - 5 + px);
       }
       &:nth-of-type(#{$i}) .dateStamp:nth-of-type(#{$j}) {
         // rotation is in the range [-40,40]deg
-        $rot: ((random()) * 80) - 40;
+        $rot: ((random()) * 50) - 25;
         transform: rotate(($rot) + deg);
         &:before {
           // translate is [-75, -45]px
           // rotate is [-15,15]px (offset from parent rotation)
-          transform: translateX((-(random() * 15) - 60) + px)
+          transform: translateX((-(random() * 15) - 50) + px)
             rotate((((random()) * 15) - 15 - $rot) + deg);
         }
       }
@@ -127,7 +129,7 @@ h3 {
   }
 
   &.disabled {
-    .letterHead.letterHead {
+    .letter.letter {
       cursor: initial;
     }
   }
@@ -138,6 +140,7 @@ h3 {
   display: flex;
   align-items: center;
   gap: 1em;
+  z-index: 5;
 }
 
 .dateStamp {
@@ -156,12 +159,13 @@ h3 {
   font-size: 0.8em;
   line-height: normal;
   text-align: center;
+  pointer-events: none;
 
   &:before {
     content: "";
     position: absolute;
     overflow: visible;
-    left: -$date-stamp-border-size;
+    left: -calc($date-stamp-border-size + 10px);
     top: -$date-stamp-border-size;
     width: 150px;
     height: 70px;
@@ -172,7 +176,8 @@ h3 {
 }
 
 .stamp {
-  height: auto;
+  display: flex;
+  // NOTE: make sure this changes with the height of the image below
   width: auto;
 
   & img,
@@ -188,10 +193,16 @@ h3 {
 
   & label {
     cursor: pointer;
+    aspect-ratio: 1/1;
+    display: flex;
+
+    &.empty {
+      box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
+    }
   }
 }
 
-$letter-zoom-scale: 0.5;
+$letter-zoom-scale: 0.4;
 #deskPlaceholder {
   height: 500px;
   margin: 2em 0;
@@ -213,6 +224,147 @@ $letter-zoom-scale: 0.5;
   }
 }
 
+.draggable-desk {
+  position: fixed;
+  text-align: center;
+
+  & > img {
+    z-index: 3;
+    padding: 0 2em;
+    box-sizing: border-box;
+    width: 100vw;
+  }
+
+  .instructions {
+    z-index: 4;
+    position: absolute;
+    bottom: 12%;
+    font-family: cursive;
+    // font-size: 2em;
+    text-align: center;
+    width: 100vw;
+    color: #a88052;
+  }
+}
+
+.type-letter {
+  display: flex;
+  .letterHead {
+    max-width: 130px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .stamps {
+    position: absolute;
+    top: 20px;
+    right: -250px;
+  }
+
+  .dateStamp {
+    margin-top: -80px;
+  }
+
+  .effect-layer {
+    position: absolute;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    .sheen {
+      width: 100%;
+      height: 100%;
+      box-shadow: inset 0 0 10px 3px #00000055;
+      background-image: url("/grain.png");
+      background-size: cover;
+      &:after {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        content: "";
+        background: linear-gradient(
+          320deg,
+          #0000 33%,
+          rgba(255, 255, 255, 0.3) 50%,
+          #0000 66%
+        );
+        background-size: 220% 100%;
+        transition: background-position 0.4s
+          cubic-bezier(0.85, -0.01, 0.28, 0.99);
+        background-position: 120%;
+      }
+    }
+  }
+
+  & .letter-content-wrapper {
+    margin: 3.5em 1.5em 1.5em;
+    width: 225px;
+    height: 105px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 10px;
+
+    iframe {
+      filter: blur(1px);
+      border: none;
+      width: 100% * calc(1 / $letter-zoom-scale);
+      height: 100% * calc(1 / $letter-zoom-scale);
+      -webkit-transform: scale($letter-zoom-scale);
+      transform: scale($letter-zoom-scale);
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
+    }
+  }
+}
+
+.type-note {
+  .letterHead.letterHead {
+    display: flex;
+    border-bottom: 1px solid #acb2b57d;
+  }
+
+  &.editable {
+    .dialogInput {
+      display: inline;
+    }
+
+    .stamps {
+      flex-direction: column;
+      margin-left: 1em;
+    }
+  }
+
+  .letter-content-wrapper {
+    // background: linear-gradient(180deg, $color-letter 0%, $color-main 80%);
+    text-align: center;
+    font-family: cursive;
+    width: $letter-note-width;
+    min-height: 130px;
+    max-height: 340px;
+    overflow-y: auto;
+    // keep this padding
+    padding: 0.6em 1.2em;
+    box-sizing: border-box;
+    user-select: text;
+    line-height: 30px;
+    text-align: left;
+
+    &::after {
+      content: "";
+      background: linear-gradient(transparent, $color-letter);
+      width: 100%;
+      // Keep this aligned with the padding above
+      height: 22px;
+      position: fixed;
+      bottom: 0px;
+      left: 0;
+    }
+  }
+}
+
 .letter {
   overflow: hidden;
   border: 1px solid $color-letter-border;
@@ -220,28 +372,40 @@ $letter-zoom-scale: 0.5;
   background: $color-letter;
   width: fit-content;
   user-select: none;
+  cursor: pointer;
+  &.dragging:not(.disabled) {
+    cursor: grabbing;
+  }
 
   .header {
     font-weight: bold;
   }
 
-  &:hover {
-    .link-to-letter:after {
-      background-position: -20%;
+  &:hover .effect-layer > .sheen:after {
+    background-position: -20%;
+  }
+
+  .names {
+    margin-left: 0.5em;
+    & > div {
+      margin: 0.5em 0;
     }
   }
 
   .letterHead {
     text-shadow: 0 0 5px $color-shadow;
-    line-height: 1.6;
+    line-height: 1.2;
     padding: 0.8em;
-    cursor: grab;
-    display: flex;
     user-select: none;
-    border-bottom: 1px solid $color-letter-border;
 
-    &.dragging:not(.disabled) {
-      cursor: grabbing;
+    .stamp {
+      &:hover {
+        // TODO: maybe use the same hover as fingerprint?
+        // this is the same as on the label for upload
+        box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
+        will-change: box-shadow;
+        transition: box-shadow 0.3s ease-in-out;
+      }
     }
   }
 
@@ -250,98 +414,9 @@ $letter-zoom-scale: 0.5;
     position: relative;
   }
 
-  .link-to-letter {
-    position: absolute;
-    z-index: 3;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    // background-image: url("/grain.png");
-    // background-size: cover;
-    // Cursor of touching the curtain? like a smooshed cursor
-
-    img {
-      box-shadow: 0 0 6px 1px $color-box-shadow;
-      border-radius: 50%;
-    }
-
-    &:after {
-      position: absolute;
-      pointer-events: none;
-      height: 100%;
-      width: 100%;
-      content: "";
-      background: linear-gradient(
-        320deg,
-        #0000 33%,
-        rgba(255, 255, 255, 0.3) 50%,
-        #0000 66%
-      );
-      background-size: 300% 100%;
-      transition: background-position 0.4s cubic-bezier(0.85, -0.01, 0.28, 0.99);
-      background-position: 120%;
-    }
-
-    &:hover {
-      img {
-        box-shadow: 2px 2px 15px 2px rgb(138 9 1 / 70%);
-        will-change: box-shadow;
-        transition: box-shadow 0.3s ease-in-out;
-      }
-    }
-
-    & img {
-      width: 70px;
-      height: 68px;
-      // Cursor of a knife or fire to break teh seal?
-    }
-    & > a {
-      padding: 0.2em 0.8em;
-    }
-  }
-
   .edit-letter {
-    margin-top: 1em;
-  }
-
-  .letter-content-wrapper {
-    width: 300px;
-    height: 300px;
-    overflow: hidden;
-    position: relative;
-
-    iframe {
-      border: none;
-      filter: blur(2.5px);
-      width: 100% * calc(1 / $letter-zoom-scale);
-      height: 100% * calc(1 / $letter-zoom-scale);
-      -webkit-transform: scale($letter-zoom-scale);
-      transform: scale($letter-zoom-scale);
-      -webkit-transform-origin: 0 0;
-      transform-origin: 0 0;
-    }
-
-    &.direct {
-      background: linear-gradient(180deg, $color-letter 0%, $color-main 80%);
-      text-align: center;
-      font-family: cursive;
-      overflow-y: auto;
-      padding: 0.6em 2em;
-      box-sizing: border-box;
-      user-select: text;
-
-      &::after {
-        content: "";
-        background: linear-gradient(transparent, $color-main);
-        width: 100%;
-        height: 30px;
-        position: fixed;
-        bottom: 0px;
-        left: 0;
-      }
-    }
+    margin-top: 0.5em;
+    margin-bottom: 1em;
   }
 }
 
@@ -403,6 +478,7 @@ button {
 }
 
 .mainDialogContent {
+  padding: 2em;
   display: flex;
   justify-content: center;
 }
@@ -416,11 +492,25 @@ button {
 .dialogInput {
   all: unset;
   width: 80px;
+  z-index: 5;
+  display: block;
 
   &:focus {
     box-shadow: 0 0 4px 2px $color-box-shadow;
-    // background: white;
   }
+}
+
+.letter input,
+.letter select {
+  background-color: $color-letter;
+  border: 1px solid $color-letter-border;
+  border-radius: 5px;
+  padding: 3px 5px;
+  font-family: inherit;
+}
+
+.letterIframeInput {
+  margin: 1em 15px;
 }
 
 .toolbar {
@@ -466,8 +556,8 @@ button {
 
 .letterTextInput {
   all: unset;
-  height: 100%;
-  width: 90%;
+  min-height: 180px;
+  width: 100%;
   overflow-x: none;
   word-wrap: break-word;
 }
@@ -480,8 +570,8 @@ button {
 }
 
 .letterTypeSelect {
-  border: 4px solid #aee68b;
   margin-bottom: 0.5em;
+  margin-left: 1em;
   display: flex;
 }
 
