@@ -142,7 +142,6 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
           bounce: 0.8,
         }}
         animate={isDragging ? draggingValues : stillValues}
-        whileFocus={draggingValues}
         initial={false}
       >
         {pastFingerprints}

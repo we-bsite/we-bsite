@@ -197,9 +197,9 @@ h3 {
     aspect-ratio: 1/1;
     display: flex;
 
-    &.empty {
-      box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
-    }
+    // &.empty {
+    //   box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
+    // }
   }
 }
 
@@ -239,7 +239,7 @@ $letter-zoom-scale: 0.4;
 
 .type-letter {
   display: flex;
-  & .letterHead {
+   .letterHead {
     max-width: 130px;
     box-sizing: border-box;
     position: relative;
@@ -247,24 +247,24 @@ $letter-zoom-scale: 0.4;
     align-items: center;
   }
 
-  & .stamps {
+  .stamps {
     position: absolute;
     top: 20px;
     right: -250px;
   }
 
-  & .dateStamp {
+  .dateStamp {
     margin-top: -80px;
   }
 
-  & .effect-layer {
+  .effect-layer {
     position: absolute;
     z-index: 3;
     width: 100%;
     height: 100%;
     pointer-events: none;
 
-    & .sheen {
+    .sheen {
       width: 100%;
       height: 100%;
       box-shadow: inset 0 0 10px 3px #00000055;
@@ -376,16 +376,6 @@ $letter-zoom-scale: 0.4;
     line-height: 1.2;
     padding: 0.8em;
     user-select: none;
-
-    .stamp {
-      &:hover {
-        // TODO: maybe use the same hover as fingerprint?
-        // this is the same as on the label for upload
-        box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
-        will-change: box-shadow;
-        transition: box-shadow 0.3s ease-in-out;
-      }
-    }
   }
 
   .spacer {
@@ -550,6 +540,7 @@ button {
 
 .letterTypeSelect {
   margin-bottom: 0.5em;
+  margin-left: 1em;
   display: flex;
 }
 

@@ -88,6 +88,11 @@ export function LetterFormDialogContent() {
               Tell Dream
             </button>
           </Dialog.Close>
+          <Dialog.Close asChild>
+            <button className="dialogCloseButton" aria-label="Close">
+              ⓧ
+            </button>
+          </Dialog.Close>
         </div>
       </Dialog.Content>
     </Dialog.Portal>

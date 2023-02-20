@@ -3,7 +3,7 @@ export enum LetterType {
   Content = "Content",
 }
 export const LetterTypeToDisplay: Record<LetterType, string> = {
-  [LetterType.IFrame]: "Link to your public letter",
+  [LetterType.IFrame]: "Link your publicly hosted letter",
   [LetterType.Content]: "Write a letter here",
 };
 
