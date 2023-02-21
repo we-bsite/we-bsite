@@ -14,6 +14,8 @@ import { withQueryParams } from "../utils/url";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { Fingerprint } from "./Fingerprint";
 import seedrandom from "seedrandom";
+import { currentDeskShowingHeight } from "./OpenLetterDesk";
+import { SubmitLetterId } from "../constants";
 
 interface Props {
   letter: LetterInterface;
@@ -26,7 +28,7 @@ const FingerprintSize = 50;
 export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
   const [isDragging, setDragging] = useState(disableDrag ? true : false);
   const { id, letterInteractionData } = letter;
-  const saved = disableDrag ? undefined : localStorage.getItem(id);
+  const saved = disableDrag ? undefined : localStorage.getItem(String(id));
   const savedPersistenceData = useRef<LetterPersistenceData>(
     saved ? JSON.parse(saved) : {}
   );
@@ -47,6 +49,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
   const initialRandomX = 30 * randomGenerator() - 15;
   const initialRandomY = 30 * randomGenerator() - 15;
 
+  // TODO: these should probably be percentages of screen size
   const position = {
     x: initialRandomX,
     y: initialRandomY,
@@ -116,22 +119,32 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
 
   const draggingValues = {
     boxShadow: "0 0 35px rgba(51, 75, 97, 0.35)",
-    transform: position ? "rotate(0deg)" : ""
-
-  }
+    transform: "rotate(0deg)",
+  };
   const stillValues = {
     boxShadow: "0 0 5px rgba(51, 75, 97, 0.2)",
-    transform: position ? `rotate(${randomRotation || 0}deg)` : ""
-  }
+    transform: `rotate(${randomRotation}deg)`,
+  };
+  const focusValues = {
+    boxShadow: draggingValues.boxShadow,
+  };
 
   const letterContent = (
-    <div style={{ zIndex: z }} ref={ref} className="letterContent">
+    <div
+      style={{
+        zIndex: z,
+      }}
+      ref={ref}
+      className={`letterContent`}
+    >
       <motion.div
-        className={`letter ${isDragging ? "dragging" : ""} ${isEditable ? "disabled" : ""}`}
+        className={`letter ${isDragging ? "dragging" : ""} ${
+          isEditable ? "disabled" : ""
+        } ${id === SubmitLetterId ? "submitLetter" : ""}`}
         tabIndex={0}
         onKeyUp={(e) => {
           if (e.key === "Enter" && letter.type === LetterType.IFrame) {
-            window.open(letter.content, "_blank")
+            window.open(letter.content, "_blank");
           }
         }}
         transition={{
@@ -141,7 +154,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
           bounce: 0.8,
         }}
         animate={isDragging ? draggingValues : stillValues}
-        whileFocus={draggingValues}
+        whileFocus={focusValues}
         initial={false}
       >
         {pastFingerprints}
@@ -166,7 +179,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
       onStart={(e, _draggableData) => {
         setDragging(true);
         if (letter.type === LetterType.IFrame) {
-          setCurrentDraggedLetter(letter.content)
+          setCurrentDraggedLetter(letter.content);
         }
         if (ref.current) {
           const { top, left } = ref.current.getBoundingClientRect();
@@ -192,7 +205,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
       onStop={(e, dragData) => {
         setFingerprint(undefined);
         localStorage.setItem(
-          id,
+          String(id),
           JSON.stringify({
             x: dragData.x,
             y: dragData.y,
@@ -201,9 +214,15 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
         );
 
         // if top of screen, letter dropped on desk
-        const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
-        if (clientY <= 200 && letter.type === LetterType.IFrame) {
-          window.open(letter.content, "_blank")
+        const clientY =
+          "touches" in e
+            ? (e.touches?.[0] || e.changedTouches?.[0]).clientY
+            : e.clientY;
+        if (
+          clientY <= currentDeskShowingHeight() &&
+          letter.type === LetterType.IFrame
+        ) {
+          window.open(letter.content, "_blank");
         }
 
         const newLetterInteractionData = { ...letterInteractionData };
@@ -214,9 +233,10 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
           };
         }
         newLetterInteractionData[color].numDrags++;
+        // Only do this if you were dragging for at least 1 second
         void updateLetterInteraction(id, newLetterInteractionData);
         setDragging(false);
-        setCurrentDraggedLetter(undefined)
+        setCurrentDraggedLetter(undefined);
       }}
     >
       {letterContent}
@@ -238,10 +258,7 @@ function cleanSubmittedUrl(url: string): string {
   }
 }
 
-export function LetterView({
-  letter,
-  isEditable,
-}: LetterViewProps) {
+export function LetterView({ letter, isEditable }: LetterViewProps) {
   const { id, to, from, date } = letter;
 
   const userLetterContext = useContext(UserLetterContext);
@@ -270,7 +287,13 @@ export function LetterView({
                 className="letterIframeInput"
                 placeholder="https://yourwebsite.com/letter"
                 value={content}
-                onChange={(e) => setContent(cleanSubmittedUrl(e.target.value))}
+                onChange={(e) => setContent(e.target.value)}
+                onBlur={(e) => {
+                  const cleanedUrl = cleanSubmittedUrl(e.target.value);
+                  if (cleanedUrl !== content) {
+                    setContent(cleanedUrl);
+                  }
+                }}
               />
             ) : null}
             <div className="effect-layer">
@@ -287,9 +310,15 @@ export function LetterView({
         const { ctaContent } = letter;
         const srcContent = isEditable ? content : letter.content;
         return (
-          <div className="letter-content-wrapper">
+          <div
+            className={`letter-content-wrapper  ${
+              id === SubmitLetterId && !isEditable ? "submitting" : ""
+            }`}
+          >
             {isEditable ? (
               // TODO: add gradient picker / cycler too
+              // - styles, ala jackie liu
+              // - fonts (all serif: 'cursive', 'Garamond', 'Playfair Display', 'Georgia')
               <textarea
                 className="letterTextInput"
                 placeholder="your letter of internet dreams & hopes"
@@ -329,10 +358,12 @@ export function LetterView({
   }
 
   return (
-    <div className={type === LetterType.IFrame ? "type-letter" : "type-note"}>
-      <div
-        className="letterHead"
-      >
+    <div
+      className={`${type === LetterType.IFrame ? "type-letter" : "type-note"} ${
+        isEditable ? "editable" : ""
+      }`}
+    >
+      <div className="letterHead">
         <div className="names">
           <div>
             <span className="header">From: </span>{" "}
@@ -372,21 +403,26 @@ export function LetterView({
           </div>
         </div>
         <div className="stamps">
-          {isEditable && <select
-            className="letterTypeSelect"
-            value={letterType}
-            onChange={(e) => setType(e.target.value as LetterType)}
-          >
-            {Object.values(LetterType).map((type) => (
-              <option key={type} value={type}>
-                {LetterTypeToDisplay[type]}
-              </option>
-            ))}
-          </select>
-          }
+          {isEditable && (
+            <select
+              className="letterTypeSelect"
+              value={letterType}
+              onChange={(e) => setType(e.target.value as LetterType)}
+            >
+              {Object.values(LetterType).map((type) => (
+                <option key={type} value={type}>
+                  {LetterTypeToDisplay[type]}
+                </option>
+              ))}
+            </select>
+          )}
           {isEditable ? (
             <div className="stamp cursor-pointer">
-              <label className="flex justify-center w-full h-32 px-4 appearance-none cursor-pointer hover:background-gray-400 focus:outline-none">
+              <label
+                className={`flex justify-center w-full h-32 px-4 appearance-none cursor-pointer hover:background-gray-400 focus:outline-none ${
+                  !fromStamp ? "empty" : ""
+                }`}
+              >
                 {fromStamp ? (
                   <img alt="stamp" src={fromStamp} />
                 ) : (

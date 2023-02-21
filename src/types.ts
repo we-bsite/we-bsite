@@ -3,12 +3,12 @@ export enum LetterType {
   Content = "Content",
 }
 export const LetterTypeToDisplay: Record<LetterType, string> = {
-  [LetterType.IFrame]: "Link to your public letter",
+  [LetterType.IFrame]: "Link your publicly hosted letter",
   [LetterType.Content]: "Write a letter here",
 };
 
 export interface LetterInterface {
-  id: string;
+  id: number;
   type: LetterType;
   to: PersonWithoutColor | string;
   from: PersonWithoutColor;
@@ -26,9 +26,7 @@ interface LetterContent {
   date?: number;
 }
 
-// TODO: just generate these randomly and then persist to local storage, we don't need to hardcode these or persist them
 export interface LetterPersistenceData {
-  rotation?: number;
   x?: number;
   y?: number;
   z?: number;
@@ -44,7 +42,7 @@ export type LetterInteractionData = Record<Color, LetterInteraction>;
 export type WebsiteAwarenessData = {
   user: Partial<Person> & Pick<Person, "color">;
   fingerprint?: {
-    letterId: string;
+    letterId: number;
     top: number;
     left: number;
   };
@@ -82,9 +80,10 @@ export interface DatabaseLetter {
   creation_timestamp: number;
   letter_content: LetterContent;
   interaction_data: LetterInteractionData;
+  should_hide: boolean;
 }
 
 export type DatabaseLetterInsertInfo = Omit<
   DatabaseLetter,
-  "id" | "creation_timestamp"
+  "id" | "creation_timestamp" | "should_hide"
 >;

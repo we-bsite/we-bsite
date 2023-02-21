@@ -13,7 +13,7 @@ import { useStickyState } from "../utils/localstorage";
 import { useEffect, useState } from "react";
 import { LetterFormButton } from "../components/LetterForm";
 import { supabase } from "../lib/supabaseClient";
-import { SubmitLetterMetadata } from "../components/Home";
+import { SubmitLetterMetadata } from "../constants";
 import randomColor from "randomcolor";
 import { useYAwareness, useYDoc } from "zustand-yjs";
 import { YJS_ROOM } from "../constants";
@@ -40,7 +40,7 @@ interface UserLetterContextType {
   highestZIndex: number;
   bumpHighestZIndex: () => void;
   updateLetterInteraction: (
-    id: string,
+    id: number,
     newInteractionData: LetterInteractionData
   ) => void;
   currentDraggedLetter: string | undefined;
@@ -115,7 +115,9 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
   const setType = (type: LetterType) =>
     setUserContext({ ...userContext, type });
   const setColor = (color: Color) => setUserContext({ ...userContext, color });
-  const [currentDraggedLetter, setCurrentDraggedLetter] = useState<undefined | string>(undefined)
+  const [currentDraggedLetter, setCurrentDraggedLetter] = useState<
+    undefined | string
+  >(undefined);
 
   const currentUser = useMemo(
     () => ({
@@ -158,6 +160,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       const { data, error, status } = await supabase
         .from("letters")
         .select("*")
+        .filter("should_hide", "eq", false)
         .order("id", { ascending: true })
         // TODO: add pagination
         .limit(500);
@@ -173,13 +176,13 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         );
       }
 
-      setLetters([
-        ...fetchedLetters,
-        {
-          ...SubmitLetterMetadata,
-          ctaContent: <LetterFormButton />,
-        },
-      ]);
+      const idxToInsertSubmitLetter = Math.min(fetchedLetters.length - 1, 5);
+      fetchedLetters.splice(idxToInsertSubmitLetter, 0, {
+        ...SubmitLetterMetadata,
+        ctaContent: <LetterFormButton />,
+      });
+
+      setLetters(fetchedLetters);
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -188,7 +191,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
   }
 
   async function updateLetterInteraction(
-    id: string,
+    id: number,
     newInteractionData: LetterInteractionData
   ) {
     await supabase
@@ -207,7 +210,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
     const { letter_content, interaction_data } = dbLetter;
 
     return {
-      id: String(dbLetter.id),
+      id: dbLetter.id,
       from: dbLetter.from_person,
       to: dbLetter.to_person,
       date: new Date(letter_content.date || dbLetter.creation_timestamp),
@@ -282,7 +285,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         bumpHighestZIndex,
         updateLetterInteraction,
         currentDraggedLetter,
-        setCurrentDraggedLetter
+        setCurrentDraggedLetter,
       }}
     >
       {children}
