@@ -1,21 +1,10 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { LetterType, LetterInterface } from "../types";
 import { LetterFormDialogContent } from "./LetterForm";
 import { Desk } from "./Desk";
 import { useEffect } from "react";
 import { UserLetterContextProvider } from "../context/UserLetterContext";
 import { Profile } from "./Profile";
 import { OpenLetterDesk } from "./OpenLetterDesk";
-
-export const SubmitLetterMetadata: LetterInterface = {
-  id: -1,
-  to: "the internet",
-  from: { name: "you" },
-  content: "your letter of internet dreams & hopes",
-  date: new Date(),
-  type: LetterType.Content,
-  letterInteractionData: {},
-};
 
 function Home() {
   useEffect(() => {

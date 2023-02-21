@@ -42,7 +42,7 @@ export type LetterInteractionData = Record<Color, LetterInteraction>;
 export type WebsiteAwarenessData = {
   user: Partial<Person> & Pick<Person, "color">;
   fingerprint?: {
-    letterId: string;
+    letterId: number;
     top: number;
     left: number;
   };

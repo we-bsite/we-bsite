@@ -27,7 +27,7 @@ const FingerprintSize = 50;
 export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
   const [isDragging, setDragging] = useState(disableDrag ? true : false);
   const { id, letterInteractionData } = letter;
-  const saved = disableDrag ? undefined : localStorage.getItem(id);
+  const saved = disableDrag ? undefined : localStorage.getItem(String(id));
   const savedPersistenceData = useRef<LetterPersistenceData>(
     saved ? JSON.parse(saved) : {}
   );
@@ -197,7 +197,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
       onStop={(e, dragData) => {
         setFingerprint(undefined);
         localStorage.setItem(
-          id,
+          String(id),
           JSON.stringify({
             x: dragData.x,
             y: dragData.y,

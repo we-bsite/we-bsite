@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { UserLetterContext } from "../context/UserLetterContext";
 import { supabase } from "../lib/supabaseClient";
 import { DatabaseLetterInsertInfo } from "../types";
-import { SubmitLetterMetadata } from "./Home";
+import { SubmitLetterMetadata } from "../constants";
 import { Letter } from "./Letter";
 
 export function LetterFormButton() {
