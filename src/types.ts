@@ -8,7 +8,7 @@ export const LetterTypeToDisplay: Record<LetterType, string> = {
 };
 
 export interface LetterInterface {
-  id: string;
+  id: number;
   type: LetterType;
   to: PersonWithoutColor | string;
   from: PersonWithoutColor;

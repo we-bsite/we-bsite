@@ -12,24 +12,18 @@ export function currentDeskShowingHeight() {
 }
 
 export function calculateDeskTop() {
-  if (typeof window === "undefined") {
-    return 0;
-  }
   const minToShow = 200;
-  const currentDeskHeight = (window?.innerWidth || 1000) / WidthToHeightRatio;
+  const currentDeskHeight = (window.innerWidth || 1000) / WidthToHeightRatio;
 
   // Try showing half of the desk
   if (currentDeskHeight / 2 > minToShow) {
-    console.log("1");
     return -currentDeskHeight / 2;
   }
   // Show as much as we can of the desk up to 200px;
   if (currentDeskHeight > minToShow) {
-    console.log("2");
     return minToShow - currentDeskHeight;
   }
   // Show all the desk
-  console.log("none");
   return 0;
 }
 

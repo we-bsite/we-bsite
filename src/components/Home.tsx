@@ -8,7 +8,7 @@ import { Profile } from "./Profile";
 import { OpenLetterDesk } from "./OpenLetterDesk";
 
 export const SubmitLetterMetadata: LetterInterface = {
-  id: "submit-0",
+  id: -1,
   to: "the internet",
   from: { name: "you" },
   content: "your letter of internet dreams & hopes",
