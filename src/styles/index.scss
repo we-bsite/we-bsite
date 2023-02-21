@@ -5,6 +5,7 @@
 // $color-main: #0288d1;
 $color-main: #d1efff;
 $color-accent: #aee68b;
+$color-accent-2: rgb(255, 253, 222);
 $color-bg: #213547;
 $color-overlay: #9185687b;
 $color-shadow: #334b6177;
@@ -248,6 +249,25 @@ $letter-zoom-scale: 0.4;
   }
 }
 
+.submitLetter.submitLetter {
+  background: radial-gradient(ellipse at top, $color-accent-2, transparent),
+    radial-gradient(ellipse at bottom, $color-main, transparent) repeat;
+
+  background-size: 200% auto;
+  animation: shine 5s linear infinite;
+  will-change: box-shadow;
+  transition: box-shadow 0.5s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 35px $color-accent !important;
+  }
+}
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
 .type-letter {
   display: flex;
   .letterHead {
@@ -353,15 +373,17 @@ $letter-zoom-scale: 0.4;
     line-height: 30px;
     text-align: left;
 
-    &::after {
-      content: "";
-      background: linear-gradient(transparent, $color-letter);
-      width: 100%;
-      // Keep this aligned with the padding above
-      height: 22px;
-      position: fixed;
-      bottom: 0px;
-      left: 0;
+    &:not(.submitting) {
+      &::after {
+        content: "";
+        background: linear-gradient(transparent, $color-letter);
+        width: 100%;
+        // Keep this aligned with the padding above
+        height: 22px;
+        position: fixed;
+        bottom: 0px;
+        left: 0;
+      }
     }
   }
 }
@@ -400,12 +422,12 @@ $letter-zoom-scale: 0.4;
     user-select: none;
 
     .stamp {
+      will-change: box-shadow;
+      transition: box-shadow 0.6s ease-in-out;
       &:hover {
         // TODO: maybe use the same hover as fingerprint?
         // this is the same as on the label for upload
-        box-shadow: 2px 2px 15px 2px rgb(73 148 188 / 80%);
-        will-change: box-shadow;
-        transition: box-shadow 0.3s ease-in-out;
+        box-shadow: 2px 2px 10px 2px rgb(73 148 188 / 80%);
       }
     }
   }

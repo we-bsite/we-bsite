@@ -15,6 +15,7 @@ import { UserLetterContext } from "../context/UserLetterContext";
 import { Fingerprint } from "./Fingerprint";
 import seedrandom from "seedrandom";
 import { currentDeskShowingHeight } from "./OpenLetterDesk";
+import { SubmitLetterId } from "../constants";
 
 interface Props {
   letter: LetterInterface;
@@ -118,22 +119,28 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
 
   const draggingValues = {
     boxShadow: "0 0 35px rgba(51, 75, 97, 0.35)",
-    transform: position ? "rotate(0deg)" : "",
+    transform: "rotate(0deg)",
   };
   const stillValues = {
     boxShadow: "0 0 5px rgba(51, 75, 97, 0.2)",
-    transform: position ? `rotate(${randomRotation || 0}deg)` : "",
+    transform: `rotate(${randomRotation}deg)`,
   };
   const focusValues = {
     boxShadow: draggingValues.boxShadow,
   };
 
   const letterContent = (
-    <div style={{ zIndex: z }} ref={ref} className="letterContent">
+    <div
+      style={{
+        zIndex: z,
+      }}
+      ref={ref}
+      className={`letterContent`}
+    >
       <motion.div
         className={`letter ${isDragging ? "dragging" : ""} ${
           isEditable ? "disabled" : ""
-        }`}
+        } ${id === SubmitLetterId ? "submitLetter" : ""}`}
         tabIndex={0}
         onKeyUp={(e) => {
           if (e.key === "Enter" && letter.type === LetterType.IFrame) {
@@ -147,6 +154,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
           bounce: 0.8,
         }}
         animate={isDragging ? draggingValues : stillValues}
+        whileFocus={focusValues}
         initial={false}
       >
         {pastFingerprints}
@@ -302,7 +310,11 @@ export function LetterView({ letter, isEditable }: LetterViewProps) {
         const { ctaContent } = letter;
         const srcContent = isEditable ? content : letter.content;
         return (
-          <div className="letter-content-wrapper">
+          <div
+            className={`letter-content-wrapper  ${
+              id === SubmitLetterId ? "submitting" : ""
+            }`}
+          >
             {isEditable ? (
               // TODO: add gradient picker / cycler too
               // - styles, ala jackie liu
