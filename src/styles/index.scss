@@ -249,7 +249,7 @@ $letter-zoom-scale: 0.4;
   }
 }
 
-.submitLetter.submitLetter {
+.submitLetter.submitLetter:not(.disabled) {
   background: radial-gradient(ellipse at top, $color-accent-2, transparent),
     radial-gradient(ellipse at bottom, $color-main, transparent) repeat;
 

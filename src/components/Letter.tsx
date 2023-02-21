@@ -312,7 +312,7 @@ export function LetterView({ letter, isEditable }: LetterViewProps) {
         return (
           <div
             className={`letter-content-wrapper  ${
-              id === SubmitLetterId ? "submitting" : ""
+              id === SubmitLetterId && !isEditable ? "submitting" : ""
             }`}
           >
             {isEditable ? (
