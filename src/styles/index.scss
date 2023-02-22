@@ -270,8 +270,9 @@ $letter-zoom-scale: 0.4;
 
 .type-letter {
   display: flex;
+  flex-direction: column;
+
   .letterHead {
-    max-width: 130px;
     box-sizing: border-box;
     position: relative;
     display: flex;
@@ -280,12 +281,12 @@ $letter-zoom-scale: 0.4;
 
   .stamps {
     position: absolute;
-    top: 20px;
-    right: -250px;
+    top: 40px;
+    right: 5%;
   }
 
   .dateStamp {
-    margin-top: -80px;
+    margin-top: -40px;
   }
 
   .effect-layer {
@@ -320,10 +321,10 @@ $letter-zoom-scale: 0.4;
     }
   }
 
-  & .letter-content-wrapper {
-    margin: 3.5em 1.5em 1.5em;
-    width: 225px;
-    height: 105px;
+  .letter-content-wrapper {
+    margin: 0em 1em 1em;
+    width: $letter-note-width;
+    height: 135px;
     overflow: hidden;
     position: relative;
     border-radius: 10px;
