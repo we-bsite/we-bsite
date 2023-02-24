@@ -303,6 +303,12 @@ export function LetterView({ letter, isEditable }: LetterViewProps) {
               tabIndex={-1}
               loading="lazy"
               src={withQueryParams(src, { device: "mobile" })}
+              {...(src.endsWith(".pdf")
+                ? {}
+                : {
+                    sandbox:
+                      "allow-popups-to-escape-sandbox allow-popups allow-forms allow-top-navigation",
+                  })}
             ></iframe>
           </div>
         );
