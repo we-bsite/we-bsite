@@ -250,8 +250,13 @@ $letter-zoom-scale: 0.4;
 }
 
 .submitLetter.submitLetter:not(.disabled) {
-  background: radial-gradient(ellipse at top, $color-accent-2, transparent),
-    radial-gradient(ellipse at bottom, $color-main, transparent) repeat;
+  background: radial-gradient(
+      ellipse at top,
+      $color-accent-2,
+      rgba(255, 255, 255, 0.2)
+    ),
+    radial-gradient(ellipse at bottom, $color-main, rgba(255, 255, 255, 0.2))
+      repeat;
 
   background-size: 200% auto;
   animation: shine 5s linear infinite;
