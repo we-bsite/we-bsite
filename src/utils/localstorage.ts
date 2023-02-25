@@ -1,6 +1,10 @@
 import React from "react";
 
 export function getLocalStorageItem<T>(key: string): T | null {
+  if (typeof window === "undefined") {
+    return null
+  }
+
   const item = localStorage.getItem(key);
 
   if (!item) {

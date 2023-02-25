@@ -47,7 +47,7 @@ interface UserLetterContextType {
   setCurrentDraggedLetter: (url: string | undefined) => void;
 }
 
-type PersistedUserLetterContextInfo = Pick<
+export type PersistedUserLetterContextInfo = Pick<
   UserLetterContextType,
   "fromName" | "toName" | "fromStamp" | "content" | "type"
 > &
@@ -81,7 +81,7 @@ const DefaultUserLetterContext: UserLetterContextType = {
   setCurrentDraggedLetter: (_: string | undefined) => {},
 };
 
-const DefaultPersistedUserLetterContext: PersistedUserLetterContextInfo = {
+export const DefaultPersistedUserLetterContext: PersistedUserLetterContextInfo = {
   ...DefaultUserLetterContext,
   color: DefaultUserLetterContext.currentUser.color,
 };
@@ -90,7 +90,7 @@ export const UserLetterContext = createContext<UserLetterContextType>(
   DefaultUserLetterContext
 );
 
-const UserContextStorageId = "user-letter-context";
+export const UserContextStorageId = "user-letter-context";
 
 export function UserLetterContextProvider({ children }: PropsWithChildren) {
   const [userContext, setUserContext] =
