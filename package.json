@@ -13,7 +13,7 @@
     "@radix-ui/react-dialog": "^1.0.2",
     "@radix-ui/react-icons": "^1.1.1",
     "@supabase/supabase-js": "^2.4.0",
-    "cursor-chat": "^0.5.3",
+    "cursor-chat": "^0.5.4",
     "dayjs": "^1.11.7",
     "framer-motion": "^8.0.2",
     "nanoid": "^4.0.1",

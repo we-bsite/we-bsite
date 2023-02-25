@@ -47,7 +47,7 @@ interface UserLetterContextType {
   setCurrentDraggedLetter: (url: string | undefined) => void;
 }
 
-type PersistedUserLetterContextInfo = Pick<
+export type PersistedUserLetterContextInfo = Pick<
   UserLetterContextType,
   "fromName" | "toName" | "fromStamp" | "content" | "type"
 > &
@@ -66,22 +66,22 @@ const DefaultUserLetterContext: UserLetterContextType = {
     color: randomColor(),
   },
   sharedFingerprints: [],
-  setFingerprint: () => {},
-  setFromName: () => {},
-  setToName: () => {},
-  setFromStamp: () => {},
-  setContent: () => {},
-  setType: () => {},
-  setColor: () => {},
-  onLetterSubmitted: () => {},
+  setFingerprint: () => { },
+  setFromName: () => { },
+  setToName: () => { },
+  setFromStamp: () => { },
+  setContent: () => { },
+  setType: () => { },
+  setColor: () => { },
+  onLetterSubmitted: () => { },
   highestZIndex: 0,
-  bumpHighestZIndex: () => {},
-  updateLetterInteraction: () => {},
+  bumpHighestZIndex: () => { },
+  updateLetterInteraction: () => { },
   currentDraggedLetter: undefined,
-  setCurrentDraggedLetter: (_: string | undefined) => {},
+  setCurrentDraggedLetter: (_: string | undefined) => { },
 };
 
-const DefaultPersistedUserLetterContext: PersistedUserLetterContextInfo = {
+export const DefaultPersistedUserLetterContext: PersistedUserLetterContextInfo = {
   ...DefaultUserLetterContext,
   color: DefaultUserLetterContext.currentUser.color,
 };
@@ -90,7 +90,7 @@ export const UserLetterContext = createContext<UserLetterContextType>(
   DefaultUserLetterContext
 );
 
-const UserContextStorageId = "user-letter-context";
+export const UserContextStorageId = "user-letter-context";
 
 export function UserLetterContextProvider({ children }: PropsWithChildren) {
   const [userContext, setUserContext] =
@@ -98,10 +98,6 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       UserContextStorageId,
       DefaultPersistedUserLetterContext
     );
-
-  // TODO: if you want to get ip of user
-  // <script src="https://cdn.jsdelivr.net/gh/joeymalvinni/webrtc-ip/dist/bundle.dev.js"></script>
-  // getIPs().then(res => document.write(res.join('\n')))
 
   const { fromName, toName, fromStamp, content, type, color } = userContext;
   const setFromName = (fromName: string) =>
@@ -128,6 +124,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
     }),
     [color, fromName, fromStamp]
   );
+  
   const yDoc = useYDoc(YJS_ROOM, connectDoc);
 
   const [awarenessData, setAwarenessData] =
