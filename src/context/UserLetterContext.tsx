@@ -169,16 +169,19 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         throw error;
       }
 
-      let fetchedLetters: LetterInterface[] = [];
-      if (data) {
-        fetchedLetters = (data as DatabaseLetter[]).map<LetterInterface>(
-          mapDbLetterToLetterInterface
-        );
+      if (!data) {
+        setLetters([]);
       }
+      const allFetchedLetters: LetterInterface[] = (
+        data as DatabaseLetter[]
+      ).map<LetterInterface>(mapDbLetterToLetterInterface);
+
+      const [submitLetter, ...fetchedLetters] = allFetchedLetters;
 
       const idxToInsertSubmitLetter = Math.min(fetchedLetters.length - 1, 5);
       fetchedLetters.splice(idxToInsertSubmitLetter, 0, {
         ...SubmitLetterMetadata,
+        letterInteractionData: submitLetter.letterInteractionData,
         ctaContent: <LetterFormButton />,
       });
 
