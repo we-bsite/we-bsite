@@ -30,11 +30,9 @@ function Home() {
               space to hold, show, and uplift everyday visions and hopes for the
               internet.
             </p>
-            <p>
-              <h3>
-                <em>What do you want from the internet?</em>
-              </h3>
-            </p>
+            <h3>
+              <em>What do you want from the internet?</em>
+            </h3>
             <p>
               Please share your dreams, hopes, and invocations with us and{" "}
               <LetterFormButton inline={true} />. The only personal data we

@@ -14,6 +14,11 @@ export const connectDoc = (
   doc: Y.Doc,
   startAwareness: StartAwarenessFunction
 ) => {
+  // Hack to get around server-side rendering build
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+
   const ctx =
     getLocalStorageItem<PersistedUserLetterContextInfo>(UserContextStorageId) ??
     DefaultPersistedUserLetterContext;
@@ -22,14 +27,9 @@ export const connectDoc = (
     `Connecting to the internet as ${color}... ${doc.guid} initialized`
   );
 
-  // Hack to get around server-side rendering build
-  if (typeof window === "undefined") {
-    return () => {};
-  }
-
-  // @ts-ignore
   const stopCursorChatCallback = initCursorChat("(we)bsite", {
     yDoc: doc,
+    // @ts-ignore
     color,
   });
   // @ts-ignore

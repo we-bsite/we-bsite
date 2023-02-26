@@ -7,17 +7,18 @@ export function ColorPicker({ inline }: { inline?: boolean }) {
     setColor,
   } = useContext(UserLetterContext);
 
-  return (
-    <div
-      className="colorPicker"
-      style={{ display: inline ? "inline" : "inherit" }}
-    >
-      <input
-        type="color"
-        onChange={(e) => setColor(e.target.value)}
-        value={color}
-      />
-    </div>
+  const child = (
+    <input
+      type="color"
+      onChange={(e) => setColor(e.target.value)}
+      value={color}
+    />
+  );
+
+  return inline ? (
+    <span className="colorPicker">{child}</span>
+  ) : (
+    <div className="colorPicker">{child}</div>
   );
 }
 

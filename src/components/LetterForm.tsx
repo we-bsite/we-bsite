@@ -7,13 +7,13 @@ import { SubmitLetterMetadata } from "../constants";
 import { Letter } from "./Letter";
 
 export function LetterFormButton({ inline }: { inline?: boolean }) {
-  return (
-    <div style={{ display: inline ? "inline" : "inherit" }}>
-      <Dialog.Trigger asChild>
-        <button className="submit edit-letter">Write a letter</button>
-      </Dialog.Trigger>
-    </div>
+  const child = (
+    <Dialog.Trigger asChild>
+      <button className="submit edit-letter">Write a letter</button>
+    </Dialog.Trigger>
   );
+
+  return inline ? <span>{child}</span> : <div>{child}</div>;
 }
 
 export function LetterFormDialogContent() {
