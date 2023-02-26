@@ -456,6 +456,7 @@ $letter-zoom-scale: 0.4;
 }
 
 footer {
+  margin-top: auto;
   margin-bottom: 2em;
   padding: 0 2em;
   text-align: center;
@@ -637,4 +638,14 @@ button {
   box-shadow: 0 0 6px 1px $color-box-shadow;
   overflow: hidden;
   filter: blur(1.2px);
+}
+
+.aboutLink {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}
+
+.aboutContent {
+  margin-bottom: 3em;
 }

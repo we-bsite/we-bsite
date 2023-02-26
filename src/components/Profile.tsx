@@ -1,14 +1,17 @@
 import { useContext } from "react";
 import { UserLetterContext } from "../context/UserLetterContext";
 
-export function ColorPicker() {
+export function ColorPicker({ inline }: { inline?: boolean }) {
   const {
     currentUser: { color },
     setColor,
   } = useContext(UserLetterContext);
 
   return (
-    <div className="colorPicker">
+    <div
+      className="colorPicker"
+      style={{ display: inline ? "inline" : "inherit" }}
+    >
       <input
         type="color"
         onChange={(e) => setColor(e.target.value)}
