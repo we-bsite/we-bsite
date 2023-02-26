@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { Footer } from "../components/Footer";
 
@@ -49,14 +50,14 @@ export default function About() {
             </li>
             <li>every visitor has their own unique fingerprint</li>
             <li>
-              visitors' fingerprints are left on the letters they drag, so that
+              {`visitors' fingerprints are left on the letters they drag, so that
               they are able to passively leave a presence. Others are ambiently
-              aware of who has been here
+              aware of who has been here`}
             </li>
             <li>
-              real-time passive presence through cursors that match each
+              {`real-time passive presence through cursors that match each
               person's color and through the fingerprints as they touch each
-              letter.
+              letter.`}
             </li>
             <li>
               letters remember where they have been dragged to emulate the
@@ -80,9 +81,9 @@ export default function About() {
 export function AboutLink() {
   return (
     <div className="aboutLink">
-      <a className="buttonLink" href="/about">
+      <Link className="buttonLink" href="/about">
         <button>About</button>
-      </a>
+      </Link>
     </div>
   );
 }
