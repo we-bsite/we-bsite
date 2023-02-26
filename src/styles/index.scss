@@ -276,6 +276,13 @@ $letter-zoom-scale: 0.4;
   display: flex;
   flex-direction: column;
 
+  &.editable {
+    .stamps {
+      flex-direction: column;
+      margin-left: 1em;
+    }
+  }
+
   .letterHead {
     box-sizing: border-box;
     position: relative;

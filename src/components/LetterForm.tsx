@@ -6,9 +6,9 @@ import { DatabaseLetterInsertInfo } from "../types";
 import { SubmitLetterMetadata } from "../constants";
 import { Letter } from "./Letter";
 
-export function LetterFormButton() {
+export function LetterFormButton({ inline }: { inline?: boolean }) {
   return (
-    <div>
+    <div style={{ display: inline ? "inline" : "inherit" }}>
       <Dialog.Trigger asChild>
         <button className="submit edit-letter">Write a letter</button>
       </Dialog.Trigger>

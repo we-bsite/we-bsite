@@ -7,7 +7,7 @@ import {
   LetterTypeToDisplay,
 } from "../types";
 import { AnimatePresence, motion } from "framer-motion";
-import { useContext, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import dayjs from "dayjs";
 import { withQueryParams } from "../utils/url";
@@ -25,9 +25,14 @@ interface Props {
   idx: number;
 }
 const FingerprintSize = 50;
+const MinDragTimeMs = 1000;
 
 export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
-  const [isDragging, setDragging] = useState(disableDrag ? true : false);
+  const [dragStart, setDragStart] = useState<null | number>(null);
+  const isDragging = useMemo(
+    () => (disableDrag || dragStart ? true : false),
+    [disableDrag, dragStart]
+  );
   const { id, letterInteractionData } = letter;
   const saved = disableDrag ? undefined : localStorage.getItem(String(id));
   const savedPersistenceData = useRef<LetterPersistenceData>(
@@ -116,6 +121,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
       className={`letterContent`}
     >
       <motion.div
+        id={id === SubmitLetterId ? "submitLetter" : undefined}
         className={`letter ${isDragging ? "dragging" : ""} ${
           isEditable ? "disabled" : ""
         } ${id === SubmitLetterId ? "submitLetter" : ""}`}
@@ -155,7 +161,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
       cancel=".letter-content-wrapper"
       defaultPosition={position}
       onStart={(e, _draggableData) => {
-        setDragging(true);
+        setDragStart(Date.now());
         if (letter.type === LetterType.IFrame) {
           setCurrentDraggedLetter(letter.content);
         }
@@ -212,8 +218,11 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
         }
         newLetterInteractionData[color].numDrags++;
         // Only do this if you were dragging for at least 1 second
-        void updateLetterInteraction(id, newLetterInteractionData);
-        setDragging(false);
+        if (dragStart && Date.now() - dragStart > MinDragTimeMs) {
+          console.log("updating drag");
+          void updateLetterInteraction(id, newLetterInteractionData);
+        }
+        setDragStart(null);
         setCurrentDraggedLetter(undefined);
       }}
     >
@@ -277,17 +286,19 @@ export function LetterView({ letter, isEditable }: LetterViewProps) {
             <div className="effect-layer">
               <div className="sheen"></div>
             </div>
-            <iframe
-              tabIndex={-1}
-              loading="lazy"
-              src={withQueryParams(src, { device: "mobile" })}
-              {...(src.endsWith(".pdf")
-                ? {}
-                : {
-                    sandbox:
-                      "allow-popups-to-escape-sandbox allow-popups allow-forms allow-top-navigation",
-                  })}
-            ></iframe>
+            {isEditable && !content ? null : (
+              <iframe
+                tabIndex={-1}
+                loading="lazy"
+                src={withQueryParams(src, { device: "mobile" })}
+                {...(src.endsWith(".pdf")
+                  ? {}
+                  : {
+                      sandbox:
+                        "allow-popups-to-escape-sandbox allow-popups allow-forms allow-top-navigation",
+                    })}
+              ></iframe>
+            )}
           </div>
         );
       case LetterType.Content:

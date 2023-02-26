@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { LetterFormDialogContent } from "./LetterForm";
+import { LetterFormButton, LetterFormDialogContent } from "./LetterForm";
 import { Desk } from "./Desk";
 import { useEffect } from "react";
 import { UserLetterContextProvider } from "../context/UserLetterContext";
@@ -45,6 +45,10 @@ function Home() {
             </p>
             <p>
               <em>What do you want from the internet?</em>
+            </p>
+            <p>
+              Please share your dreams, hopes, and invocations with us and{" "}
+              <LetterFormButton inline={true} />
             </p>
           </div>
           <Desk />
