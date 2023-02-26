@@ -50,7 +50,7 @@ export type WebsiteAwarenessData = {
 
 export type LiveLetterInteractionAwareness = Required<WebsiteAwarenessData>;
 
-interface LetterInteraction {
+export interface LetterInteraction {
   numOpens: number;
   numDrags: number;
 }

@@ -16,6 +16,7 @@ import { Fingerprint } from "./Fingerprint";
 import seedrandom from "seedrandom";
 import { currentDeskShowingHeight } from "./OpenLetterDesk";
 import { SubmitLetterId } from "../constants";
+import { PastFingerprint } from "./PastFingerprint";
 
 interface Props {
   letter: LetterInterface;
@@ -86,35 +87,12 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
     );
   }
 
-  const pastFingerprints = Object.entries(letterInteractionData).map(
-    ([color, data], idx) => {
-      const { numDrags } = data;
-      // evenly distribute it among the width/height of the handle, 300 x 100px
-      const randomGenerator = seedrandom(color);
-      const top = 100 * randomGenerator();
-      const left = 300 * randomGenerator();
-      // scale opacity based on numDrags, logarithmic distribution between .1 and up to .6
-      const opacity = Math.min(0.8, 0.1 + Math.log(numDrags) / 10);
+  // console.log(
+  //   `letter: ${letter.id}: ${Object.entries(letterInteractionData).length}`
+  // );
 
-      return (
-        // <Fingerprint
-        //   key={color}
-        //   width={12}
-        //   height={12}
-        //   opacity={opacity}
-        //   color={color}
-        //   top={top}
-        //   left={left}
-        //   type={FingerprintType.Passive}
-        //   style={{ filter: "blur(1.2px)" }}
-        // />
-        <div
-          key={color}
-          className="pastFingerprintContainer"
-          style={{ top, left, background: color, opacity }}
-        ></div>
-      );
-    }
+  const pastFingerprints = Object.entries(letterInteractionData).map(
+    ([color, data]) => <PastFingerprint key={color} color={color} data={data} />
   );
 
   const draggingValues = {
