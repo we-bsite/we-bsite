@@ -664,3 +664,8 @@ button {
 .aboutContent {
   margin-bottom: 3em;
 }
+
+#cursor-chat-layer {
+  // absurdly large z-index to always be above all letters
+  z-index: 99999999;
+}
