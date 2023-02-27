@@ -3,23 +3,35 @@ import { WebrtcProvider } from "y-webrtc";
 import Y from "yjs";
 import { StartAwarenessFunction } from "zustand-yjs";
 import { YJS_ROOM } from "../constants";
-import { DefaultPersistedUserLetterContext, PersistedUserLetterContextInfo, UserContextStorageId } from "../context/UserLetterContext";
+import {
+  DefaultPersistedUserLetterContext,
+  PersistedUserLetterContextInfo,
+  UserContextStorageId,
+} from "../context/UserLetterContext";
 import { getLocalStorageItem } from "./localstorage";
 
 export const connectDoc = (
   doc: Y.Doc,
   startAwareness: StartAwarenessFunction
 ) => {
-  const ctx = getLocalStorageItem<PersistedUserLetterContextInfo>(UserContextStorageId) ?? DefaultPersistedUserLetterContext
-  const color = ctx.color
-  console.log(`Connecting to the internet as ${color}... ${doc.guid} initialized`);
-
   // Hack to get around server-side rendering build
   if (typeof window === "undefined") {
-    return () => { };
+    return () => {};
   }
 
-  const stopCursorChatCallback = initCursorChat("(we)bsite", { yDoc: doc, color })
+  const ctx =
+    getLocalStorageItem<PersistedUserLetterContextInfo>(UserContextStorageId) ??
+    DefaultPersistedUserLetterContext;
+  const color = ctx.color;
+  console.log(
+    `Connecting to the internet as ${color}... ${doc.guid} initialized`
+  );
+
+  const stopCursorChatCallback = initCursorChat("(we)bsite", {
+    yDoc: doc,
+    // @ts-ignore
+    color,
+  });
   // @ts-ignore
   const provider = new WebrtcProvider(YJS_ROOM, doc, {
     signaling: ['wss://signalling.communities.digital', 'wss://signaling.yjs.dev', 'wss://y-webrtc-signaling-eu.herokuapp.com', 'wss://y-webrtc-signaling-us.herokuapp.com'],

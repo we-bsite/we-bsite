@@ -276,6 +276,13 @@ $letter-zoom-scale: 0.4;
   display: flex;
   flex-direction: column;
 
+  &.editable {
+    .stamps {
+      flex-direction: column;
+      margin-left: 1em;
+    }
+  }
+
   .letterHead {
     box-sizing: border-box;
     position: relative;
@@ -449,6 +456,7 @@ $letter-zoom-scale: 0.4;
 }
 
 footer {
+  margin-top: auto;
   margin-bottom: 2em;
   padding: 0 2em;
   text-align: center;
@@ -630,4 +638,20 @@ button {
   box-shadow: 0 0 6px 1px $color-box-shadow;
   overflow: hidden;
   filter: blur(1.2px);
+}
+
+.aboutLink {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}
+
+.galleryLink {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+}
+
+.aboutContent {
+  margin-bottom: 3em;
 }

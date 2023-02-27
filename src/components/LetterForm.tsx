@@ -6,14 +6,14 @@ import { DatabaseLetterInsertInfo } from "../types";
 import { SubmitLetterMetadata } from "../constants";
 import { Letter } from "./Letter";
 
-export function LetterFormButton() {
-  return (
-    <div>
-      <Dialog.Trigger asChild>
-        <button className="submit edit-letter">Write a letter</button>
-      </Dialog.Trigger>
-    </div>
+export function LetterFormButton({ inline }: { inline?: boolean }) {
+  const child = (
+    <Dialog.Trigger asChild>
+      <button className="submit edit-letter">Write a letter</button>
+    </Dialog.Trigger>
   );
+
+  return inline ? <span>{child}</span> : <div>{child}</div>;
 }
 
 export function LetterFormDialogContent() {

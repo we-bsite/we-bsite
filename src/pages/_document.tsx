@@ -9,7 +9,7 @@ export default function Document() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
-          href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap"
+          href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           rel="stylesheet"
         />
         <link
@@ -21,7 +21,11 @@ export default function Document() {
           type="text/css"
           href="https://unpkg.com/cursor-chat/dist/style.css"
         />
-        <script defer data-domain="we-b.site" src="https://plausible.io/js/script.js"></script>
+        <script
+          defer
+          data-domain="we-b.site"
+          src="https://plausible.io/js/script.js"
+        ></script>
       </Head>
       <body>
         <div id="cursor-chat-layer">

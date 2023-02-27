@@ -1,66 +1,44 @@
-import * as Dialog from "@radix-ui/react-dialog";
-import { LetterFormDialogContent } from "./LetterForm";
+import { LetterFormButton, LetterFormDialogContent } from "./LetterForm";
 import { Desk } from "./Desk";
 import { useEffect } from "react";
 import { UserLetterContextProvider } from "../context/UserLetterContext";
-import { Profile } from "./Profile";
+import { ColorPicker, Profile } from "./Profile";
 import { OpenLetterDesk } from "./OpenLetterDesk";
+import { AboutLink } from "../pages/about";
+import { Footer } from "./Footer";
 
 function Home() {
-  useEffect(() => {
-    console.log(
-      "Hi there friend. If you'd like, poke around the source code! https://github.com/we-bsite/we-bsite"
-    );
-  }, []);
-
   return (
     <>
-      <UserLetterContextProvider>
-        <Dialog.Root>
-          <OpenLetterDesk />
-          <div className="App">
-            <Profile />
-            <h1>(we)bsite</h1>
-            <p>
-              <em>(we)bsite</em> is a living collection of internet dreams from
-              people like you, inhabitants of the internet. It aims to create
-              space to hold, show, and uplift everyday visions and hopes for the
-              internet.
-            </p>
-            <p>
-              Despite all the time we spend on the internet, most of us are
-              passive consumers of content and interfaces. Our standard digital
-              environments do not offer let alone encourage us to imagine and
-              create alternative futures for the internet.
-            </p>
-            <p>
-              What if everyone who used the internet was encouraged to dream
-              about it? What would it look like if we collectively imagine and
-              build a better internet together?
-            </p>
-            <p>
-              Change starts with possibility. We hope <em>(we)bsite</em> can be
-              a catalyst for change by showing all the love, care, memories, and
-              dreams that people have for the internet.
-            </p>
-            <p>
-              <em>What do you want from the internet?</em>
-            </p>
-          </div>
-          <Desk />
-          <footer>
-            (we)bsite is a project by{" "}
-            <a href="https://www.spencerchang.me/">Spencer Chang</a> and{" "}
-            <a href="https://jzhao.xyz">Jacky Zhao</a>. if your ears are perked,
-            please{" "}
-            <a href="mailto:spencerc99@gmail.com,j.zhao2k19@gmail.com?subject=(we)bsite dreams">
-              reach out to us
-            </a>
-            .
-          </footer>
-          <LetterFormDialogContent />
-        </Dialog.Root>
-      </UserLetterContextProvider>
+      <OpenLetterDesk />
+      <AboutLink />
+      <div className="App">
+        {/* <Profile /> */}
+        <h1>(we)bsite</h1>
+        <p>
+          <em>(we)bsite</em> is a living collection of internet dreams from
+          people like you, inhabitants of the internet. It aims to create space
+          to hold, show, and uplift everyday visions and hopes for the internet.
+        </p>
+        <h3>
+          <em>What do you want from the internet?</em>
+        </h3>
+        <p>
+          Please share your dreams, hopes, and invocations with us and{" "}
+          <LetterFormButton inline={true} />. The only personal data we collect
+          from you is where you leave your fingerprint as you interact with the
+          letters <ColorPicker inline={true} /> (pick a color that you identify
+          with). You&apos;ll find other visitors&apos; fingers scattered
+          throughout the letters they&apos;ve touched.
+        </p>
+        <p>
+          What does it mean to leave our presence on the websites we visit? Can
+          we feel the presence of those who have been here before?
+        </p>
+      </div>
+      <Desk />
+      <Footer />
+      <LetterFormDialogContent />
     </>
   );
 }
