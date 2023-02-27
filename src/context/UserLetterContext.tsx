@@ -8,6 +8,7 @@ import {
   WebsiteAwarenessData,
   Person,
   LiveLetterInteractionAwareness,
+  LetterPersistenceData,
 } from "../types";
 import { useStickyState } from "../utils/localstorage";
 import { useEffect, useState } from "react";
@@ -29,6 +30,7 @@ interface UserLetterContextType {
   currentUser: Person;
   type: LetterType;
   sharedFingerprints: Array<LiveLetterInteractionAwareness>;
+  letterLocationPersistence: Record<number, LetterPersistenceData>;
   setFingerprint: (fingerprint: WebsiteAwarenessData["fingerprint"]) => void;
   setFromName: (fromName: string) => void;
   setToName: (toName: string) => void;
@@ -45,6 +47,8 @@ interface UserLetterContextType {
   ) => void;
   currentDraggedLetter: string | undefined;
   setCurrentDraggedLetter: (url: string | undefined) => void;
+  updateLetterLocation: (id: number, data: LetterPersistenceData) => void;
+  clearLetterLocations: () => void;
 }
 
 export type PersistedUserLetterContextInfo = Pick<
@@ -66,6 +70,7 @@ const DefaultUserLetterContext: UserLetterContextType = {
     color: randomColor(),
   },
   sharedFingerprints: [],
+  letterLocationPersistence: {},
   setFingerprint: () => {},
   setFromName: () => {},
   setToName: () => {},
@@ -79,18 +84,22 @@ const DefaultUserLetterContext: UserLetterContextType = {
   updateLetterInteraction: () => {},
   currentDraggedLetter: undefined,
   setCurrentDraggedLetter: (_: string | undefined) => {},
+  updateLetterLocation: () => {},
+  clearLetterLocations: () => {},
 };
 
-export const DefaultPersistedUserLetterContext: PersistedUserLetterContextInfo = {
-  ...DefaultUserLetterContext,
-  color: DefaultUserLetterContext.currentUser.color,
-};
+export const DefaultPersistedUserLetterContext: PersistedUserLetterContextInfo =
+  {
+    ...DefaultUserLetterContext,
+    color: DefaultUserLetterContext.currentUser.color,
+  };
 
 export const UserLetterContext = createContext<UserLetterContextType>(
   DefaultUserLetterContext
 );
 
 export const UserContextStorageId = "user-letter-context";
+export const LetterLocationPersistenceStorageId = "letter-location-persistence";
 
 export function UserLetterContextProvider({ children }: PropsWithChildren) {
   const [userContext, setUserContext] =
@@ -99,9 +108,8 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       DefaultPersistedUserLetterContext
     );
 
-  // TODO: if you want to get ip of user
-  // <script src="https://cdn.jsdelivr.net/gh/joeymalvinni/webrtc-ip/dist/bundle.dev.js"></script>
-  // getIPs().then(res => document.write(res.join('\n')))
+  const [letterLocationPersistence, setLetterLocationPersistence] =
+    useStickyState(LetterLocationPersistenceStorageId, {});
 
   const { fromName, toName, fromStamp, content, type, color } = userContext;
   const setFromName = (fromName: string) =>
@@ -223,6 +231,20 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
     } as LetterInterface;
   }
 
+  async function updateLetterLocation(
+    letterId: number,
+    location: LetterPersistenceData
+  ) {
+    setLetterLocationPersistence({
+      ...letterLocationPersistence,
+      [letterId]: location,
+    });
+  }
+  async function clearLetterLocations() {
+    console.log("hello?");
+    setLetterLocationPersistence({});
+  }
+
   // useEffect(() => {
   //   console.log("set up channel");
 
@@ -275,6 +297,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         type,
         sharedFingerprints,
         currentUser: currentUser,
+        letterLocationPersistence,
         setFingerprint,
         setFromName,
         setToName,
@@ -289,6 +312,8 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         updateLetterInteraction,
         currentDraggedLetter,
         setCurrentDraggedLetter,
+        updateLetterLocation,
+        clearLetterLocations,
       }}
     >
       {children}

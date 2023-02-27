@@ -17,6 +17,7 @@ $zindex-overlay: 100;
 $zindex-dialog: $zindex-overlay + 1;
 
 $letter-note-width: 325px;
+$cursor-chat-layer-zindex: 99999999;
 
 :root {
   font-family: "EB Garamond", "Garamond", serif;
@@ -564,9 +565,9 @@ button {
   gap: 0.15em;
   margin-left: 0.05em;
 
-  position: absolute;
+  position: fixed;
   left: 0;
-  z-index: 10;
+  z-index: $cursor-chat-layer-zindex - 1;
 
   button {
     padding: 0;
@@ -667,5 +668,5 @@ button {
 
 #cursor-chat-layer {
   // absurdly large z-index to always be above all letters
-  z-index: 99999999;
+  z-index: $cursor-chat-layer-zindex;
 }
