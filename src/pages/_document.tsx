@@ -26,6 +26,10 @@ export default function Document() {
           data-domain="we-b.site"
           src="https://plausible.io/js/script.js"
         ></script>
+        <meta
+          http-equiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
       </Head>
       <body>
         <div id="cursor-chat-layer">
