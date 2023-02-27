@@ -8,19 +8,22 @@ export function Desk() {
 
   const renderToolbar = () => {
     return (
-      <div className="toolbar">
+      <fieldset className="toolbar">
+        <legend>
+          <b>tools</b>
+        </legend>
         <button>
           <ResetIcon onClick={() => clearLetterLocations()} />
         </button>
         {/* shuffle letters */}
-        {/* <button>
+        <button disabled={true}>
           <ShuffleIcon />
-        </button> */}
+        </button>
         {/* toggle between StackIcon */}
-        {/* <button>
+        <button disabled={true}>
           <ViewGridIcon />
-        </button> */}
-      </div>
+        </button>
+      </fieldset>
     );
   };
 

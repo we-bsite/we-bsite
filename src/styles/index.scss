@@ -562,11 +562,17 @@ button {
 .toolbar {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.15em;
   margin-left: 0.05em;
+  border: 1px solid black;
+  border-left: none;
+  border-radius: 0px 5px 5px 0px;
+  padding: 0.3em 0.2em;
 
   position: fixed;
-  left: 0;
+  left: 0px;
+  top: 45%;
   z-index: $cursor-chat-layer-zindex - 1;
 
   button {
@@ -574,6 +580,10 @@ button {
     width: 32px;
     height: 32px;
     box-shadow: 0 0 6px 1px $color-box-shadow;
+  }
+
+  legend {
+    line-height: 1;
   }
 }
 
