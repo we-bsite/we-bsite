@@ -22,8 +22,9 @@ export const connectDoc = (
   const stopCursorChatCallback = initCursorChat("(we)bsite", { yDoc: doc, color })
   // @ts-ignore
   const provider = new WebrtcProvider(YJS_ROOM, doc, {
-    signaling: ['wss://signalling-2u32im64eq-uc.a.run.app:4444'],
+    signaling: ['wss://signalling.communities.digital', 'wss://signaling.yjs.dev', 'wss://y-webrtc-signaling-eu.herokuapp.com', 'wss://y-webrtc-signaling-us.herokuapp.com'],
   });
+  console.log("Connected!")
   const stopAwarenessCallback = startAwareness(provider);
   return () => {
     provider.disconnect();
