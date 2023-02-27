@@ -225,15 +225,24 @@ $letter-zoom-scale: 0.4;
   }
 }
 
+$desk-width: calc(max(min(100vw, 1920px), 600px));
+
 .draggable-desk {
   position: fixed;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (max-width: 600px) {
+    left: calc(-1 * (600px - 100vw) / 2);
+  }
 
   & > img {
     z-index: 3;
     padding: 0 2em;
     box-sizing: border-box;
-    width: 100vw;
+    width: $desk-width;
   }
 
   .instructions {
@@ -243,7 +252,7 @@ $letter-zoom-scale: 0.4;
     font-family: cursive;
     // font-size: 2em;
     text-align: center;
-    width: 100vw;
+    width: $desk-width;
     color: #a88052;
   }
 }

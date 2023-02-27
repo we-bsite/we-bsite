@@ -34,9 +34,13 @@ export const connectDoc = (
   });
   // @ts-ignore
   const provider = new WebrtcProvider(YJS_ROOM, doc, {
-    signaling: ['wss://signalling.communities.digital', 'wss://signaling.yjs.dev', 'wss://y-webrtc-signaling-eu.herokuapp.com', 'wss://y-webrtc-signaling-us.herokuapp.com'],
+    signaling: [
+      "wss://signalling.communities.digital",
+      "wss://signaling.yjs.dev",
+      "wss://y-webrtc-signaling-eu.herokuapp.com",
+    ],
   });
-  console.log("Connected!")
+  console.log("Connected!");
   const stopAwarenessCallback = startAwareness(provider);
   return () => {
     provider.disconnect();
