@@ -93,6 +93,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
           const fingerprintColor = user.color;
           const { top, left } = fingerprint;
 
+          // TODO: fix color on mobile
           return (
             <Fingerprint
               key={fingerprintColor}
