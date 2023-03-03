@@ -2,6 +2,7 @@ import { Letter } from "./Letter";
 import { ShuffleIcon, ResetIcon, ViewGridIcon } from "@radix-ui/react-icons";
 import { useContext } from "react";
 import { UserLetterContext } from "../context/UserLetterContext";
+import { Signature } from "./Signature";
 
 export function Desk() {
   const { letters, clearLetterLocations, loading, shuffleLetterLocations } =
@@ -20,7 +21,7 @@ export function Desk() {
         <button>
           <ResetIcon onClick={() => clearLetterLocations()} />
         </button>
-        <button disabled={true}>
+        <button>
           <ShuffleIcon onClick={onShuffleLetters} />
         </button>
         {/* toggle between StackIcon */}
@@ -34,6 +35,9 @@ export function Desk() {
   return (
     <>
       {renderToolbar()}
+      <div className="topSignature">
+        <Signature repeat={6} />
+      </div>
       <div id="desk">
         {letters?.map((letter, idx) => (
           <Letter letter={letter} key={letter.id} idx={idx} />

@@ -664,12 +664,14 @@ button {
   position: absolute;
   top: 1em;
   right: 1em;
+  z-index: 1;
 }
 
 .galleryLink {
   position: absolute;
   top: 1em;
   left: 1em;
+  z-index: 1;
 }
 
 .aboutContent {
@@ -679,4 +681,16 @@ button {
 #cursor-chat-layer {
   // absurdly large z-index to always be above all letters
   z-index: $cursor-chat-layer-zindex;
+}
+
+.topSignature {
+  display: flex;
+  position: absolute;
+  top: 4px;
+  left: -40px;
+  justify-content: center;
+}
+
+.signatureContainer {
+  display: inline-flex;
 }
