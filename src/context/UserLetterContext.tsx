@@ -19,6 +19,7 @@ import randomColor from "randomcolor";
 import { useYAwareness, useYDoc } from "zustand-yjs";
 import { YJS_ROOM } from "../constants";
 import { connectDoc } from "../utils/yjs";
+import { shuffleArray } from "../utils";
 
 interface UserLetterContextType {
   loading: boolean;
@@ -49,6 +50,7 @@ interface UserLetterContextType {
   setCurrentDraggedLetter: (url: string | undefined) => void;
   updateLetterLocation: (id: number, data: LetterPersistenceData) => void;
   clearLetterLocations: () => void;
+  shuffleLetterLocations: () => void;
 }
 
 export type PersistedUserLetterContextInfo = Pick<
@@ -86,6 +88,7 @@ const DefaultUserLetterContext: UserLetterContextType = {
   setCurrentDraggedLetter: (_: string | undefined) => {},
   updateLetterLocation: () => {},
   clearLetterLocations: () => {},
+  shuffleLetterLocations: () => {},
 };
 
 export const DefaultPersistedUserLetterContext: PersistedUserLetterContextInfo =
@@ -240,9 +243,15 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       [letterId]: location,
     });
   }
+
   async function clearLetterLocations() {
-    console.log("hello?");
     setLetterLocationPersistence({});
+  }
+
+  async function shuffleLetterLocations() {
+    clearLetterLocations();
+    const shuffledLetters = shuffleArray(letters);
+    setLetters(shuffledLetters);
   }
 
   // useEffect(() => {
@@ -314,6 +323,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
         setCurrentDraggedLetter,
         updateLetterLocation,
         clearLetterLocations,
+        shuffleLetterLocations,
       }}
     >
       {children}

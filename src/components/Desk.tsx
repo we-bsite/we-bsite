@@ -4,7 +4,12 @@ import { useContext } from "react";
 import { UserLetterContext } from "../context/UserLetterContext";
 
 export function Desk() {
-  const { letters, clearLetterLocations } = useContext(UserLetterContext);
+  const { letters, clearLetterLocations, loading, shuffleLetterLocations } =
+    useContext(UserLetterContext);
+
+  const onShuffleLetters = () => {
+    shuffleLetterLocations();
+  };
 
   const renderToolbar = () => {
     return (
@@ -15,14 +20,13 @@ export function Desk() {
         <button>
           <ResetIcon onClick={() => clearLetterLocations()} />
         </button>
-        {/* shuffle letters */}
         <button disabled={true}>
-          <ShuffleIcon />
+          <ShuffleIcon onClick={onShuffleLetters} />
         </button>
         {/* toggle between StackIcon */}
-        <button disabled={true}>
+        {/* <button disabled={true}>
           <ViewGridIcon />
-        </button>
+        </button> */}
       </fieldset>
     );
   };
@@ -31,7 +35,6 @@ export function Desk() {
     <>
       {renderToolbar()}
       <div id="desk">
-        {/* If loading add loading indicator */}
         {letters?.map((letter, idx) => (
           <Letter letter={letter} key={letter.id} idx={idx} />
         ))}
