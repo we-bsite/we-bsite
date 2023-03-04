@@ -29,6 +29,7 @@ export const connectDoc = (
 
   const stopCursorChatCallback = initCursorChat("(we)bsite", {
     yDoc: doc,
+    shouldChangeUserCursor: true,
     // @ts-ignore
     color,
   });
