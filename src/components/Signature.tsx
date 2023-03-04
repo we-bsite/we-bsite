@@ -37,7 +37,7 @@ export function Signature({ repeat = 1, timePerLetter = 0.03 }: Props) {
               return (
                 <motion.path
                   key={`${i}${j}`}
-                  vector-effect="non-scaling-stroke"
+                  vectorEffect="non-scaling-stroke"
                   strokeLinecap="round"
                   fillRule="evenodd"
                   fontSize="9pt"
