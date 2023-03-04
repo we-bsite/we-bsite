@@ -17,6 +17,7 @@ import seedrandom from "seedrandom";
 import { currentDeskShowingHeight } from "./OpenLetterDesk";
 import { SubmitLetterId } from "../constants";
 import { PastFingerprint } from "./PastFingerprint";
+import { useStickyState } from "../utils/localstorage";
 
 interface Props {
   letter: LetterInterface;
@@ -33,11 +34,6 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
     () => (disableDrag || dragStart ? true : false),
     [disableDrag, dragStart]
   );
-  const { id, letterInteractionData } = letter;
-  const saved = disableDrag ? undefined : localStorage.getItem(String(id));
-  const savedPersistenceData = useRef<LetterPersistenceData>(
-    saved ? JSON.parse(saved) : {}
-  );
 
   const {
     updateLetterInteraction,
@@ -47,21 +43,41 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
     sharedFingerprints,
     setFingerprint,
     setCurrentDraggedLetter,
+    letterLocationPersistence,
+    updateLetterLocation,
   } = useContext(UserLetterContext);
+
+  const { id, letterInteractionData } = letter;
+  const savedPersistenceData = useMemo(
+    () => (disableDrag ? undefined : letterLocationPersistence[id]),
+    [disableDrag, letterLocationPersistence, id]
+  );
+
   const { color } = currentUser;
 
-  const randomGenerator = seedrandom(String(idx));
-  const randomRotation = 10 * randomGenerator() - 5;
-  const initialRandomX = 30 * randomGenerator() - 15;
-  const initialRandomY = 30 * randomGenerator() - 15;
+  const randomGenerator = useMemo(() => seedrandom(String(idx)), [idx]);
+  const randomRotation = useMemo(
+    () => 10 * randomGenerator() - 5,
+    [randomGenerator]
+  );
+  const initialRandomX = useMemo(
+    () => 30 * randomGenerator() - 15,
+    [randomGenerator]
+  );
+  const initialRandomY = useMemo(
+    () => 30 * randomGenerator() - 15,
+    [randomGenerator]
+  );
 
   // TODO: these should probably be percentages of screen size
-  const position = {
-    x: initialRandomX,
-    y: initialRandomY,
-    z: 0,
-    ...savedPersistenceData.current,
-  };
+  const position = useMemo(
+    () => ({
+      x: savedPersistenceData?.x ?? initialRandomX,
+      y: savedPersistenceData?.y ?? initialRandomY,
+      z: savedPersistenceData?.z ?? 0,
+    }),
+    [initialRandomX, initialRandomY, savedPersistenceData]
+  );
 
   const [z, setZ] = useState<number>(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -77,6 +93,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
           const fingerprintColor = user.color;
           const { top, left } = fingerprint;
 
+          // TODO: fix color on mobile
           return (
             <Fingerprint
               key={fingerprintColor}
@@ -141,7 +158,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
         whileFocus={focusValues}
         initial={false}
       >
-        {pastFingerprints}
+        <div className="pastFingerprints">{pastFingerprints}</div>
         {renderFingerprints()}
         <LetterView
           letter={letter}
@@ -159,7 +176,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
       handle=".letter"
       defaultClassName="letter-container"
       cancel=".letter-content-wrapper"
-      defaultPosition={position}
+      position={position}
       onStart={(e, _draggableData) => {
         setDragStart(Date.now());
         if (letter.type === LetterType.IFrame) {
@@ -188,14 +205,11 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
       }}
       onStop={(e, dragData) => {
         setFingerprint(undefined);
-        localStorage.setItem(
-          String(id),
-          JSON.stringify({
-            x: dragData.x,
-            y: dragData.y,
-            z,
-          })
-        );
+        updateLetterLocation(id, {
+          x: dragData.x,
+          y: dragData.y,
+          z,
+        });
 
         // if top of screen, letter dropped on desk
         const clientY =

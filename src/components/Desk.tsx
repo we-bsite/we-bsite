@@ -2,34 +2,43 @@ import { Letter } from "./Letter";
 import { ShuffleIcon, ResetIcon, ViewGridIcon } from "@radix-ui/react-icons";
 import { useContext } from "react";
 import { UserLetterContext } from "../context/UserLetterContext";
+import { Signature } from "./Signature";
 
 export function Desk() {
-  const { letters } = useContext(UserLetterContext);
+  const { letters, clearLetterLocations, loading, shuffleLetterLocations } =
+    useContext(UserLetterContext);
+
+  const onShuffleLetters = () => {
+    shuffleLetterLocations();
+  };
 
   const renderToolbar = () => {
     return (
-      <div className="toolbar">
-        {/* reset letters */}
+      <fieldset className="toolbar">
+        <legend>
+          <b>tools</b>
+        </legend>
         <button>
-          <ResetIcon />
+          <ResetIcon onClick={() => clearLetterLocations()} />
         </button>
-        {/* shuffle letters */}
         <button>
-          <ShuffleIcon />
+          <ShuffleIcon onClick={onShuffleLetters} />
         </button>
         {/* toggle between StackIcon */}
-        <button>
+        {/* <button disabled={true}>
           <ViewGridIcon />
-        </button>
-      </div>
+        </button> */}
+      </fieldset>
     );
   };
 
   return (
     <>
-      {/* {renderToolbar()} */}
+      {renderToolbar()}
+      <div className="topSignature">
+        <Signature repeat={6} />
+      </div>
       <div id="desk">
-        {/* If loading add loading indicator */}
         {letters?.map((letter, idx) => (
           <Letter letter={letter} key={letter.id} idx={idx} />
         ))}

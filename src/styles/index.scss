@@ -17,6 +17,7 @@ $zindex-overlay: 100;
 $zindex-dialog: $zindex-overlay + 1;
 
 $letter-note-width: 325px;
+$cursor-chat-layer-zindex: 99999999;
 
 :root {
   font-family: "EB Garamond", "Garamond", serif;
@@ -225,15 +226,24 @@ $letter-zoom-scale: 0.4;
   }
 }
 
+$desk-width: calc(max(min(100vw, 1920px), 600px));
+
 .draggable-desk {
   position: fixed;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (max-width: 600px) {
+    left: calc(-1 * (600px - 100vw) / 2);
+  }
 
   & > img {
     z-index: 3;
     padding: 0 2em;
     box-sizing: border-box;
-    width: 100vw;
+    width: $desk-width;
   }
 
   .instructions {
@@ -243,7 +253,7 @@ $letter-zoom-scale: 0.4;
     font-family: cursive;
     // font-size: 2em;
     text-align: center;
-    width: 100vw;
+    width: $desk-width;
     color: #a88052;
   }
 }
@@ -549,21 +559,32 @@ button {
   margin: 1em 15px;
 }
 
+// TODO: make position top right in mobile
 .toolbar {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.15em;
   margin-left: 0.05em;
+  border: 1px solid black;
+  border-left: none;
+  border-radius: 0px 5px 5px 0px;
+  padding: 0.3em 0.2em;
 
-  position: absolute;
-  left: 0;
-  z-index: 10;
+  position: fixed;
+  left: 0px;
+  top: 45%;
+  z-index: $cursor-chat-layer-zindex - 1;
 
   button {
     padding: 0;
     width: 32px;
     height: 32px;
     box-shadow: 0 0 6px 1px $color-box-shadow;
+  }
+
+  legend {
+    line-height: 1;
   }
 }
 
@@ -644,14 +665,35 @@ button {
   position: absolute;
   top: 1em;
   right: 1em;
+  z-index: 1;
 }
 
+// TODO: fix blue on mobile
 .galleryLink {
   position: absolute;
   top: 1em;
   left: 1em;
+  z-index: 1;
 }
 
 .aboutContent {
   margin-bottom: 3em;
+}
+
+#cursor-chat-layer {
+  // absurdly large z-index to always be above all letters
+  z-index: $cursor-chat-layer-zindex;
+}
+
+.topSignature {
+  display: flex;
+  position: absolute;
+  top: 4px;
+  width: 100vw;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+.signatureContainer {
+  display: inline-flex;
 }
