@@ -19,7 +19,7 @@ import randomColor from "randomcolor";
 import { useYAwareness, useYDoc } from "zustand-yjs";
 import { YJS_ROOM } from "../constants";
 import { connectDoc } from "../utils/yjs";
-import { shuffleArray } from "../utils";
+import { encodeSVG, getSvgForCursor, shuffleArray } from "../utils";
 
 interface UserLetterContextType {
   loading: boolean;
@@ -157,6 +157,11 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     setAwarenessData({ user: currentUser });
   }, [currentUser, setAwarenessData]);
+
+  useEffect(() => {
+    const userCursorSvgEncoded = encodeSVG(getSvgForCursor(color));
+    document.documentElement.style.cursor = `url("data:image/svg+xml,${userCursorSvgEncoded}"), auto`;
+  }, [color]);
 
   const [letters, setLetters] = useState<LetterInterface[]>([]);
   const [loading, setLoading] = useState(true);
