@@ -114,7 +114,9 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
   // );
 
   const pastFingerprints = Object.entries(letterInteractionData).map(
-    ([color, data]) => <PastFingerprint key={color} color={color} data={data} />
+    ([color, data]) => (
+      <PastFingerprint key={color} color={color} data={data} letterId={id} />
+    )
   );
 
   const draggingValues = {

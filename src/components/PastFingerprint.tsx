@@ -6,18 +6,22 @@ import { LetterInteraction } from "../types";
 interface Props {
   color: string;
   data: LetterInteraction;
+  letterId: number;
 }
 
 const MinNumDrags = 2;
 
-export function PastFingerprint({ color, data }: Props) {
+export function PastFingerprint({ color, data, letterId }: Props) {
   const { numDrags } = data;
   // evenly distribute it among the width/height of the handle, 300 x 100px
 
   const { currentUser } = useContext(UserLetterContext);
   const { color: userColor } = currentUser;
 
-  const randomGenerator = useMemo(() => seedrandom(color), [color]);
+  const randomGenerator = useMemo(
+    () => seedrandom(`${color}${letterId}`),
+    [color, letterId]
+  );
   const top = useMemo(() => 100 * randomGenerator(), [randomGenerator]);
   const left = useMemo(() => 300 * randomGenerator(), [randomGenerator]);
   // scale opacity based on numDrags, logarithmic distribution between .1 and up to .6
