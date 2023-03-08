@@ -1,11 +1,15 @@
 import Link from "next/link";
 import React from "react";
 import { Footer } from "../components/Footer";
+import { Signature } from "../components/Signature";
 
 export default function About() {
   return (
     <>
       <GalleryLink />
+      <div className="topSignature">
+        <Signature repeat={6} />
+      </div>
       <div className="App">
         <h1>about (we)bsite</h1>
         <div className="aboutContent">
