@@ -22,6 +22,7 @@ export function Signature({ repeat = 1, timePerLetter = 0.03 }: Props) {
       {[...Array(repeat)].flatMap((_, j) => {
         return (
           <motion.svg
+            key={j}
             width="285.32"
             height="20"
             viewBox="0 0 285.32 20"

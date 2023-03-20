@@ -6,10 +6,19 @@ import { DatabaseLetterInsertInfo } from "../types";
 import { SubmitLetterMetadata } from "../constants";
 import { Letter } from "./Letter";
 
-export function LetterFormButton({ inline }: { inline?: boolean }) {
+interface LetterFormProps {
+  inline?: boolean;
+  buttonContent?: React.ReactNode;
+}
+
+export function LetterFormButton({ inline, buttonContent }: LetterFormProps) {
   const child = (
     <Dialog.Trigger asChild>
-      <button className="submit edit-letter">Write a letter</button>
+      {buttonContent ? (
+        buttonContent
+      ) : (
+        <button className="submit edit-letter">Write a letter</button>
+      )}
     </Dialog.Trigger>
   );
 

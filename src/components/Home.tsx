@@ -28,7 +28,7 @@ function Home() {
           <LetterFormButton inline={true} />. The only personal data we collect
           from you is where you leave your fingerprint as you interact with the
           letters <ColorPicker inline={true} /> (pick a color that you identify
-          with). You&apos;ll find other visitors&apos; fingers scattered
+          with). You&apos;ll find other visitors&apos; fingerprints scattered
           throughout the letters they&apos;ve touched.
         </p>
         <p>

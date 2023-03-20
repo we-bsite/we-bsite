@@ -81,6 +81,11 @@ export default function About() {
             public. Please contact us if you are interested in supporting the
             project through extensions or advocacy.
           </p>
+          <p>
+            You can follow us on{" "}
+            <a href="https://twitter.com/we_bsite">Twitter</a> for updates on
+            new releases and resurfacing letters from the community.
+          </p>
         </div>
         <Footer />
       </div>
