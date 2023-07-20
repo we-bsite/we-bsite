@@ -43,7 +43,7 @@ export function Signature({ repeat = 1, timePerLetter = 0.03 }: Props) {
                   fillRule="evenodd"
                   fontSize="9pt"
                   stroke="#faf9f5"
-                  stroke-width="0.05mm"
+                  strokeWidth="0.05mm"
                   variants={{
                     hidden: { pathLength: 0, opacity: 0 },
                     visible: () => {

@@ -1,7 +1,6 @@
 import { LetterFormButton, LetterFormDialogContent } from "./LetterForm";
 import { Desk } from "./Desk";
 import { useEffect } from "react";
-import { UserLetterContextProvider } from "../context/UserLetterContext";
 import { ColorPicker, Profile } from "./Profile";
 import { OpenLetterDesk } from "./OpenLetterDesk";
 import { AboutLink } from "../pages/about";

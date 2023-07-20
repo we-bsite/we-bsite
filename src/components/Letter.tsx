@@ -26,7 +26,7 @@ interface Props {
   idx: number;
 }
 const FingerprintSize = 50;
-const MinDragTimeMs = 1000;
+const MinDragTimeMs = 1500;
 
 export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
   const [dragStart, setDragStart] = useState<null | number>(null);
@@ -235,7 +235,6 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
         newLetterInteractionData[color].numDrags++;
         // Only do this if you were dragging for at least 1 second
         if (dragStart && Date.now() - dragStart > MinDragTimeMs) {
-          console.log("updating drag");
           void updateLetterInteraction(id, newLetterInteractionData);
         }
         setDragStart(null);

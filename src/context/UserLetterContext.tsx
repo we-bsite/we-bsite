@@ -104,7 +104,45 @@ export const UserLetterContext = createContext<UserLetterContextType>(
 export const UserContextStorageId = "user-letter-context";
 export const LetterLocationPersistenceStorageId = "letter-location-persistence";
 
-export function UserLetterContextProvider({ children }: PropsWithChildren) {
+function mapDbLetterToLetterInterface(
+  dbLetter: DatabaseLetter
+): LetterInterface {
+  const { letter_content, interaction_data } = dbLetter;
+
+  return {
+    id: dbLetter.id,
+    from: dbLetter.from_person,
+    to: dbLetter.to_person,
+    date: new Date(letter_content.date || dbLetter.creation_timestamp),
+    type: letter_content.type,
+    content: letter_content.content,
+    letterInteractionData: interaction_data,
+  } as LetterInterface;
+}
+
+export async function fetchLetters(): Promise<DatabaseLetter[]> {
+  const { data, error, status } = await supabase
+    .from("letters")
+    .select("*")
+    .filter("should_hide", "eq", false)
+    .order("id", { ascending: true })
+    .limit(500);
+
+  if (error && status !== 406) {
+    throw error;
+  }
+
+  if (!data) {
+    return [];
+  }
+
+  return data;
+}
+
+export function UserLetterContextProvider({
+  children,
+  savedLetters,
+}: PropsWithChildren<{ savedLetters: DatabaseLetter[] }>) {
   const [userContext, setUserContext] =
     useStickyState<PersistedUserLetterContextInfo>(
       UserContextStorageId,
@@ -163,43 +201,38 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
     document.documentElement.style.cursor = `url("data:image/svg+xml,${userCursorSvgEncoded}"), auto`;
   }, [color]);
 
-  const [letters, setLetters] = useState<LetterInterface[]>([]);
+  function getLettersToDisplayFromSavedLetters(
+    dbLetters: DatabaseLetter[]
+  ): LetterInterface[] {
+    const allFetchedLetters: LetterInterface[] = dbLetters.map<LetterInterface>(
+      mapDbLetterToLetterInterface
+    );
+
+    const [submitLetter, ...fetchedLetters] = allFetchedLetters;
+
+    const idxToInsertSubmitLetter = Math.min(fetchedLetters.length - 1, 5);
+    fetchedLetters.splice(idxToInsertSubmitLetter, 0, {
+      ...SubmitLetterMetadata,
+      letterInteractionData: submitLetter.letterInteractionData,
+      ctaContent: <LetterFormButton />,
+    });
+    return fetchedLetters;
+  }
+
+  const [letters, setLetters] = useState<LetterInterface[]>(
+    getLettersToDisplayFromSavedLetters(savedLetters)
+  );
   const [loading, setLoading] = useState(true);
 
   const [highestZIndex, setHighestZIndex] = useState<number>(0);
   const bumpHighestZIndex = () => setHighestZIndex((highest) => highest + 1);
 
-  async function fetchLetters() {
+  async function loadLetters() {
     try {
       setLoading(true);
       // TODO: stream this and can avoid the re-fetch when submit below
-      const { data, error, status } = await supabase
-        .from("letters")
-        .select("*")
-        .filter("should_hide", "eq", false)
-        .order("id", { ascending: true })
-        // TODO: add pagination
-        .limit(500);
-
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      if (!data) {
-        setLetters([]);
-      }
-      const allFetchedLetters: LetterInterface[] = (
-        data as DatabaseLetter[]
-      ).map<LetterInterface>(mapDbLetterToLetterInterface);
-
-      const [submitLetter, ...fetchedLetters] = allFetchedLetters;
-
-      const idxToInsertSubmitLetter = Math.min(fetchedLetters.length - 1, 5);
-      fetchedLetters.splice(idxToInsertSubmitLetter, 0, {
-        ...SubmitLetterMetadata,
-        letterInteractionData: submitLetter.letterInteractionData,
-        ctaContent: <LetterFormButton />,
-      });
+      const data = await fetchLetters();
+      const fetchedLetters = getLettersToDisplayFromSavedLetters(data);
 
       setLetters(fetchedLetters);
     } catch (err: any) {
@@ -217,26 +250,6 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
       .from("letters")
       .update({ interaction_data: newInteractionData })
       .eq("id", id);
-  }
-
-  useEffect(() => {
-    void fetchLetters();
-  }, []);
-
-  function mapDbLetterToLetterInterface(
-    dbLetter: DatabaseLetter
-  ): LetterInterface {
-    const { letter_content, interaction_data } = dbLetter;
-
-    return {
-      id: dbLetter.id,
-      from: dbLetter.from_person,
-      to: dbLetter.to_person,
-      date: new Date(letter_content.date || dbLetter.creation_timestamp),
-      type: letter_content.type,
-      content: letter_content.content,
-      letterInteractionData: interaction_data,
-    } as LetterInterface;
   }
 
   async function updateLetterLocation(
@@ -297,7 +310,7 @@ export function UserLetterContextProvider({ children }: PropsWithChildren) {
   const onLetterSubmitted = () => {
     // Resets values that shouldn't be persisted.
     setUserContext({ ...userContext, content: "", toName: "the internet" });
-    fetchLetters();
+    loadLetters();
   };
 
   return (

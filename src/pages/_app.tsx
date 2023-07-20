@@ -1,7 +1,6 @@
 import "../styles/index.scss";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { UserLetterContextProvider } from "../context/UserLetterContext";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useEffect } from "react";
 
@@ -16,12 +15,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>҉ .｡⋆° (𝓌𝑒)𝒷𝓈𝒾𝓉𝑒 ˚｡⋆ ◌</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <UserLetterContextProvider>
-        <Dialog.Root>
-          <Component {...pageProps} />
-        </Dialog.Root>
-      </UserLetterContextProvider>
+      <Dialog.Root>
+        <Component {...pageProps} />
+      </Dialog.Root>
     </>
   );
 }

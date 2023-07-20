@@ -6,7 +6,6 @@ export default function Document() {
         <meta charSet="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="./tk.svg" />
         <link rel="apple-touch-icon" href="./tk.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap"
@@ -27,7 +26,7 @@ export default function Document() {
           src="https://plausible.io/js/script.js"
         ></script>
         <meta
-          http-equiv="Content-Security-Policy"
+          httpEquiv="Content-Security-Policy"
           content="upgrade-insecure-requests"
         />
       </Head>
