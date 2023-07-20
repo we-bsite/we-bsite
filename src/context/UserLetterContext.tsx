@@ -120,13 +120,22 @@ function mapDbLetterToLetterInterface(
   } as LetterInterface;
 }
 
-export async function fetchLetters(): Promise<DatabaseLetter[]> {
+export const InitialFetchSize = 10;
+
+interface FetchRange {
+  from: number;
+  to: number;
+}
+
+export async function fetchLetters(
+  { from, to }: FetchRange = { from: 0, to: 200 }
+): Promise<DatabaseLetter[]> {
   const { data, error, status } = await supabase
     .from("letters")
     .select("*")
     .filter("should_hide", "eq", false)
     .order("id", { ascending: true })
-    .limit(500);
+    .range(from, to);
 
   if (error && status !== 406) {
     throw error;
@@ -141,8 +150,8 @@ export async function fetchLetters(): Promise<DatabaseLetter[]> {
 
 export function UserLetterContextProvider({
   children,
-  savedLetters,
-}: PropsWithChildren<{ savedLetters: DatabaseLetter[] }>) {
+  initialLoadLetters: savedLetters,
+}: PropsWithChildren<{ initialLoadLetters: DatabaseLetter[] }>) {
   const [userContext, setUserContext] =
     useStickyState<PersistedUserLetterContextInfo>(
       UserContextStorageId,
@@ -190,6 +199,27 @@ export function UserLetterContextProvider({
   function setFingerprint(fingerprint?: WebsiteAwarenessData["fingerprint"]) {
     setAwarenessData({ fingerprint });
   }
+
+  async function initialLoadLetters() {
+    try {
+      setLoading(true);
+      const data = await fetchLetters({ from: InitialFetchSize + 1, to: 200 });
+      const fetchedLetters = data.map<LetterInterface>(
+        mapDbLetterToLetterInterface
+      );
+
+      setLetters([...letters, ...fetchedLetters]);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    // load all the other letters besides initial load
+    void initialLoadLetters();
+  }, []);
 
   // Handle local awareness data for user
   useEffect(() => {
