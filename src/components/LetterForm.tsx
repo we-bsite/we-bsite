@@ -46,6 +46,7 @@ export function LetterFormDialogContent() {
         type,
       },
       interaction_data: {},
+      should_hide: true,
     };
 
     await supabase.from("letters").insert(toInsert);

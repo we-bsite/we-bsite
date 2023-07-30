@@ -85,5 +85,5 @@ export interface DatabaseLetter {
 
 export type DatabaseLetterInsertInfo = Omit<
   DatabaseLetter,
-  "id" | "creation_timestamp" | "should_hide"
+  "id" | "creation_timestamp"
 >;
