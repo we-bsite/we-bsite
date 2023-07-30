@@ -293,6 +293,23 @@ $desk-width: calc(max(min(100vw, 1920px), 600px));
     }
   }
 
+  .letter-mobile-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -1em;
+
+    img {
+      width: 16px;
+      height: 16px;
+      margin-left: 4px;
+    }
+
+    @media screen and (min-width: 800px) {
+      display: none;
+    }
+  }
+
   .letterHead {
     box-sizing: border-box;
     position: relative;

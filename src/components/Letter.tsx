@@ -177,7 +177,7 @@ export function Letter({ letter, isEditable, disableDrag, idx }: Props) {
     <Draggable
       handle=".letter"
       defaultClassName="letter-container"
-      cancel=".letter-content-wrapper"
+      cancel=".letter-content-wrapper, .letter-mobile-link"
       position={position}
       onStart={(e, _draggableData) => {
         setDragStart(Date.now());
@@ -472,6 +472,17 @@ export function LetterView({ letter, isEditable }: LetterViewProps) {
         </div>
       </div>
       {renderContent()}
+      {type === LetterType.IFrame && !isEditable ? (
+        <a
+          href={src}
+          className="letter-mobile-link"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          Open Letter (shortcut)
+          <img src="/external-open-icon.png" alt="external link" />
+        </a>
+      ) : null}
     </div>
   );
 }
