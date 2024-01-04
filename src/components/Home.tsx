@@ -1,12 +1,16 @@
 import { LetterFormButton, LetterFormDialogContent } from "./LetterForm";
 import { Desk } from "./Desk";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { ColorPicker, Profile } from "./Profile";
 import { OpenLetterDesk } from "./OpenLetterDesk";
 import { AboutLink } from "../pages/about";
 import { Footer } from "./Footer";
+import { UserLetterContext } from "../context/UserLetterContext";
 
 function Home() {
+  const { letters } = useContext(UserLetterContext);
+  const areLettersLoading = letters.length === 11;
+
   return (
     <>
       <OpenLetterDesk />
@@ -30,10 +34,18 @@ function Home() {
           with). You&apos;ll find other visitors&apos; fingerprints scattered
           throughout the letters they&apos;ve touched.
         </p>
-        <p>
+        <p style={{ marginBottom: "6px" }}>
           What does it mean to leave our presence on the websites we visit? Can
           we feel the presence of those who have been here before?
         </p>
+        <span className="small">
+          <i>
+            <span className={areLettersLoading ? "loading" : ""}>
+              {areLettersLoading ? "???" : letters.length}
+            </span>{" "}
+            letters written since December, 11, 2022.
+          </i>
+        </span>
       </div>
       <Desk />
       <Footer />

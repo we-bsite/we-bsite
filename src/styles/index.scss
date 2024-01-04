@@ -719,3 +719,26 @@ button {
 input {
   cursor: unset;
 }
+
+.small {
+  font-size: 0.8em;
+}
+
+.loading {
+  animation: opacity 1s ease-in-out infinite;
+  opacity: 1;
+}
+
+@keyframes opacity {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
