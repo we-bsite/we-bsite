@@ -1,3 +1,6 @@
+// ABOUTME: Coordinates saved letters, local editor state, and collaborative fingerprints.
+// ABOUTME: Loads and updates persisted letter data through the public letters API.
+
 import { createContext, PropsWithChildren, useMemo } from "react";
 import {
   Color,
@@ -13,7 +16,10 @@ import {
 import { useStickyState } from "../utils/localstorage";
 import { useEffect, useState } from "react";
 import { LetterFormButton } from "../components/LetterForm";
-import { supabase } from "../lib/supabaseClient";
+import {
+  fetchLetters as fetchSavedLetters,
+  saveLetterInteractions,
+} from "../lib/lettersClient";
 import { SubmitLetterMetadata } from "../constants";
 import randomColor from "randomcolor";
 import { useYAwareness, useYDoc } from "zustand-yjs";
@@ -128,24 +134,9 @@ interface FetchRange {
 }
 
 export async function fetchLetters(
-  { from, to }: FetchRange = { from: 0, to: 200 }
+  { from, to }: FetchRange = { from: 0, to: 499 }
 ): Promise<DatabaseLetter[]> {
-  const { data, error, status } = await supabase
-    .from("letters")
-    .select("*")
-    .filter("should_hide", "eq", false)
-    .order("id", { ascending: true })
-    .range(from, to);
-
-  if (error && status !== 406) {
-    throw error;
-  }
-
-  if (!data) {
-    return [];
-  }
-
-  return data;
+  return fetchSavedLetters({ from, to });
 }
 
 export function UserLetterContextProvider({
@@ -200,24 +191,26 @@ export function UserLetterContextProvider({
     setAwarenessData({ fingerprint });
   }
 
-  async function initialLoadLetters() {
-    try {
-      setLoading(true);
-      const data = await fetchLetters({ from: InitialFetchSize + 1, to: 200 });
-      const fetchedLetters = data.map<LetterInterface>(
-        mapDbLetterToLetterInterface
-      );
-
-      setLetters([...letters, ...fetchedLetters]);
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
-    // load all the other letters besides initial load
+    async function initialLoadLetters() {
+      try {
+        setLoading(true);
+        const data = await fetchLetters({
+          from: InitialFetchSize + 1,
+          to: 499,
+        });
+        const fetchedLetters = data.map<LetterInterface>(
+          mapDbLetterToLetterInterface
+        );
+
+        setLetters((letters) => [...letters, ...fetchedLetters]);
+      } catch (err: any) {
+        alert(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
     void initialLoadLetters();
   }, []);
 
@@ -276,10 +269,7 @@ export function UserLetterContextProvider({
     id: number,
     newInteractionData: LetterInteractionData
   ) {
-    await supabase
-      .from("letters")
-      .update({ interaction_data: newInteractionData })
-      .eq("id", id);
+    await saveLetterInteractions(id, newInteractionData);
   }
 
   async function updateLetterLocation(
@@ -301,41 +291,6 @@ export function UserLetterContextProvider({
     const shuffledLetters = shuffleArray(letters);
     setLetters(shuffledLetters);
   }
-
-  // useEffect(() => {
-  //   console.log("set up channel");
-
-  //   const channel = supabase
-  //     .channel("any")
-  //     .on(
-  //       REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
-  //       { event: "INSERT", schema: "public", table: "letters" },
-  //       (payload) => {
-  //         console.log("loaded payload: ", payload);
-  //         try {
-  //           setLoading(true);
-  //           const newLetter: DatabaseLetter = payload.new as DatabaseLetter;
-  //           setLetters((letters: any) => [
-  //             ...letters.slice(0, letters.length - 1),
-  //             mapDbLetterToLetterInterface(newLetter),
-  //             {
-  //               ...SubmitLetterMetadata,
-  //               ctaContent: <LetterFormButton />,
-  //             },
-  //           ]);
-  //         } catch (err: any) {
-  //           alert(err.message);
-  //         } finally {
-  //           setLoading(false);
-  //         }
-  //       }
-  //     )
-  //     .subscribe();
-
-  //   return () => {
-  //     supabase.removeChannel(channel);
-  //   };
-  // }, [letters]);
 
   const onLetterSubmitted = () => {
     // Resets values that shouldn't be persisted.

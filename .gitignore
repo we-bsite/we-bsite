@@ -26,6 +26,7 @@ node_modules/
 
 # Next.js build output
 .next
+.wrangler
 
 # Optional eslint cache
 .eslintcache

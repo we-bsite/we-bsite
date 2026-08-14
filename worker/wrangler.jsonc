@@ -1,0 +1,22 @@
+// ABOUTME: Configures the Cloudflare Worker that serves letters and stamp images.
+// ABOUTME: Binds the production D1 database and private R2 stamp bucket.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "we-bsite-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-13",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "we-bsite",
+      "database_id": "38d1ea20-89b1-4e12-9a82-df67eca96b90",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "STAMPS",
+      "bucket_name": "we-bsite-stamps"
+    }
+  ]
+}
