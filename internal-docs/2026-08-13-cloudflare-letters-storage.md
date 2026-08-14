@@ -19,7 +19,7 @@ Cloudflare's free allowances are shared at the account level where noted:
 - D1 allows 500 MB per database and 5 GB total storage on the free account. Free row-read and row-write quotas are account-level daily allowances.
 - R2 includes 10 GB-month of storage, 1 million Class A operations, and 10 million Class B operations per month for the account. R2 does not charge egress.
 
-The migrated data uses about 0.01% of the D1 account storage allowance and 0.2% of the R2 storage allowance.
+The migrated data uses about 0.01% of the D1 account storage allowance and 0.2% of the R2 storage allowance. An index on `(should_hide, id)` keeps public list requests from scanning hidden rows.
 
 ## API surface
 
