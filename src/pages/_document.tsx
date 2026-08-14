@@ -1,3 +1,6 @@
+// ABOUTME: Defines the shared HTML document shell and third-party metadata.
+// ABOUTME: Provides the fixed cursor collaboration layer used by every page.
+
 import { Html, Main, Head, NextScript } from "next/document";
 export default function Document() {
   return (
@@ -14,11 +17,6 @@ export default function Document() {
         <link
           href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
           rel="stylesheet"
-        />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://unpkg.com/cursor-chat/dist/style.css"
         />
         <script
           defer

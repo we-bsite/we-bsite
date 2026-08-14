@@ -6,7 +6,7 @@ const MAX_STAMP_BYTES = 5 * 1024 * 1024;
 const MAX_INTERACTION_DATA_BYTES = 100_000;
 const JSON_HEADERS = { "content-type": "application/json; charset=utf-8" };
 
-export default {
+const lettersService = {
   async fetch(request, env) {
     try {
       return await routeRequest(request, env);
@@ -19,6 +19,8 @@ export default {
     }
   },
 };
+
+export default lettersService;
 
 async function routeRequest(request, env) {
   if (request.method === "OPTIONS") {

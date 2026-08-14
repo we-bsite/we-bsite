@@ -22,7 +22,7 @@ import {
 } from "../lib/lettersClient";
 import { SubmitLetterMetadata } from "../constants";
 import randomColor from "randomcolor";
-import { useYAwareness, useYDoc } from "zustand-yjs";
+import { useYAwareness, useYDoc } from "zustand-yjs/index.js";
 import { YJS_ROOM } from "../constants";
 import { connectDoc } from "../utils/yjs";
 import { encodeSVG, getSvgForCursor, shuffleArray } from "../utils";
@@ -191,6 +191,11 @@ export function UserLetterContextProvider({
     setAwarenessData({ fingerprint });
   }
 
+  const [letters, setLetters] = useState<LetterInterface[]>(
+    getLettersToDisplayFromSavedLetters(savedLetters)
+  );
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     async function initialLoadLetters() {
       try {
@@ -241,11 +246,6 @@ export function UserLetterContextProvider({
     });
     return fetchedLetters;
   }
-
-  const [letters, setLetters] = useState<LetterInterface[]>(
-    getLettersToDisplayFromSavedLetters(savedLetters)
-  );
-  const [loading, setLoading] = useState(true);
 
   const [highestZIndex, setHighestZIndex] = useState<number>(0);
   const bumpHighestZIndex = () => setHighestZIndex((highest) => highest + 1);

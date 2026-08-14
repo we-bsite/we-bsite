@@ -1,6 +1,8 @@
+// ABOUTME: Configures Next.js build and image handling behavior.
+// ABOUTME: Keeps remote image optimization disabled until explicit hosts are approved.
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  swcMinify: true,
   images: {
     remotePatterns: [
       // {
@@ -13,4 +15,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
