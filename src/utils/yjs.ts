@@ -1,7 +1,9 @@
-import { initCursorChat } from "cursor-chat";
+// ABOUTME: Connects the shared Yjs document to cursor chat and WebRTC transport.
+// ABOUTME: Restores persisted user color before starting collaborative awareness.
+
 import { WebrtcProvider } from "y-webrtc";
-import Y from "yjs";
-import { StartAwarenessFunction } from "zustand-yjs";
+import * as Y from "yjs";
+import type { StartAwarenessFunction } from "zustand-yjs/index.js";
 import { YJS_ROOM } from "../constants";
 import {
   DefaultPersistedUserLetterContext,
@@ -9,6 +11,7 @@ import {
   UserContextStorageId,
 } from "../context/UserLetterContext";
 import { getLocalStorageItem } from "./localstorage";
+import { connectCursorChat } from "./cursorChat";
 
 export const connectDoc = (
   doc: Y.Doc,
@@ -27,12 +30,7 @@ export const connectDoc = (
     `Connecting to the internet as ${color}... ${doc.guid} initialized`
   );
 
-  const stopCursorChatCallback = initCursorChat("(we)bsite", {
-    yDoc: doc,
-    // @ts-ignore
-    color,
-  });
-  // @ts-ignore
+  const stopCursorChatCallback = connectCursorChat(doc, color);
   const provider = new WebrtcProvider(YJS_ROOM, doc, {
     signaling: ["wss://signalling.communities.digital"],
   });

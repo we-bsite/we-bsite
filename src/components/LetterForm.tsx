@@ -1,7 +1,10 @@
+// ABOUTME: Renders the letter submission dialog and persists completed letters.
+// ABOUTME: Builds the database-shaped payload from the current editor state.
+
 import * as Dialog from "@radix-ui/react-dialog";
 import { useContext } from "react";
 import { UserLetterContext } from "../context/UserLetterContext";
-import { supabase } from "../lib/supabaseClient";
+import { createLetter } from "../lib/lettersClient";
 import { DatabaseLetterInsertInfo } from "../types";
 import { SubmitLetterMetadata } from "../constants";
 import { Letter } from "./Letter";
@@ -49,7 +52,7 @@ export function LetterFormDialogContent() {
       should_hide: false,
     };
 
-    await supabase.from("letters").insert(toInsert);
+    await createLetter(toInsert);
     onLetterSubmitted();
   };
 

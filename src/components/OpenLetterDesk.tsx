@@ -1,3 +1,7 @@
+// ABOUTME: Animates the desk that receives letters dragged to the top of the page.
+// ABOUTME: Calculates the visible desk height for the current viewport.
+
+/* eslint-disable @next/next/no-img-element */
 import { motion } from "framer-motion";
 import { useContext } from "react";
 import { UserLetterContext } from "../context/UserLetterContext";
